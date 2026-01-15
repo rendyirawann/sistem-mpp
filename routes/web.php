@@ -29,7 +29,8 @@ use App\Http\Controllers\Backend\Master\Wilayah\WilayahKecamatanController;
 use App\Http\Controllers\Backend\Master\Wilayah\WilayahDesaController;
 
 // ANTRIAN
-use App\Http\Controllers\AntrianController;
+use App\Http\Controllers\Backend\Antrian\AntrianController;
+use App\Http\Controllers\Backend\Loket\LoketController;
 // SKPD
 use App\Http\Controllers\Backend\Skpd\SkpdController;
 
@@ -71,11 +72,45 @@ Route::middleware('auth')->group(function () {
     Route::post('/users/{id}/unban', [UserController::class, 'unban'])->name('users.unban');
 
     Route::resource('skpd', SkpdController::class);
-    Route::get('skpd', [SkpdController::class, 'index'])->name('skpd.index');
-    Route::get('skpd/data', [SkpdController::class, 'getSkpd'])->name('skpd.data');
     Route::get('get-skpd', [SkpdController::class, 'getSkpd'])->name('get-skpd');
     Route::post('/skpd/mass-delete', [SkpdController::class, 'massDelete'])->name('skpd.mass-delete');
 
+    Route::resource('antrian', AntrianController::class);
+    Route::get('/get', [AntrianController::class, 'getData'])->name('antrian.get');
+    Route::post('/call', [AntrianController::class, 'call'])
+    ->name('antrian.call'); // ✅ INI UNTUK MIC
+    Route::get('/jumlah', [AntrianController::class, 'jumlah'])->name('antrian.jumlah');
+    Route::get('/sekarang', [AntrianController::class, 'sekarang'])->name('antrian.sekarang');
+    Route::get('/selanjutnya', [AntrianController::class, 'selanjutnya'])->name('antrian.selanjutnya');
+    Route::get('/sisa', [AntrianController::class, 'sisa'])->name('antrian.sisa');
+
+
+    Route::get('/loket/get', [LoketController::class, 'getData'])->name('get-loket');
+    Route::post('/loket/mass-delete', [SkpdController::class, 'massDelete'])->name('loket.mass-delete');
+    Route::post('/loket/aktifkan', [LoketController::class, 'aktifkan'])
+        ->name('loket.aktifkan');
+
+    Route::post('/loket/nonaktifkan', [LoketController::class, 'nonaktifkan'])
+        ->name('loket.nonaktifkan');
+
+    Route::get('/loket/jumlah', [LoketController::class, 'jumlah'])
+        ->name('loket.jumlah');
+
+    Route::get('/loket/aktif', [LoketController::class, 'aktif'])
+        ->name('loket.aktif');
+
+    Route::get('/loket/nonaktif', [LoketController::class, 'nonaktif'])
+        ->name('loket.nonaktif');
+        Route::resource('loket', LoketController::class);
+
+    // Route::get('get-antrian', [AntrianController::class, 'getData'])
+    // ->name('get-antrian');
+    // // mass delete (kalau dipakai)
+    // Route::post('/antrian/mass-delete', [AntrianController::class, 'massDelete'])
+    //     ->name('antrian.mass-delete');
+    // // panggil antrian (khusus panggilan)
+    // Route::post('/antrian/call', [AntrianController::class, 'call'])
+    //     ->name('antrian.call');
 
     Route::resource('roles', RoleController::class);
     Route::get('get-datarole', [RoleController::class, 'getDataRoles'])->name('get-datarole');

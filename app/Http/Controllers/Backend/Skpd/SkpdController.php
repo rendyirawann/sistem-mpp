@@ -27,7 +27,7 @@ class SkpdController extends Controller
     function __construct()
     {
         $this->middleware(['auth']);
-        $this->middleware('permission:skpd.list', ['only' => ['index','getSkpd']]);
+        $this->middleware('permission:skpd.list', ['only' => ['index', 'getSkpd']]);
         $this->middleware('permission:skpd.show', ['only' => ['show']]);
         $this->middleware('permission:skpd.create', ['only' => ['store']]);
         $this->middleware('permission:skpd.edit', ['only' => ['edit', 'update']]);
@@ -42,47 +42,110 @@ class SkpdController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(): View
     {
-        return view('backend.skpd.index');
-    }
+        $roles = Role::orderBy('id', 'desc')
+            ->get();
 
+
+        return view('backend.skpd.index', compact('roles'));
+    }
 
 
 
     public function getSkpd(Request $request)
     {
         $query = Skpd::query()->orderByDesc('created_at');
-
+        if (!empty($request->search['value'])) { $search = $request->search['value']; $query->where(function ($q) use ($search) { $q->where('nama_skpd', 'like', "%{$search}%") -> orWhere('kepala_skpd', 'like', "%{$search}%") -> orWhere('nip_kepala', 'like', "%{$search}%"); }); }
         return DataTables::of($query)
-            ->addIndexColumn()
-
-            ->editColumn('kepala_skpd', fn ($r) => $r->kepala_skpd ?? '-')
-            ->editColumn('nip_kepala', fn ($r) => $r->nip_kepala ?? '-')
-
-            ->addColumn('status', function ($r) {
-                return $r->isAktif
+            ->addColumn('nama_skpd', function ($r) {
+                return $r->nama_skpd;
+            })
+            ->addColumn('kepala_skpd', function ($r) {
+                return $r->kepala_skpd ?? '-';
+            })
+            ->addColumn('nip_kepala', function ($r) {
+                return $r->nip_kepala ?? '-';
+            })
+            ->addColumn('no_urutan', function ($r) {
+                return $r->no_urutan ?? '-';
+            })
+            ->addColumn('isaktif', function ($r) {
+                return $r->isaktif
                     ? '<span class="badge badge-light-success">Aktif</span>'
                     : '<span class="badge badge-light-danger">Nonaktif</span>';
             })
+            ->addColumn('action', function ($row) {
 
-            ->addColumn('action', function ($r) {
-                return '
-                    <div class="text-end">
-                        <button class="btn btn-sm btn-warning" onclick="editSkpd(`'.$r->id.'`)">
-                            <i class="ki-outline ki-pencil"></i>
-                        </button>
-                        <button class="btn btn-sm btn-danger" onclick="deleteSkpd(`'.$r->id.'`)">
-                            <i class="ki-outline ki-trash"></i>
-                        </button>
-                    </div>
-                ';
+                if (
+                    !auth()->user()->can('skpd.show') &&
+                    !auth()->user()->can('skpd.edit') &&
+                    !auth()->user()->can('skpd.delete')
+                ) {
+                    return '-';
+                }
+
+                $html = '
+                <div class="text-center">
+                    <button class="btn btn-sm btn-light btn-active-light-primary"
+                        data-bs-toggle="dropdown" aria-expanded="false">
+                        <i class="ki-outline ki-dots-vertical fs-3"></i>
+                    </button>
+
+                    <ul class="dropdown-menu dropdown-menu-end fs-7">';
+
+                // 🔍 Detail
+                // if (auth()->user()->can('skpd.show')) {
+                //     $html .= '
+                //         <li>
+                //             <a class="dropdown-item d-flex align-items-center"
+                //                href="' . route('users.show', $row->id) . '">
+                //                 <i class="ki-outline ki-eye fs-5 me-2 text-info"></i>
+                //                 Detail
+                //             </a>
+                //         </li>';
+                // }
+
+                // ✏️ Edit
+                if (auth()->user()->can('skpd.edit')) {
+                    $html .= '
+                        <li>
+                            <a href="javascript:void(0)"
+                               class="dropdown-item d-flex align-items-center"
+                               id="getEditRowData"
+                               data-id="' . $row->id . '">
+                                <i class="ki-outline ki-pencil fs-5 me-2 text-warning"></i>
+                                Edit
+                            </a>
+                        </li>';
+                }
+
+                // 🗑 Hapus
+                if (auth()->user()->can('skpd.delete')) {
+                    $html .= '
+                        <li>
+                            <a href="javascript:void(0)"
+                               class="dropdown-item d-flex align-items-center"
+                               data-id="' . $row->id . '"
+                               data-bs-toggle="modal"
+                               data-bs-target="#Modal_Hapus_Data"
+                               id="getDeleteId">
+                                <i class="ki-outline ki-trash fs-5 me-2 text-danger"></i>
+                                Hapus
+                            </a>
+                        </li>';
+                }
+
+                $html .= '
+                    </ul>
+                </div>';
+
+                return $html;
             })
 
-            ->rawColumns(['status', 'action'])
+            ->rawColumns(['isaktif', 'action'])
             ->make(true);
     }
-
 
 
 
@@ -96,133 +159,96 @@ class SkpdController extends Controller
      */
 
 
-    public function store(Request $request)
-    {
-        $formattedTime = Carbon::now()->diffForHumans();
+     public function store(Request $request)
+     {
+         $formattedTime = Carbon::now()->diffForHumans();
 
-        $validator = \Validator::make($request->all(), [
-            'name' => 'required|string|max:255',
-            'no_wa' => 'required|string|max:20|min:10|unique:users,no_wa',
-            'email' => 'required|string|email|max:255|unique:users,email',
-            'password' => 'required|string|min:8|confirmed',
-            'avatar' => 'required|mimes:jpg,png,svg|max:2048',
-            'roles' => 'required',
+         $validator = \Validator::make($request->all(), [
+            //  'kode_skpd'   => 'required|string|max:50|unique:skpd,kode_skpd',
+             'nama_skpd'   => 'required|string|max:255',
+             'kepala_skpd' => 'nullable|string|max:255',
+             'nip_kepala'  => 'nullable|string|max:25',
+             'isaktif'    => 'required|in:0,1',
+         ], [
 
-        ], [
+            //  'kode_skpd.required' => 'Kode SKPD wajib diisi',
+            //  'kode_skpd.unique'   => 'Kode SKPD sudah digunakan',
+            //  'kode_skpd.max'      => 'Kode SKPD maksimal 50 karakter',
 
-            'name.required' => 'Nama Lengkap wajib diisi',
-            'name.max' => 'Nama Lengkap maksimal 255 karakter',
-            'name.string'      => 'Nomor WhatsApp harus berupa teks.',
+             'nama_skpd.required' => 'Nama SKPD wajib diisi',
+             'nama_skpd.max'      => 'Nama SKPD maksimal 255 karakter',
 
-            'no_wa.required'    => 'Nomor WhatsApp wajib diisi.',
-            'no_wa.string'      => 'Nomor WhatsApp harus berupa teks.',
-            'no_wa.max'         => 'Nomor WhatsApp maksimal 20 karakter.',
-            'no_wa.min'         => 'Nomor WhatsApp minimal 10 karakter.',
-            'no_wa.unique'      => 'Nomor WhatsApp sudah digunakan oleh pengguna lain.',
+             'kepala_skpd.max'    => 'Nama Kepala SKPD maksimal 255 karakter',
+             'nip_kepala.max'     => 'NIP Kepala maksimal 25 karakter',
 
-            'email.required' => 'Email wajib diisi',
-            'email.email' => 'Format Email tidak valid',
-            'email.unique' => 'Email sudah terdaftar',
+             'isaktif.required'  => 'Status wajib dipilih',
+             'isaktif.in'        => 'Status tidak valid',
+         ]);
 
-            'password.required' => 'Password wajib diisi',
-            'password.min' => 'Kata Sandi minimal 8 krakter',
-            'password.confirmed' => 'Kata Sandi tidak sama',
+         if ($validator->fails()) {
+             return response()->json(['errors' => $validator->errors()]);
+         }
 
-            'avatar.required' => 'Avatar wajib diisi',
-            'avatar.mimes' => 'Avatar harus format .jpg .png .svg',
-            'avatar.max' => 'Ukuran file Avatar maksimal 2 MB',
+         try {
+             \DB::beginTransaction();
 
-            'roles.required' => 'Role wajib diisi',
+             $data = new Skpd;
+             $data->id          = \Ramsey\Uuid\Uuid::uuid4();
+            //  $data->kode_skpd   = $request->kode_skpd;
+             $data->nama_skpd   = $request->nama_skpd;
+             $data->kepala_skpd = $request->kepala_skpd;
+             $data->nip_kepala  = $request->nip_kepala;
+             $data->isaktif    = $request->isaktif;
+             $data->save();
 
+             // ===============================
+             // FULL NEW SNAPSHOT (AUDIT)
+             // ===============================
+             $newData = $data->toArray();
+             $agent = new \Jenssegers\Agent\Agent;
 
-        ]);
+             activity()
+                 ->useLog('Tambah Skpd')
+                 ->causedBy(auth()->user())
+                 ->performedOn($data)
+                 ->withProperties([
+                     'ip' => $request->ip(),
+                     'agent' => [
+                         'browser'     => $agent->browser() . ' ' . $agent->version($agent->browser()),
+                         'os'          => $agent->platform() . ' ' . $agent->version($agent->platform()),
+                         'device'      => $agent->device(),
+                         'is_mobile'   => $agent->isMobile(),
+                         'is_desktop'  => $agent->isDesktop(),
+                         'raw'         => $request->header('User-Agent'),
+                     ],
+                     'request' => [
+                         'method' => $request->method(),
+                         'url'    => $request->fullUrl(),
+                     ],
+                     'new' => $newData,
+                 ])
+                 ->log('Membuat data SKPD ' . $data->nama_skpd);
 
+             \DB::commit();
 
-        if ($validator->fails()) {
-            return response()->json(['errors' => $validator->errors()]);
-        }
+             return response()->json([
+                 'success' => 'Data SKPD berhasil disimpan.',
+                 'time'    => $formattedTime,
+                 'judul'   => 'Berhasil'
+             ], 201);
 
+         } catch (\Exception $e) {
+             \DB::rollBack();
 
+             return response()->json([
+                 'error'        => 'Terjadi kesalahan di aplikasi, hubungi Developer.',
+                 'time'         => $formattedTime,
+                 'judul'        => 'Aplikasi Error',
+                 'errorMessage' => $e->getMessage()
+             ], 500);
+         }
+     }
 
-        // Logika penyimpanan data
-        try {
-            \DB::beginTransaction();
-
-            $data = new User;
-            // ===============================
-            // SIMPAN AVATAR (PAKAI POLA SAMA)
-            // ===============================
-            if ($request->hasFile('avatar')) {
-                $file      = $request->file('avatar');
-                $extension = $file->getClientOriginalExtension();
-
-                $filename = 'avatar-' . $data->id . '-' . time() . '.' . $extension;
-
-                Storage::disk('public')->putFileAs(
-                    'user/avatar/',
-                    $file,
-                    $filename
-                );
-
-                $data->avatar = $filename;
-            }
-
-            $data->id = Uuid::uuid4();
-            $data->name = $request->name;
-            $data->no_wa = $request->no_wa;
-            $data->email = $request->email;
-            $data->password = Hash::make($request->password);
-            $data->assignRole($request->input('roles'));
-
-            $data->save();
-
-
-            // ===============================
-            // FULL NEW SNAPSHOT
-            // ===============================
-            $newData = $data->toArray();
-
-            $agent = new Agent;
-
-            activity()
-                ->useLog('tambah skpd')
-                ->causedBy(auth()->user())
-                ->withProperties([
-                    'ip' => $request->ip(),
-                    'agent' => [
-                        'browser' => $agent->browser() . ' ' . $agent->version($agent->browser()),
-                        'os' => $agent->platform() . ' ' . $agent->version($agent->platform()),
-                        'device' => $agent->device(),
-                        'is_mobile' => $agent->isMobile(),
-                        'is_desktop' => $agent->isDesktop(),
-                        'raw' => $request->header('User-Agent'),
-                    ],
-                    'request' => [
-                        'method' => $request->method(),
-                        'url' => $request->fullUrl(),
-                    ],
-                    'new' => $newData,
-                ])
-                ->log('Membuat akun skpd ' . $data->name);
-
-            \DB::commit();
-
-            return response()->json([
-                'success' => 'Data berhasil disimpan.',
-                'time' => $formattedTime,
-                'judul' => 'Berhasil'
-            ], 201);
-        } catch (\Exception $e) {
-            \DB::rollback();
-            $errorMessage = $e->getMessage(); // Mendapatkan pesan kesalahan dari Exception
-            return response()->json([
-                'error' => 'Terjadi kesalahan di aplikasi, hubungi Developer.',
-                'time' => $formattedTime,
-                'judul' => 'Aplikasi Error',
-                'errorMessage' => $errorMessage
-            ], 500);
-        }
-    }
 
     /**
      * Store a newly created resource in storage.
@@ -241,7 +267,7 @@ class SkpdController extends Controller
     public function show($id): View
     {
         // Menemukan user berdasarkan id
-        $data = User::findOrFail($id);
+        $data = Skpd::findOrFail($id);
 
         // Mengirim data ke view
         return view('backend.skpd.show', compact('data'));
@@ -414,18 +440,15 @@ class SkpdController extends Controller
      */
     public function edit($id)
     {
-        $user = User::findOrFail($id);
+        $user = Skpd::findOrFail($id);
 
-        // Kirim data ke view untuk di-render
         $html = view('backend.skpd.edit', [
-
             'user' => $user,
-            'userRole' => $user->getRoleNames()->toArray(),
-            'roles' => Role::where('guard_name', '=', 'web')->select(['id', 'name'])->get(),
         ])->render();
 
         return response()->json(['html' => $html]);
     }
+
 
 
 
@@ -441,22 +464,19 @@ class SkpdController extends Controller
         $formattedTime = Carbon::now()->diffForHumans();
 
         $validator = \Validator::make($request->all(), [
-            'name' => 'required|string|max:255',
-            'email' => 'required|email|max:255|unique:users,email,' . $id,
-            'password' => 'confirmed',
-            'avatar' => 'mimes:jpg,png,svg|max:2048',
-            'roles' => 'required',
+            'nama_skpd'    => 'required|string|max:255',
+            'kepala_skpd'  => 'nullable|string|max:255',
+            'nip_kepala'   => 'nullable|string|max:25',
+            'isaktif'      => 'required|in:0,1',
         ], [
-            'name.required' => 'Nama Lengkap wajib diisi',
-            'name.max' => 'Nama Lengkap maksimal 255 karakter',
-            'email.required' => 'Email wajib diisi',
-            'email.email' => 'Format Email tidak valid',
-            'email.unique' => 'Email sudah terdaftar',
-            'password.confirmed' => 'Kata Sandi tidak sama',
-            'avatar.mimes' => 'Avatar harus format .jpg .png .svg',
-            'avatar.max' => 'Ukuran file Avatar maksimal 2 MB',
-            'roles.required' => 'Role wajib diisi',
+            'nama_skpd.required' => 'Nama SKPD wajib diisi',
+            'nama_skpd.max'      => 'Nama SKPD maksimal 255 karakter',
 
+            'kepala_skpd.max'    => 'Nama Kepala SKPD maksimal 255 karakter',
+            'nip_kepala.max'     => 'NIP Kepala maksimal 25 karakter',
+
+            'isaktif.required'   => 'Status wajib dipilih',
+            'isaktif.in'         => 'Status tidak valid',
         ]);
 
         if ($validator->fails()) {
@@ -466,44 +486,17 @@ class SkpdController extends Controller
         try {
             \DB::beginTransaction();
 
-            $data = User::findOrFail($id);
+            $data = Skpd::findOrFail($id);
             $oldData = $data->toArray();
 
-            if ($request->hasFile('avatar')) {
-
-                // Hapus file lama
-                if ($data->avatar && Storage::disk('public')->exists('user/avatar/' . $data->avatar)) {
-                    Storage::disk('public')->delete('user/avatar/' . $data->avatar);
-                }
-
-                $file = $request->file('avatar');
-                $extension = $file->getClientOriginalExtension();
-
-                // Nama file aman & standar
-                $filename = 'avatar-' . $data->id . '-' . time() . '.' . $extension;
-
-                // Simpan file
-                Storage::disk('public')->putFileAs(
-                    'user/avatar/',
-                    $file,
-                    $filename
-                );
-
-                $data->avatar = $filename;
-            }
-
-            $data->name = $request->name;
-            $data->email = $request->email;
-
-            if (!empty($request->password)) {
-                $data->password = Hash::make($request->password);
-            }
-
+            // ===============================
+            // UPDATE DATA SKPD
+            // ===============================
+            $data->nama_skpd   = $request->nama_skpd;
+            $data->kepala_skpd = $request->kepala_skpd;
+            $data->nip_kepala  = $request->nip_kepala;
+            $data->isaktif     = $request->isaktif;
             $data->save();
-
-            // Sync roles
-            DB::table('model_has_roles')->where('model_id', $id)->delete();
-            $data->assignRole($request->input('roles'));
 
             // ===============================
             // FULL NEW SNAPSHOT
@@ -516,52 +509,48 @@ class SkpdController extends Controller
             $agent = new \Jenssegers\Agent\Agent;
 
             activity()
-                ->useLog('edit user')
+                ->useLog('edit skpd')
                 ->causedBy(Auth::user())
                 ->performedOn($data)
                 ->withProperties([
                     'ip' => $request->ip(),
                     'agent' => [
-                        'browser' => $agent->browser() . ' ' . $agent->version($agent->browser()),
-                        'os'      => $agent->platform() . ' ' . $agent->version($agent->platform()),
-                        'device'  => $agent->device(),
-                        'is_mobile' => $agent->isMobile(),
-                        'is_desktop' => $agent->isDesktop(),
-                        'raw' => $request->header('User-Agent'),
+                        'browser'     => $agent->browser() . ' ' . $agent->version($agent->browser()),
+                        'os'          => $agent->platform() . ' ' . $agent->version($agent->platform()),
+                        'device'      => $agent->device(),
+                        'is_mobile'   => $agent->isMobile(),
+                        'is_desktop'  => $agent->isDesktop(),
+                        'raw'         => $request->header('User-Agent'),
                     ],
                     'request' => [
                         'method' => $request->method(),
                         'url'    => $request->fullUrl(),
                     ],
-
-                    // === CATAT SEMUA DATA SEBELUM & SESUDAH ===
                     'old' => $oldData,
                     'new' => $newData,
                 ])
-                ->log('Mengubah akun user ' . $data->name);
-
-
-
-
+                ->log('Mengubah data SKPD ' . $data->nama_skpd);
 
             \DB::commit();
 
             return response()->json([
-                'success' => 'Data berhasil diperbaharui.',
-                'time' => $formattedTime,
-                'judul' => 'Berhasil',
+                'success' => 'Data SKPD berhasil diperbaharui.',
+                'time'    => $formattedTime,
+                'judul'   => 'Berhasil',
             ]);
+
         } catch (\Exception $e) {
-            \DB::rollback();
-            $errorMessage = $e->getMessage();
+            \DB::rollBack();
+
             return response()->json([
-                'error' => 'Terjadi kesalahan di aplikasi, hubungi Developer.',
-                'time' => $formattedTime,
-                'judul' => 'Aplikasi Error',
-                'errorMessage' => $errorMessage,
+                'error'        => 'Terjadi kesalahan di aplikasi, hubungi Developer.',
+                'time'         => $formattedTime,
+                'judul'        => 'Aplikasi Error',
+                'errorMessage' => $e->getMessage(),
             ]);
         }
     }
+
 
 
     /**
@@ -575,148 +564,119 @@ class SkpdController extends Controller
         $formattedTime = Carbon::now()->diffForHumans();
 
         try {
-            \DB::beginTransaction();
+            DB::beginTransaction();
 
-            $data = User::findOrFail($id);
+            $data = Skpd::findOrFail($id);
             $getData = $data->toArray();
 
-            // ===============================
-            // HAPUS AVATAR JIKA ADA
-            // ===============================
-            if ($data->avatar) {
-                $avatarPath = 'user/avatar/' . $data->avatar;
-
-                if (Storage::disk('public')->exists($avatarPath)) {
-                    Storage::disk('public')->delete($avatarPath);
-                }
-            }
-
-            // ===============================
-            // HAPUS USER
-            // ===============================
             $data->delete();
 
-            \DB::commit();
+            DB::commit();
 
-            // ===============================
-            // LOG ACTIVITY (AUDIT FULL)
-            // ===============================
+            // LOG ACTIVITY
             $agent = new \Jenssegers\Agent\Agent;
 
             activity()
-                ->useLog('hapus user')
+                ->useLog('hapus skpd')
                 ->causedBy(Auth::user())
                 ->performedOn($data)
                 ->withProperties([
                     'ip' => $request->ip(),
                     'agent' => [
-                        'browser' => $agent->browser() . ' ' . $agent->version($agent->browser()),
-                        'os'      => $agent->platform() . ' ' . $agent->version($agent->platform()),
+                        'browser' => $agent->browser(),
+                        'os'      => $agent->platform(),
                         'device'  => $agent->device(),
-                        'is_mobile' => $agent->isMobile(),
-                        'is_desktop' => $agent->isDesktop(),
-                        'raw' => $request->header('User-Agent'),
-                    ],
-                    'request' => [
-                        'method' => $request->method(),
-                        'url'    => $request->fullUrl(),
                     ],
                     'get' => $getData,
                 ])
-                ->log('Menghapus akun user ' . $getData['name']);
+                ->log('Menghapus data SKPD ' . $getData['nama_skpd']);
 
             return response()->json([
-                'success' => 'Data berhasil dihapus',
+                'success' => 'Data SKPD berhasil dihapus',
                 'time' => $formattedTime,
                 'judul' => 'Berhasil'
             ]);
-        } catch (\Exception $e) {
 
-            \DB::rollback();
+        } catch (\Exception $e) {
+            DB::rollback();
 
             return response()->json([
-                'error'        => 'Data Gagal dihapus',
-                'time'         => $formattedTime,
-                'judul'        => 'Gagal',
+                'error' => 'Data gagal dihapus',
                 'errorMessage' => $e->getMessage()
-            ]);
+            ], 500);
         }
     }
+
 
 
     public function massDelete(Request $request)
     {
         $formattedTime = Carbon::now()->diffForHumans();
+
         try {
-            \DB::beginTransaction();
+            DB::beginTransaction();
 
             $ids = $request->ids;
 
-            if (!empty($ids)) {
-                // Dapatkan data pengguna yang akan dihapus untuk logging
-                $users = User::whereIn('id', $ids)->get();
-
-                // Hapus avatar masing-masing
-                foreach ($users as $user) {
-                    if ($user->avatar) {
-
-                        $avatarPath = 'user/avatar/' . $user->avatar;
-
-                        if (Storage::disk('public')->exists($avatarPath)) {
-                            Storage::disk('public')->delete($avatarPath);
-                        }
-                    }
-                }
-
-                // Hapus pengguna
-                User::whereIn('id', $ids)->delete();
-
-                \DB::commit();
-
-                $agent = new \Jenssegers\Agent\Agent;
-
-                // Log activity untuk setiap pengguna yang dihapus
-                foreach ($users as $user) {
-                    // ===============================
-                    // LOG ACTIVITY (AUDIT FULL)
-                    // ===============================
-                    activity()
-                        ->useLog('massdelete user')
-                        ->causedBy(Auth::user())
-                        ->performedOn($user)
-                        ->withProperties([
-                            'ip' => $request->ip(),
-                            'agent' => [
-                                'browser' => $agent->browser() . ' ' . $agent->version($agent->browser()),
-                                'os'      => $agent->platform() . ' ' . $agent->version($agent->platform()),
-                                'device'  => $agent->device(),
-                                'is_mobile' => $agent->isMobile(),
-                                'is_desktop' => $agent->isDesktop(),
-                                'raw' => $request->header('User-Agent'),
-                            ],
-                            'request' => [
-                                'method' => $request->method(),
-                                'url'    => $request->fullUrl(),
-                            ],
-                            'get' => $user->toArray(),
-                        ])
-                        ->log('Menghapus akun user ' . $user['name']);
-                }
-
+            if (empty($ids)) {
                 return response()->json([
-                    'status' => 'success',
-                    'message' => count($ids) . ' skpd deleted successfully!'
-                ]);
-            } else {
-                return response()->json([
-                    'status' => 'error',
-                    'message' => 'No users selected for deletion.'
+                    'status'  => 'error',
+                    'message' => 'No SKPD selected for deletion.'
                 ]);
             }
+
+            // Ambil data SKPD untuk logging sebelum dihapus
+            $skpds = Skpd::whereIn('id', $ids)->get();
+
+            // Hapus data SKPD
+            Skpd::whereIn('id', $ids)->delete();
+
+            DB::commit();
+
+            $agent = new Agent();
+
+            // ===============================
+            // LOG ACTIVITY (AUDIT FULL)
+            // ===============================
+            foreach ($skpds as $skpd) {
+                activity()
+                    ->useLog('massdelete skpd')
+                    ->causedBy(Auth::user())
+                    ->performedOn($skpd)
+                    ->withProperties([
+                        'ip' => $request->ip(),
+                        'agent' => [
+                            'browser'     => $agent->browser() . ' ' . $agent->version($agent->browser()),
+                            'os'          => $agent->platform() . ' ' . $agent->version($agent->platform()),
+                            'device'      => $agent->device(),
+                            'is_mobile'   => $agent->isMobile(),
+                            'is_desktop'  => $agent->isDesktop(),
+                            'raw'         => $request->header('User-Agent'),
+                        ],
+                        'request' => [
+                            'method' => $request->method(),
+                            'url'    => $request->fullUrl(),
+                        ],
+                        'data' => $skpd->toArray(),
+                    ])
+                    ->log('Menghapus data SKPD: ' . $skpd->nama_skpd);
+            }
+
+            return response()->json([
+                'status'  => 'success',
+                'message' => count($ids) . ' SKPD berhasil dihapus'
+            ]);
+
         } catch (\Exception $e) {
-            \DB::rollback();
-            $errorMessage = $e->getMessage(); // Mendapatkan pesan kesalahan dari Exception
-            return response()->json(['error' => 'Data Gagal dihapus', 'time' => $formattedTime, 'judul' => 'Gagal', 'errorMessage' => $errorMessage]);
+            DB::rollBack();
+
+            return response()->json([
+                'status'        => 'error',
+                'judul'         => 'Gagal',
+                'message'       => 'Data gagal dihapus',
+                'time'          => $formattedTime,
+                'errorMessage'  => $e->getMessage()
+            ]);
         }
     }
 

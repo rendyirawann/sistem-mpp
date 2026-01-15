@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Backend\UserManagement;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Models\User;
+use App\Models\Skpd;
 use Spatie\Permission\Models\Role;
 use DB;
 use Hash;
@@ -47,9 +48,10 @@ class UserController extends Controller
     {
         $roles = Role::orderBy('id', 'desc')
         ->get();
+        $skpd = Skpd::orderBy('id', 'desc')
+        ->get();
 
-
-        return view('backend.user_management.user.index',compact('roles'));
+        return view('backend.user_management.user.index',compact('roles','skpd'));
     }
 
 
@@ -234,7 +236,7 @@ class UserController extends Controller
 
 
 
-                ->rawColumns(['avatar', 'roles', 'last_login_at', 'last_login_ip', 'joined_date', 'action','status'])
+                ->rawColumns(['avatar', 'roles', 'skpd', 'last_login_at', 'last_login_ip', 'joined_date', 'action','status'])
                 ->make(true);
         }
     }
@@ -260,6 +262,7 @@ class UserController extends Controller
             'password' => 'required|string|min:8|confirmed',
             'avatar' => 'required|mimes:jpg,png,svg|max:2048',
             'roles' => 'required',
+            'skpd_id' => 'required',
 
         ], [
 
@@ -286,6 +289,7 @@ class UserController extends Controller
             'avatar.max' => 'Ukuran file Avatar maksimal 2 MB',
 
             'roles.required' => 'Role wajib diisi',
+            'skpd_id.required' => 'Skpd wajib diisi',
 
 
             ]);
@@ -326,6 +330,8 @@ class UserController extends Controller
         $data -> email = $request->email;
         $data -> password = Hash::make($request->password);
         $data->assignRole($request->input('roles'));
+        $data -> skpd_id = $request->skpd_id;
+
 
         $data->save();
 
@@ -568,10 +574,12 @@ class UserController extends Controller
     public function edit($id)
     {
         $user = User::findOrFail($id);
+        $skpd = Skpd::orderBy('nama_skpd')->get();
 
         // Kirim data ke view untuk di-render
         $html = view('backend.user_management.user.edit', [
             'user' => $user,
+            'skpd' => $skpd,
             'userRole' => $user->getRoleNames()->toArray(),
             'roles' => Role::where('guard_name', '=', 'web')->select(['id', 'name'])->get(),
         ])->render();
@@ -598,6 +606,7 @@ class UserController extends Controller
             'password' => 'confirmed',
             'avatar' => 'mimes:jpg,png,svg|max:2048',
             'roles' => 'required',
+            'skpd_id' => 'required',
         ], [
             'name.required' => 'Nama Lengkap wajib diisi',
             'name.max' => 'Nama Lengkap maksimal 255 karakter',
@@ -608,6 +617,7 @@ class UserController extends Controller
             'avatar.mimes' => 'Avatar harus format .jpg .png .svg',
             'avatar.max' => 'Ukuran file Avatar maksimal 2 MB',
             'roles.required' => 'Role wajib diisi',
+            'skpd_id.required' => 'Skpd wajib diisi',
 
         ]);
 
@@ -646,10 +656,11 @@ class UserController extends Controller
 
             $data->name = $request->name;
             $data->email = $request->email;
-
             if (!empty($request->password)) {
                 $data->password = Hash::make($request->password);
             }
+            $data->skpd_id = $request->skpd_id;
+
 
             $data->save();
 

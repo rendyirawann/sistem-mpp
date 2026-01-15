@@ -7,15 +7,20 @@ use Illuminate\Database\Eloquent\Model;
 
 class Loket extends Model
 {
-    use HasFactory;
-
     protected $table = 'lokets';
 
+    protected $primaryKey = 'id';
+
+    public $incrementing = false;   // ⬅️ WAJIB
+    protected $keyType = 'string';  // ⬅️ WAJIB
+
     protected $fillable = [
-        'kode_loket',
+        'id',
+        'skpd_id',
         'nama_loket',
-        'prefix_antrian',
-        'status',
+        'kode_tenant',
+        'prefix_tenant',
+        'isaktif'
     ];
 
     /**
@@ -34,5 +39,10 @@ class Loket extends Model
     public function counters()
     {
         return $this->hasMany(Counter::class);
+    }
+
+    public function skpd()
+    {
+        return $this->belongsTo(Skpd::class, 'skpd_id', 'id');
     }
 }
