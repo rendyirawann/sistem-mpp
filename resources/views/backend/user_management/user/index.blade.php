@@ -371,7 +371,19 @@
 
                             </div>
                             <!--end::Input group-->
+                            <div class="mb-5">
+                                <!--begin::Label-->
+                                <label class="required fw-semibold fs-6 mb-5">Instansi</label>
+                                <!--end::Label-->
+                                <select class="form-control mb-3 mb-lg-0" name="skpd_id" id="skpd_id">
+                                    <option selected="selected" disabled>Pilih Instansi</option>
+                                    @foreach ($skpd as $sk)
+                                        <option value="{{ $sk->id }}">{{ $sk->nama_skpd }}</option>
+                                    @endforeach
+                                </select>
+                                <span class="text-danger error-text skpd_error_add"></span>
 
+                            </div>
                         </div>
                         <!--end::Scroll-->
                         <!--begin::Actions-->

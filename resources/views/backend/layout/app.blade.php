@@ -147,7 +147,7 @@ License: For each use you must have a valid license purchased only from above li
                 <!--begin::Wrapper container-->
                 <div class="app-container container-fluid d-flex flex-row flex-column-fluid">
                     <!--begin::Sidebar-->
-                    @include('backend.layout.sidebar')
+
                     <!--end::Sidebar-->
                     <!--begin::Main-->
                     <div class="app-main flex-column flex-row-fluid" id="kt_app_main">

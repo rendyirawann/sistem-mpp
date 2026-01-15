@@ -2,21 +2,32 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Str;
 
 class Antrian extends Model
 {
-    use HasFactory;
+    public $incrementing = false;
+    protected $keyType = 'string';
 
-    protected $table = 'antrians';
+    protected static function boot()
+    {
+        parent::boot();
+        static::creating(function ($model) {
+            if (!$model->id) {
+                $model->id = (string) Str::uuid();
+            }
+        });
+    }
 
     protected $fillable = [
+        'skpd_id',
         'loket_id',
+        'customer_id',
         'nomor_urut',
         'nomor_antrian',
-        'tanggal',
         'status',
+        'tanggal',
         'waktu_ambil',
         'waktu_panggil',
         'waktu_selesai',
@@ -29,30 +40,13 @@ class Antrian extends Model
         'waktu_selesai' => 'datetime',
     ];
 
-    /**
-     * Relasi:
-     * Antrian milik satu Loket
-     */
-    public function loket()
+    public function scopeHariIni($q)
     {
-        return $this->belongsTo(Loket::class);
+        return $q->whereDate('tanggal', now());
     }
 
-    /**
-     * Scope:
-     * Antrian hari ini
-     */
-    public function scopeHariIni($query)
+    public function skpd()
     {
-        return $query->whereDate('tanggal', now()->toDateString());
-    }
-
-    /**
-     * Scope:
-     * Berdasarkan Loket
-     */
-    public function scopeByLoket($query, $loketId)
-    {
-        return $query->where('loket_id', $loketId);
+        return $this->belongsTo(Skpd::class);
     }
 }

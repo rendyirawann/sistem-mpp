@@ -23,7 +23,7 @@
             class="menu-item menu-lg-down-accordion menu-sub-lg-down-indention me-0 me-lg-2">
             <!--begin:Menu link-->
             <span class="menu-link py-3  {{ request()->routeIs('skpd.index') ? 'active ' : '' }}">
-                <span class="menu-title">Skpd</span>
+                <span class="menu-title">Intansi</span>
                 <span class="menu-arrow d-lg-none">
                 </span>
             </span>
@@ -36,9 +36,9 @@
                     <!--begin:Menu link-->
                     <a class="menu-link py-3 " href="{{ route('skpd.index') }}">
                         <span class="menu-icon">
-                            <i class="ki-outline ki-rocket fs-2"></i>
+                            <i class="ki-outline ki-virus fs-2"></i>
                         </span>
-                        <span class="menu-title">Skpd Management</span>
+                        <span class="menu-title">Intansi Management</span>
                     </a>
                     <!--end:Menu link-->
                 </div>
@@ -47,8 +47,55 @@
             </div>
             <!--end:Menu sub-->
         </div>
+        @endcanany
+
+        @canany(['antrian.list','antrian.call'])
+        <!--begin:Menu item-->
+        <div data-kt-menu-trigger="{default: 'click', lg: 'hover'}"
+            data-kt-menu-placement="bottom-start"
+            class="menu-item menu-lg-down-accordion menu-sub-lg-down-indention me-0 me-lg-2">
+
+            <!--begin:Menu link-->
+            <span class="menu-link py-3 {{ request()->routeIs('antrian.*') ? 'active' : '' }}">
+                <span class="menu-title">Antrian</span>
+                <span class="menu-arrow d-lg-none"></span>
+            </span>
+            <!--end:Menu link-->
+
+            <!--begin:Menu sub-->
+            <div class="menu-sub menu-sub-lg-down-accordion menu-sub-lg-dropdown px-lg-2 py-lg-4 w-lg-225px">
+
+                {{-- ================= PANGGIL ANTRIAN ================= --}}
+                @can('antrian.call')
+                <div class="menu-item {{ request()->routeIs('antrian.call') ? 'here show' : '' }}">
+                    <a class="menu-link py-3" href="{{ route('antrian.call') }}">
+                        <span class="menu-icon">
+                            <i class="ki-outline ki-notification fs-2"></i>
+                        </span>
+                        <span class="menu-title">Panggil Antrian</span>
+                    </a>
+                </div>
+                @endcan
+
+                {{-- ================= MANAJEMEN ANTRIAN ================= --}}
+                @can('antrian.list')
+                <div class="menu-item {{ request()->routeIs('antrian.index') ? 'here show' : '' }}">
+                    <a class="menu-link py-3" href="{{ route('antrian.index') }}">
+                        <span class="menu-icon">
+                            <i class="ki-outline ki-people fs-2"></i>
+                        </span>
+                        <span class="menu-title">Antrian Management</span>
+                    </a>
+                </div>
+                @endcan
+
+            </div>
+            <!--end:Menu sub-->
+        </div>
         <!--end:Menu item-->
         @endcanany
+
+        <!--end:Menu item-->
         @canany(['user.list', 'role.list'])
         <!--begin:Menu item-->
         <div data-kt-menu-trigger="{default: 'click', lg: 'hover'}" data-kt-menu-placement="bottom-start"
@@ -85,6 +132,20 @@
                             <i class="ki-outline ki-code fs-2"></i>
                         </span>
                         <span class="menu-title">Role Management</span>
+                    </a>
+                    <!--end:Menu link-->
+                </div>
+                <!--end:Menu item-->
+                @endcan
+                @can('loket.list')
+                <!--begin:Menu item-->
+                <div class="menu-item {{ request()->routeIs('loket.index') ? 'here show ' : '' }}">
+                    <!--begin:Menu link-->
+                    <a class="menu-link py-3" href="{{ route('loket.index') }}">
+                        <span class="menu-icon">
+                            <i class="ki-outline ki-logistic fs-2"></i>
+                        </span>
+                        <span class="menu-title">Loket Management</span>
                     </a>
                     <!--end:Menu link-->
                 </div>
