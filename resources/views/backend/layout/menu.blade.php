@@ -64,27 +64,14 @@
 
             <!--begin:Menu sub-->
             <div class="menu-sub menu-sub-lg-down-accordion menu-sub-lg-dropdown px-lg-2 py-lg-4 w-lg-225px">
-
-                {{-- ================= PANGGIL ANTRIAN ================= --}}
-                @can('antrian.call')
-                <div class="menu-item {{ request()->routeIs('antrian.call') ? 'here show' : '' }}">
-                    <a class="menu-link py-3" href="{{ route('antrian.call') }}">
-                        <span class="menu-icon">
-                            <i class="ki-outline ki-notification fs-2"></i>
-                        </span>
-                        <span class="menu-title">Panggil Antrian</span>
-                    </a>
-                </div>
-                @endcan
-
                 {{-- ================= MANAJEMEN ANTRIAN ================= --}}
                 @can('antrian.list')
                 <div class="menu-item {{ request()->routeIs('antrian.index') ? 'here show' : '' }}">
                     <a class="menu-link py-3" href="{{ route('antrian.index') }}">
                         <span class="menu-icon">
-                            <i class="ki-outline ki-people fs-2"></i>
+                            <i class="ki-outline ki-notification-on fs-2"></i>
                         </span>
-                        <span class="menu-title">Antrian Management</span>
+                        <span class="menu-title">Panggilan Antrian</span>
                     </a>
                 </div>
                 @endcan
@@ -108,7 +95,7 @@
             </span>
             <!--end:Menu link-->
             <!--begin:Menu sub-->
-            <div class="menu-sub menu-sub-lg-down-accordion menu-sub-lg-dropdown px-lg-2 py-lg-4 w-lg-200px">
+            <div class="menu-sub menu-sub-lg-down-accordion menu-sub-lg-dropdown px-lg-2 py-lg-4 w-lg-210px">
                 @can('user.list')
                 <!--begin:Menu item-->
                 <div class="menu-item {{ request()->routeIs('users.index') ? 'here show ' : '' }}">
@@ -145,7 +132,7 @@
                         <span class="menu-icon">
                             <i class="ki-outline ki-logistic fs-2"></i>
                         </span>
-                        <span class="menu-title">Loket Management</span>
+                        <span class="menu-title">Layanan Management</span>
                     </a>
                     <!--end:Menu link-->
                 </div>

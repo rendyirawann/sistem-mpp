@@ -196,6 +196,66 @@
                         data-kt-scroll-dependencies="#kt_modal_add_skpd_header"
                         data-kt-scroll-wrappers="#kt_modal_add_skpd_scroll" data-kt-scroll-offset="300px">
                         <!--begin::Input group-->
+                        <div class="fv-row mb-7">
+                            <!--begin::Label-->
+                            <label class="d-block fw-semibold fs-6 mb-5">Logo Instansi</label>
+                            <!--end::Label-->
+                            <!--begin::Image placeholder-->
+                            <style>
+                                .image-input-placeholder {
+                                    background-image: url('{{ URL::to('assets/media/svg/files/blank-image.svg') }}');
+                                }
+
+                                [data-bs-theme="dark"] .image-input-placeholder {
+                                    background-image: url('{{ URL::to('assets/media/svg/files/blank-image-dark.svg') }}');
+                                }
+                            </style>
+                            <!--end::Image placeholder-->
+                            <!--begin::Image input-->
+                            <div class="image-input image-input-outline image-input-placeholder"
+                                data-kt-image-input="true">
+                                <!--begin::Preview existing avatar-->
+                                <div class="image-input-wrapper w-125px h-125px" id="default-image"
+                                    style="background-image: url({{ URL::to('assets/media/svg/files/blank-image.svg') }});">
+                                </div>
+                                <!--end::Preview existing avatar-->
+                                <!--begin::Label-->
+                                <label
+                                    class="btn btn-icon btn-circle btn-active-color-primary w-25px h-25px bg-body shadow"
+                                    data-kt-image-input-action="change" data-bs-toggle="tooltip"
+                                    title="Change Logo Instansi">
+                                    <i class="ki-outline ki-pencil fs-7"></i>
+                                    <!--begin::Inputs-->
+                                    <input type="file" name="logo_skpd" id="logo_skpd"
+                                        accept=".png, .jpg, .jpeg" />
+                                    <input type="hidden" name="avatar_remove" />
+                                    <!--end::Inputs-->
+                                </label>
+                                <!--end::Label-->
+                                <!--begin::Cancel-->
+                                <span
+                                    class="btn btn-icon btn-circle btn-active-color-primary w-25px h-25px bg-body shadow"
+                                    data-kt-image-input-action="cancel" data-bs-toggle="tooltip"
+                                    title="Cancel avatar">
+                                    <i class="ki-outline ki-cross fs-2"></i>
+                                </span>
+                                <!--end::Cancel-->
+                                <!--begin::Remove-->
+                                <span
+                                    class="btn btn-icon btn-circle btn-active-color-primary w-25px h-25px bg-body shadow"
+                                    data-kt-image-input-action="remove" data-bs-toggle="tooltip"
+                                    title="Remove avatar">
+                                    <i class="ki-outline ki-cross fs-2"></i>
+                                </span>
+                                <!--end::Remove-->
+                            </div>
+                            <!--end::Image input-->
+                            <!--begin::Hint-->
+                            <div class="form-text">Allowed file types: png, jpg, jpeg.</div>
+                            <span class="text-danger error-text avatar_error_add"></span>
+
+                            <!--end::Hint-->
+                        </div>
                         <!--end::Input group-->
                         <!--begin::Input group-->
                         <!--end::Input group-->

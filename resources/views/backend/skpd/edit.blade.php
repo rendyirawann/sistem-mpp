@@ -1,5 +1,56 @@
 <input type="hidden" name="hidden_id" value="{{ $user->id }}">
 
+<div class="fv-row mb-7">
+
+
+    <!--begin::Label-->
+    <label for="editlogo" class="d-block fw-semibold fs-6 mb-5">Logo Skpd</label>
+    <!--end::Label-->
+    <!--begin::Image placeholder-->
+
+    <!--end::Image placeholder-->
+    <!--begin::Image input-->
+    <div class="image-input image-input-outline image-input-placeholder" data-kt-image-input="true">
+        <!--begin::Preview existing logo-->
+
+        <div class="symbol symbol-125px symbol-125">
+            @if (empty($user->logo))
+                <img id="preview-image-before-upload" src="{{ asset('assets/media/svg/files/blank-image.svg') }}"
+                    alt="preview image" />
+            @else
+                <img id="preview-image-before-upload" src="{{ asset('storage/user/logo/' . $user->logo) }}"
+                    alt="preview image" />
+            @endif
+        </div>
+
+        <!--end::Preview existing logo-->
+        <!--begin::Label-->
+        <label for="editlogo" class="btn btn-icon btn-circle btn-active-color-primary w-25px h-25px bg-body shadow"
+            data-kt-image-input-action="change" data-bs-toggle="tooltip" title="Change logo">
+            <i class="bi bi-pencil-fill fs-7"></i>
+            <!--begin::Inputs-->
+            <input type="file" name="logo_skpd" id="editlogo" accept=".png, .jpg, .jpeg"
+                value="{{ $user->logo }}" /> <!--end::Inputs-->
+        </label>
+        <!--end::Label-->
+        <!--begin::Cancel-->
+        <span class="btn btn-icon btn-circle btn-active-color-primary w-25px h-25px bg-body shadow"
+            data-kt-image-input-action="cancel" data-bs-toggle="tooltip" title="Cancel logo">
+            <i class="bi bi-x fs-2"></i>
+        </span>
+        <!--end::Cancel-->
+        <!--begin::Remove-->
+        <span class="btn btn-icon btn-circle btn-active-color-primary w-25px h-25px bg-body shadow"
+            data-kt-image-input-action="remove" data-bs-toggle="tooltip" title="Remove logo">
+            <i class="ki-outline ki-cross fs-2"></i>
+        </span>
+        <!--end::Remove-->
+    </div>
+    <!--end::Image input-->
+    <!--begin::Hint-->
+    <div class="form-text">Allowed file types: png, jpg, jpeg.</div>
+    <span class="text-danger error-text logo_error_edit"></span> <!--end::Hint-->
+</div>
 <!-- Nama SKPD -->
 <div class="fv-row mb-7">
     <label class="required fw-semibold fs-6 mb-2">Nama SKPD</label>
@@ -33,3 +84,16 @@
         <option value="0" {{ !$user->isaktif ? 'selected' : '' }}>Tidak Aktif</option>
     </select>
 </div>
+
+<script type="text/javascript">
+    $(document).ready(function(e) {
+
+        $('#editlogo').change(function() {
+            let reader = new FileReader();
+            reader.onload = (e) => {
+                $('#preview-image-before-upload').attr('src', e.target.result);
+            }
+            reader.readAsDataURL(this.files[0]);
+        });
+    });
+</script>

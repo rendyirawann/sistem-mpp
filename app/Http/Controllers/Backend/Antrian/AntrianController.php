@@ -5,248 +5,211 @@ namespace App\Http\Controllers\Backend\Antrian;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\Antrian;
-use App\Models\Skpd;
-use DB;
-use Carbon\Carbon;
-use Ramsey\Uuid\Uuid;
-use Auth;
-use Jenssegers\Agent\Agent;
 use Yajra\DataTables\Facades\DataTables;
-use Spatie\Activitylog\Models\Activity;
-use Illuminate\View\View;
+use DB;
+use Auth;
 
 class AntrianController extends Controller
 {
     public function __construct()
     {
         $this->middleware(['auth']);
-        $this->middleware('permission:antrian.list', ['only' => ['index', 'getData']]);
-        $this->middleware('permission:antrian.create', ['only' => ['store']]);
-        $this->middleware('permission:antrian.edit', ['only' => ['edit', 'update']]);
-        $this->middleware('permission:antrian.delete', ['only' => ['destroy', 'massDelete']]);
-        $this->middleware('permission:antrian.call', ['only' => ['call']]);
+        $this->middleware('permission:antrian.list', ['only' => ['index', 'getAntrian']]);
     }
 
-    /* =====================================================
-     * INDEX
-     * ===================================================== */
-    public function index(): View
+    /**
+     * FILTER QUERY BERDASARKAN ROLE
+     */
+    private function filterBySkpd($query)
     {
-        $skpd = Skpd::where('isaktif', 1)->get();
-        return view('backend.antrian.index', compact('skpd'));
+        if (!auth()->user()->hasRole('Superadmin')) {
+            $query->where('antrians.skpd_id', auth()->user()->skpd_id);
+        }
+
+        return $query;
     }
 
-    /* =====================================================
-     * DATATABLES
-     * ===================================================== */
-    public function getData(Request $request)
+    /**
+     * Halaman Panggilan Antrian
+     */
+    public function index()
     {
-        $query = Antrian::with('skpd')->orderByDesc('created_at');
+        return view('backend.antrian.index');
+    }
+
+    /**
+     * DataTables
+     */
+    public function getAntrian()
+    {
+        $query = Antrian::query()
+            ->select([
+                'antrians.id',
+                'antrians.no_antrian',
+                'antrians.status',
+                'lokets.nama_loket',
+                'skpd.nama_skpd'
+            ])
+            ->leftJoin('lokets', function ($join) {
+                $join->on(
+                    DB::raw('lokets.id COLLATE utf8mb4_unicode_ci'),
+                    '=',
+                    DB::raw('antrians.loket_id COLLATE utf8mb4_unicode_ci')
+                );
+            })
+            ->leftJoin('skpd', function ($join) {
+                $join->on(
+                    DB::raw('skpd.id COLLATE utf8mb4_unicode_ci'),
+                    '=',
+                    DB::raw('antrians.skpd_id COLLATE utf8mb4_unicode_ci')
+                );
+            })
+            ->hariIni()
+            ->orderBy('antrians.no_urut');
+
+        $this->filterBySkpd($query);
+
+        $firstWaitingId = Antrian::query()
+            ->hariIni()
+            ->where('status', 0)
+            ->when(!auth()->user()->hasRole('Superadmin'), function ($q) {
+                $q->where('skpd_id', auth()->user()->skpd_id);
+            })
+            ->orderBy('no_urut')
+            ->value('id');
+
         return DataTables::of($query)
-            ->addColumn('skpd', fn($r) => $r->skpd->nama_skpd ?? '-')
-            ->addColumn('nomor_antrian', fn($r) => $r->nomor_antrian)
-            ->addColumn('tanggal', fn($r) => $r->tanggal?->format('d-m-Y'))
-            ->addColumn('status', function ($r) {
-                return match ($r->status) {
+            ->addColumn('status_label', function ($row) {
+                return match ((int) $row->status) {
                     0 => '<span class="badge badge-light-warning">Menunggu</span>',
                     1 => '<span class="badge badge-light-success">Dipanggil</span>',
-                    default => '<span class="badge badge-light-secondary">Selesai</span>',
+                    default => '-',
                 };
             })
-            ->addColumn('action', function ($row) {
-
-                if (
-                    !auth()->user()->can('antrian.edit') &&
-                    !auth()->user()->can('antrian.delete')
-                ) {
-                    return '-';
-                }
-
-                $html = '<div class="text-center">
-                    <button class="btn btn-sm btn-light btn-active-light-primary"
-                        data-bs-toggle="dropdown">
-                        <i class="ki-outline ki-dots-vertical fs-3"></i>
-                    </button>
-                    <ul class="dropdown-menu dropdown-menu-end fs-7">';
-
-                if (auth()->user()->can('antrian.edit')) {
-                    $html .= '
-                        <li>
-                            <a href="javascript:void(0)"
-                               class="dropdown-item"
-                               id="getEditRowData"
-                               data-id="' . $row->id . '">
-                                <i class="ki-outline ki-pencil fs-5 me-2 text-warning"></i>Edit
-                            </a>
-                        </li>';
-                }
-
-                if (auth()->user()->can('antrian.delete')) {
-                    $html .= '
-                        <li>
-                            <a href="javascript:void(0)"
-                               class="dropdown-item"
-                               data-id="' . $row->id . '"
-                               data-bs-toggle="modal"
-                               data-bs-target="#Modal_Hapus_Data"
-                               id="getDeleteId">
-                                <i class="ki-outline ki-trash fs-5 me-2 text-danger"></i>Hapus
-                            </a>
-                        </li>';
-                }
-
-                $html .= '</ul></div>';
-
-                return $html;
-            })
-            ->rawColumns(['status', 'action'])
+            ->addColumn('is_active', fn ($row) => (int)$row->status === 1)
+            ->addColumn('is_first', fn ($row) => $row->id === $firstWaitingId)
+            ->rawColumns(['status_label'])
             ->make(true);
     }
 
-    /* =====================================================
-     * STORE
-     * ===================================================== */
-    public function store(Request $request)
+
+    /**
+     * Jumlah antrian
+     */
+    public function jumlah()
     {
-        $formattedTime = Carbon::now()->diffForHumans();
+        $query = Antrian::query()->hariIni();
 
-        $validator = \Validator::make($request->all(), [
-            'skpd_id' => 'required',
-            'nomor_antrian' => 'required',
-            'tanggal' => 'required|date',
-        ]);
+        $this->filterBySkpd($query);
 
-        if ($validator->fails()) {
-            return response()->json(['errors' => $validator->errors()]);
-        }
-
-        try {
-            DB::beginTransaction();
-
-            $data = new Antrian;
-            $data->id = Uuid::uuid4();
-            $data->skpd_id = $request->skpd_id;
-            $data->nomor_antrian = $request->nomor_antrian;
-            $data->tanggal = $request->tanggal;
-            $data->status = 0;
-            $data->save();
-
-            $agent = new Agent;
-
-            activity()
-                ->useLog('Tambah Antrian')
-                ->causedBy(auth()->user())
-                ->performedOn($data)
-                ->withProperties([
-                    'ip' => $request->ip(),
-                    'agent' => $agent->browser(),
-                    'new' => $data->toArray()
-                ])
-                ->log('Menambah antrian ' . $data->nomor_antrian);
-
-            DB::commit();
-
-            return response()->json([
-                'success' => 'Antrian berhasil ditambahkan',
-                'time' => $formattedTime,
-                'judul' => 'Berhasil'
-            ]);
-        } catch (\Exception $e) {
-            DB::rollBack();
-            return response()->json([
-                'error' => 'Terjadi kesalahan',
-                'errorMessage' => $e->getMessage()
-            ], 500);
-        }
+        return $query->count();
     }
 
-    /* =====================================================
-     * CALL ANTRIAN
-     * ===================================================== */
-    public function call(Request $request)
+    /**
+     * Antrian sekarang
+     */
+    public function sekarang()
     {
-        $antrian = Antrian::findOrFail($request->id);
+        $query = Antrian::query()
+            ->hariIni()
+            ->where('status', 1)
+            ->orderByDesc('waktu_panggil');
 
-        if (
-            !auth()->user()->hasRole('superadmin') &&
-            $antrian->skpd_id !== auth()->user()->skpd_id
-        ) {
-            abort(403);
+        $this->filterBySkpd($query);
+
+        return $query->value('no_antrian') ?? '-';
+    }
+
+    /**
+     * Antrian selanjutnya
+     */
+    public function selanjutnya()
+    {
+        $query = Antrian::query()
+            ->hariIni()
+            ->where('status', 0)
+            ->orderBy('no_urut');
+
+        $this->filterBySkpd($query);
+
+        return $query->value('no_antrian') ?? '-';
+    }
+
+    /**
+     * Sisa antrian
+     */
+    public function sisa()
+    {
+        $query = Antrian::query()
+            ->hariIni()
+            ->where('status', 0);
+
+        $this->filterBySkpd($query);
+
+        return $query->count();
+    }
+
+    /**
+     * Panggil antrian
+     */
+    public function panggil(Request $request)
+    {
+        $request->validate([
+            'id' => 'required|exists:antrians,id'
+        ]);
+
+        $query = Antrian::query();
+        $this->filterBySkpd($query);
+
+        $antrian = $query->where('id', $request->id)->first();
+
+        if (!$antrian) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Data antrian tidak ditemukan'
+            ], 404);
         }
 
-        Antrian::where('skpd_id', $antrian->skpd_id)
-            ->where('status', 1)
-            ->update([
-                'status' => 2,
-                'waktu_selesai' => now()
+        // 🔁 JIKA SUDAH DIPANGGIL → BOLEH ULANGI
+        if ($antrian->status == 1) {
+            $antrian->update([
+                'waktu_panggil' => now()
             ]);
 
+            return response()->json([
+                'success' => true,
+                'message' => 'Antrian dipanggil ulang'
+            ]);
+        }
+
+        // 🔒 CEK ANTRIAN TERKECIL YANG MASIH MENUNGGU
+        $antrianPertama = Antrian::query()
+            ->hariIni()
+            ->where('status', 0)
+            ->when(!auth()->user()->hasRole('Superadmin'), function ($q) {
+                $q->where('skpd_id', auth()->user()->skpd_id);
+            })
+            ->orderBy('no_urut')
+            ->first();
+
+        if (!$antrianPertama || $antrianPertama->id !== $antrian->id) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Harus memanggil antrian terdepan terlebih dahulu'
+            ], 422);
+        }
+
+        // ✅ PANGGIL ANTRIAN TERDEPAN
         $antrian->update([
-            'status' => 1,
+            'status'        => 1,
             'waktu_panggil' => now()
         ]);
 
-        return response()->json(['success' => true]);
-    }
-
-    /* =====================================================
-     * EDIT
-     * ===================================================== */
-    public function edit($id)
-    {
-        $data = Antrian::findOrFail($id);
-
-        $html = view('backend.antrian.edit', compact('data'))->render();
-        return response()->json(['html' => $html]);
-    }
-
-    /* =====================================================
-     * UPDATE
-     * ===================================================== */
-    public function update(Request $request, $id)
-    {
-        Antrian::findOrFail($id)->update(
-            $request->only([
-                'skpd_id',
-                'nomor_antrian',
-                'nomor_urut',
-                'status',
-                'tanggal'
-            ])
-        );
-
         return response()->json([
-            'success' => 'Antrian berhasil diperbarui'
+            'success' => true,
+            'message' => 'Antrian berhasil dipanggil'
         ]);
     }
 
-    /* =====================================================
-     * DELETE
-     * ===================================================== */
-    public function destroy(Request $request, $id)
-    {
-        Antrian::findOrFail($id)->delete();
 
-        return response()->json([
-            'success' => 'Antrian berhasil dihapus'
-        ]);
-    }
-    public function panggil($id)
-    {
-        DB::beginTransaction();
-
-        $antrian = Antrian::findOrFail($id);
-
-        $lastUrut = Antrian::where('skpd_id', $antrian->skpd_id)
-            ->whereNotNull('nomor_urut')
-            ->max('nomor_urut');
-
-        $antrian->nomor_urut = ($lastUrut ?? 0) + 1;
-        $antrian->status = 1; // dipanggil
-        $antrian->save();
-
-        DB::commit();
-
-        return response()->json(['success' => 'Antrian dipanggil']);
-    }
 }

@@ -27,7 +27,7 @@ License: For each use you must have a valid license purchased only from above li
     <meta property="og:url" content="https://keenthemes.com/metronic" />
     <meta property="og:site_name" content="Metronic by Keenthemes" />
     <link rel="canonical" href="http://preview.keenthemes.comauthentication/layouts/overlay/sign-in.html" />
-    <link rel="shortcut icon" href="{{ asset('assets/media/logos/favicon.ico') }}" />
+    <link rel="shortcut icon" href="{{ asset('assets/media/logos/logo_deliserdang.png') }}" />
     <!--begin::Fonts(mandatory for all pages)-->
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Inter:300,400,500,600,700" />
     <!--end::Fonts-->
@@ -36,7 +36,7 @@ License: For each use you must have a valid license purchased only from above li
     <link href="{{ asset('assets/css/style.bundle.css') }}" rel="stylesheet" type="text/css" />
     <!--end::Global Stylesheets Bundle-->
     <script>
-        // Frame-busting to prevent site from being loaded within a frame without permission (click-jacking) 
+        // Frame-busting to prevent site from being loaded within a frame without permission (click-jacking)
         if (window.top != window.self) {
             window.top.location.replace(window.self.location.href);
         }
@@ -89,21 +89,25 @@ License: For each use you must have a valid license purchased only from above li
                 <!--begin::Content-->
                 <div class="d-flex flex-column flex-center pb-0 pb-lg-10 p-10 w-100">
                     <!--begin::Image-->
-                    <img class="theme-light-show mx-auto mw-100 w-150px w-lg-300px mb-10 mb-lg-20 "
-                        src="{{ asset('assets/media/auth/agency.png') }}" alt="" />
+                    <img class="theme-light-show mx-auto mw-100 w-150px w-lg-300px mb-10 mb-lg-20"
+                        src="{{ asset('assets/media/logos/mpp_logo.svg') }}" alt="" />
+
                     <img class="theme-dark-show mx-auto mw-100 w-150px w-lg-300px mb-10 mb-lg-20"
-                        src="{{ asset('assets/media/auth/agency-dark.png') }}" alt="" />
+                        src="{{ asset('assets/media/logos/mpp_logo.svg') }}" alt="" />
+
                     <!--end::Image-->
                     <!--begin::Title-->
-                    <h1 class="text-gray-800 fs-2qx fw-bold text-center mb-7">Fast, Efficient and Productive</h1>
+                    <!-- <h1 class="text-gray-800 fs-2qx fw-bold text-center mb-7">Fast, Efficient and Productive</h1> -->
                     <!--end::Title-->
                     <!--begin::Text-->
-                    <div class="text-gray-600 fs-base text-center fw-semibold">In this kind of post,
-                        <a class="opacity-75-hover text-primary me-1">the blogger</a>introduces a person
-                        they’ve interviewed
-                        <br />and provides some background information about
-                        <a class="opacity-75-hover text-primary me-1">the interviewee</a>and their
-                        <br />work following this is a transcript of the interview.
+                    <h1 class="text-gray-800 fs-2qx fw-bold text-center mb-7">
+                        Mal Pelayanan Publik <br> Kabupaten Deli Serdang
+                    </h1>
+                    <div class="text-gray-600 fs-base text-center fw-semibold">
+                        Memberikan pelayanan yang <strong>Cepat, Transparan, dan Akuntabel</strong> <br />
+                        kepada seluruh masyarakat Deli Serdang dalam satu pintu.
+                        <br /><br />
+                        <span class="badge badge-light-primary fs-7 fw-bold">Bhineka Perkasa Jaya</span>
                     </div>
                     <!--end::Text-->
                 </div>

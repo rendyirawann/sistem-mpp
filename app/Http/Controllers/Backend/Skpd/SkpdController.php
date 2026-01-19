@@ -169,6 +169,7 @@ class SkpdController extends Controller
              'kepala_skpd' => 'nullable|string|max:255',
              'nip_kepala'  => 'nullable|string|max:25',
              'isaktif'    => 'required|in:0,1',
+             'logo_skpd' => 'required|mimes:jpg,png,svg|max:2048',
          ], [
 
             //  'kode_skpd.required' => 'Kode SKPD wajib diisi',
@@ -180,6 +181,10 @@ class SkpdController extends Controller
 
              'kepala_skpd.max'    => 'Nama Kepala SKPD maksimal 255 karakter',
              'nip_kepala.max'     => 'NIP Kepala maksimal 25 karakter',
+
+            'logo_skpd.required' => 'Logo_skpd wajib diisi',
+            'logo_skpd.mimes' => 'Logo_skpd harus format .jpg .png .svg',
+            'logo_skpd.max' => 'Ukuran file Logo_skpd maksimal 2 MB',
 
              'isaktif.required'  => 'Status wajib dipilih',
              'isaktif.in'        => 'Status tidak valid',
@@ -193,6 +198,20 @@ class SkpdController extends Controller
              \DB::beginTransaction();
 
              $data = new Skpd;
+             if ($request->hasFile('logo_skpd')) {
+                $file      = $request->file('logo_skpd');
+                $extension = $file->getClientOriginalExtension();
+
+                $filename = 'logo_skpd-'.$data->id.'-'.time().'.'.$extension;
+
+                Storage::disk('public')->putFileAs(
+                    'user/logo_skpd/',
+                    $file,
+                    $filename
+                );
+
+                $data->logo_skpd = $filename;
+            }
              $data->id          = \Ramsey\Uuid\Uuid::uuid4();
             //  $data->kode_skpd   = $request->kode_skpd;
              $data->nama_skpd   = $request->nama_skpd;
@@ -467,6 +486,7 @@ class SkpdController extends Controller
             'nama_skpd'    => 'required|string|max:255',
             'kepala_skpd'  => 'nullable|string|max:255',
             'nip_kepala'   => 'nullable|string|max:25',
+            'logo_skpd' => 'mimes:jpg,png,svg|max:2048',
             'isaktif'      => 'required|in:0,1',
         ], [
             'nama_skpd.required' => 'Nama SKPD wajib diisi',
@@ -474,7 +494,8 @@ class SkpdController extends Controller
 
             'kepala_skpd.max'    => 'Nama Kepala SKPD maksimal 255 karakter',
             'nip_kepala.max'     => 'NIP Kepala maksimal 25 karakter',
-
+            'logo_skpd.mimes' => 'Logo_skpd harus format .jpg .png .svg',
+            'logo_skpd.max' => 'Ukuran file Logo_skpd maksimal 2 MB',
             'isaktif.required'   => 'Status wajib dipilih',
             'isaktif.in'         => 'Status tidak valid',
         ]);
@@ -489,6 +510,28 @@ class SkpdController extends Controller
             $data = Skpd::findOrFail($id);
             $oldData = $data->toArray();
 
+            if ($request->hasFile('logo_skpd')) {
+
+                // Hapus file lama
+                if ($data->logo_skpd && Storage::disk('public')->exists('user/logo_skpd/'.$data->logo_skpd)) {
+                    Storage::disk('public')->delete('user/logo_skpd/'.$data->logo_skpd);
+                }
+
+                $file = $request->file('logo_skpd');
+                $extension = $file->getClientOriginalExtension();
+
+                // Nama file aman & standar
+                $filename = 'logo_skpd-'.$data->id.'-'.time().'.'.$extension;
+
+                // Simpan file
+                Storage::disk('public')->putFileAs(
+                    'user/logo_skpd/',
+                    $file,
+                    $filename
+                );
+
+                $data->logo_skpd = $filename;
+            }
             // ===============================
             // UPDATE DATA SKPD
             // ===============================

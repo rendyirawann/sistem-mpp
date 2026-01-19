@@ -8,10 +8,10 @@
             <div class="d-flex flex-center flex-column align-items-stretch h-lg-100 w-md-400px">
 
                 <div class="d-flex flex-center flex-column flex-column-fluid mb-2">
-                    <img alt="Logo" class="theme-light-show h-40px h-lg-45px"
-                        src="{{ asset('assets/media/logos/keenthemes.svg') }}" />
-                    <img alt="Logo" class="theme-dark-show h-40px h-lg-45px"
-                        src="{{ asset('assets/media/logos/keenthemes-dark.svg') }}" />
+                    <img alt="Logo" class="theme-light-show h-40px h-lg-150px"
+                        src="{{ asset('assets/media/logos/mpp_login.png') }}" />
+                    <img alt="Logo" class="theme-dark-show h-40px h-lg-150px"
+                        src="{{ asset('assets/media/logos/mpp_login.png') }}" />
                 </div>
 
                 <div class="d-flex flex-center flex-column flex-column-fluid pb-15 pb-lg-20 my-12">
@@ -20,11 +20,6 @@
 
                     <form class="form w-100" id="kt_sign_in_form" method="POST" action="{{ route('login') }}">
                         @csrf
-
-                        <div class="text-center mb-11 pb-8">
-                            <h1 class="text-gray-900 fw-bolder mb-3">Sign In</h1>
-                            <div class="text-gray-500 fw-semibold fs-6">Masuk menggunakan akun terdaftar</div>
-                        </div>
 
                         <div class="fv-row mb-8">
                             <input type="text" placeholder="Email atau No WA" name="email" autocomplete="off"
@@ -56,7 +51,7 @@
                 <div class="d-flex flex-stack">
                     <div class="me-10">
                         <span class="text-muted fw-semibold me-1">{{ date('Y') }}</span>
-                        <a class="text-gray-800 text-hover-primary">&copy; rizkychimo</a>
+                        <a class="text-gray-800 text-hover-primary">&copy; MPP Deli Serdang</a>
                     </div>
                     <div class="d-flex fw-semibold text-muted fs-base gap-5">
                         <span class="px-2">No version available</span>
