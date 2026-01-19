@@ -14,6 +14,7 @@ class Skpd extends Model
         'kepala_skpd',
         'nip_kepala',
         'isaktif',
+        'logo_skpd',
         'no_antrian',
     ];
 

@@ -13,7 +13,7 @@ use Auth;
 use Jenssegers\Agent\Agent;
 use Illuminate\View\View;
 use Yajra\DataTables\Facades\DataTables;
-
+use Illuminate\Validation\Rule;
 class LoketController extends Controller
 {
     function __construct()
@@ -168,12 +168,33 @@ class LoketController extends Controller
     {
         $query = Loket::query();
 
+        // 🔒 Role guard
         if (!auth()->user()->hasRole('Superadmin')) {
             $query->where('skpd_id', auth()->user()->skpd_id);
         }
 
+        // 🎯 WAJIB: filter ID
+        $query->where('id', $id);
+
+        // ✅ VALIDASI UPDATE (ignore ID sendiri)
+        $request->validate([
+            'nama_loket' => 'required|string',
+            'kode_tenant' => [
+                'required',
+                Rule::unique('lokets', 'kode_tenant')->ignore($id)
+            ],
+            'prefix_tenant' => 'required|string|max:5',
+            'isaktif' => 'required|in:0,1',
+            'skpd_id' => 'required'
+        ]);
+
+        // 🚀 UPDATE DATA
         $query->update($request->only([
-            'nama_loket','kode_tenant','prefix_tenant','isaktif','skpd_id'
+            'nama_loket',
+            'kode_tenant',
+            'prefix_tenant',
+            'isaktif',
+            'skpd_id'
         ]));
 
         return response()->json([

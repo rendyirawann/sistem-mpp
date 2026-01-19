@@ -111,6 +111,9 @@
 @push('scripts')
 <script src="{{ asset('assets/plugins/custom/datatables/datatables.bundle.js') }}"></script>
 <script src="https://code.responsivevoice.org/responsivevoice.js?key=jQZ2zcdq"></script>
+
+<audio id="tingtung" src="{{ asset('assets/audio/tingtung.mp3') }}"></audio>
+
 <script>
 let table;
 let speechQueue = [];
@@ -174,42 +177,16 @@ $(document).ready(function () {
         }
     });
 
-    function buildFormalText(data) {
-        return [
-            `Perhatian.`,
-            `Panggilan Untuk Nomor antrian ${data.no_antrian}`,
-            `Silakan Menuju Loket.`
-        ];
+
+    function speakIndonesiaQueued(text, onDone = null) {
+
+        speechQueue.push({ text, onDone });
+
+        if (!isSpeaking) {
+            processSpeechQueue();
+        }
     }
-
-    function speakIndonesiaQueuedPro(sentences, onDone = null) {
-
-    sentences.forEach((text, index) => {
-        speechQueue.push({
-            text,
-            delay: index === 0 ? 0 : 600 // jeda antar kalimat
-        });
-    });
-
-    // ulangi 1x lagi (opsional PRO)
-    sentences.forEach((text, index) => {
-        speechQueue.push({
-            text,
-            delay: 500
-        });
-    });
-
-    speechQueue.push({
-        text: null,
-        onDone
-    });
-
-    if (!isSpeaking) {
-        processSpeechQueuePro();
-    }
-    }
-
-    function processSpeechQueuePro() {
+    function processSpeechQueue() {
 
         if (speechQueue.length === 0) {
             isSpeaking = false;
@@ -217,35 +194,41 @@ $(document).ready(function () {
         }
 
         isSpeaking = true;
+
         let item = speechQueue.shift();
+        let text = item.text;
 
-        if (item.text === null) {
-            if (typeof item.onDone === 'function') item.onDone();
-            processSpeechQueuePro();
-            return;
-        }
-
-        let utterance = new SpeechSynthesisUtterance(item.text);
+        let utterance = new SpeechSynthesisUtterance(text);
         utterance.lang   = 'id-ID';
-        utterance.rate   = 0.9; // 🔥 pelan
-        utterance.pitch  = 0.9;  // 🔥 formal
+        utterance.rate   = 0.9;  // 🔥 pelan & resmi
+        utterance.pitch  = 0.9;   // 🔥 nada lebih berat (formal)
         utterance.volume = 1;
 
+        // pilih voice Indonesia
         let voices = speechSynthesis.getVoices();
-        let indoVoice = voices.find(v => v.lang === 'id-ID');
+
+        let indoVoice = voices.find(v =>
+            v.lang === 'id-ID' &&
+            !v.name.toLowerCase().includes('female') &&
+            !v.name.toLowerCase().includes('child')
+        );
+
         if (indoVoice) utterance.voice = indoVoice;
 
-        utterance.onend = () => {
-            setTimeout(processSpeechQueuePro, item.delay || 500);
+
+        utterance.onend = function () {
+            if (typeof item.onDone === 'function') {
+                item.onDone();
+            }
+            processSpeechQueue(); // lanjut suara berikutnya
         };
 
-        utterance.onerror = () => {
-            processSpeechQueuePro();
+        utterance.onerror = function () {
+            processSpeechQueue(); // skip kalau error
         };
 
         speechSynthesis.speak(utterance);
     }
-
 
 
     $('#tabel-antrian').on('click', '.btn-call', function () {
@@ -259,22 +242,26 @@ $(document).ready(function () {
     // 🔒 kunci tombol
     btn.prop('disabled', true).addClass('disabled');
 
-    // 🔔 bell
+    // 🔔 bunyi bell dulu
     bell.pause();
     bell.currentTime = 0;
     bell.play().catch(()=>{});
 
-    let sentences = buildFormalText(data);
+    let text = `Nomor antrian ${data.no_antrian}. Silakan menuju. Tenant ${data.nama_skpd}.`;
 
-    // ⏱️ jeda bell → suara
+
+    // ⏱ beri jarak bell → suara
     setTimeout(() => {
 
-        speakIndonesiaQueuedPro(sentences, function () {
-            // 🔓 buka tombol SETELAH SEMUA selesai
+        speakIndonesiaQueued(text, function () {
+
+            // 🔓 tombol dibuka SETELAH suaranya SELESAI
             btn.prop('disabled', false).removeClass('disabled');
+
         });
 
     }, 1200);
+
     // 🔄 update status ke server
     $.ajax({
         url: "{{ route('antrian.panggil') }}",

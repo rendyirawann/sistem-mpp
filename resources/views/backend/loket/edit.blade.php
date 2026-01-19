@@ -1,5 +1,5 @@
 <div class="fv-row mb-7">
-    <label class="required fw-semibold fs-6 mb-2">Nama Loket</label>
+    <label class="required fw-semibold fs-6 mb-2">Nama Layanan</label>
     <input type="text" name="nama_loket" class="form-control"
            value="{{ $loket->nama_loket }}">
 </div>

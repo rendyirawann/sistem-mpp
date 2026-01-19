@@ -76,14 +76,27 @@ Route::middleware('auth')->group(function () {
     Route::post('/skpd/mass-delete', [SkpdController::class, 'massDelete'])->name('skpd.mass-delete');
 
     Route::resource('antrian', AntrianController::class);
-    Route::get('/get', [AntrianController::class, 'getData'])->name('antrian.get');
-    Route::post('/call', [AntrianController::class, 'call'])
-    ->name('antrian.call'); // ✅ INI UNTUK MIC
-    Route::get('/jumlah', [AntrianController::class, 'jumlah'])->name('antrian.jumlah');
-    Route::get('/sekarang', [AntrianController::class, 'sekarang'])->name('antrian.sekarang');
-    Route::get('/selanjutnya', [AntrianController::class, 'selanjutnya'])->name('antrian.selanjutnya');
-    Route::get('/sisa', [AntrianController::class, 'sisa'])->name('antrian.sisa');
 
+    /* DATATABLE */
+    Route::get('get-antrian', [AntrianController::class, 'getAntrian'])
+        ->name('antrian.get');
+
+    /* INFO BOX */
+    Route::get('/jumlah', [AntrianController::class, 'jumlah'])
+        ->name('antrian.jumlah');
+
+    Route::get('/sekarang', [AntrianController::class, 'sekarang'])
+        ->name('antrian.sekarang');
+
+    Route::get('/selanjutnya', [AntrianController::class, 'selanjutnya'])
+        ->name('antrian.selanjutnya');
+
+    Route::get('/sisa', [AntrianController::class, 'sisa'])
+        ->name('antrian.sisa');
+
+    /* PANGGIL / UPDATE STATUS */
+    Route::post('antrian/panggil', [AntrianController::class, 'panggil'])
+    ->name('antrian.panggil');
 
     Route::get('/loket/get', [LoketController::class, 'getData'])->name('get-loket');
     Route::post('/loket/mass-delete', [SkpdController::class, 'massDelete'])->name('loket.mass-delete');

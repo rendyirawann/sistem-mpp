@@ -27,7 +27,7 @@
                 <!--end::Item-->
 
                 <!--begin::Item-->
-                <li class="breadcrumb-item text-muted">Loket Management</li>
+                <li class="breadcrumb-item text-muted">Layanan Management</li>
                 <!--end::Item-->
                 <!--begin::Item-->
                 <li class="breadcrumb-item">
@@ -35,7 +35,7 @@
                 </li>
                 <!--end::Item-->
                 <!--begin::Item-->
-                <li class="breadcrumb-item text-gray-900">Loket List</li>
+                <li class="breadcrumb-item text-gray-900">Layanan List</li>
                 <!--end::Item-->
             </ul>
             <!--end::Breadcrumb-->
@@ -145,7 +145,7 @@
                         </th>
                         @endcan
                         <th class="min-w-150px ">Nama Instansi</th>
-                        <th class="min-w-150px ">Nama Loket</th>
+                        <th class="min-w-150px ">Nama Layanan</th>
                         <th class="min-w-120px ">Kode Tenant</th>
                         <th class="min-w-140px text-center">Prefix</th>
                         <th class="min-w-100px ">Status</th>
@@ -203,7 +203,7 @@
                         <!--begin::Input group-->
                         <div class="fv-row mb-7">
                             <!--begin::Label-->
-                            <label class="required fw-semibold fs-6 mb-2">Nama Loket</label>
+                            <label class="required fw-semibold fs-6 mb-2">Nama Layanan</label>
                             <!--end::Label-->
                             <!--begin::Input-->
                             <input type="text" name="nama_loket" id="nama_loket" class="form-control"
@@ -227,11 +227,11 @@
                         <!--begin::Input group-->
                         <div class="fv-row mb-7">
                             <!--begin::Label-->
-                            <label for="password" class="required fw-semibold fs-6 mb-2">Prefix</label>
+                            <label for="prefix" class="required fw-semibold fs-6 mb-2 text-left d-block">Prefix</label>
                             <!--end::Label-->
                             <!--begin::Input-->
                             <input type="text" name="prefix_tenant" id="prefix_tenant" class="form-control"
-                                placeholder="198909152025211075" />
+                                placeholder="A" />
                             <span class="text-danger error-text prefix_tenant_error_add"></span>
                             <!--end::Input-->
                         </div>
