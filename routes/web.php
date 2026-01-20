@@ -35,9 +35,9 @@ use App\Http\Controllers\Backend\Loket\LoketController;
 use App\Http\Controllers\Backend\Skpd\SkpdController;
 
 
-Route::get('/', function () {
-    return redirect()->route('login');
-});
+//Route::get('/', function () {
+//    return redirect()->route('login');
+//});
 
 Route::post('/login')
     ->middleware('throttle:5,1')
@@ -174,20 +174,14 @@ Route::middleware('auth')->group(function () {
 });
 
 require __DIR__ . '/auth.php';
+// --- ROUTE UNTUK KIOS ANTRIAN (Ubah Bagian Bawah Jadi Ini) ---
 
-Route::get('/', function () {
-    return view('antrian.index');
-});
+//use App\Http\Controllers\AntrianController; // Pastikan baris ini ada di paling atas file, kalau sudah ada hapus yang ini.
 
-// ambil antrian (via tombol)
-Route::post('/antrian/ambil/{kodeLoket}', [AntrianController::class, 'ambilAntrian'])
-    ->name('antrian.ambil');
+// 1. Halaman Depan Kios (Memanggil AntrianController fungsi index)
+Route::get('/', [AntrianController::class, 'index'])->name('home');
 
-// halaman petugas loket
-Route::get('/loket/{kodeLoket}', function ($kodeLoket) {
-    return view('antrian.loket', compact('kodeLoket'));
-});
+// 2. Proses Ambil Antrian (Saat tombol Input ditekan)
+Route::post('/ambil-antrian', [AntrianController::class, 'ambilAntrian'])->name('ambil.antrian');
 
-// selesai antrian
-Route::post('/antrian/selesai/{id}', [AntrianController::class, 'selesaiAntrian'])
-    ->name('antrian.selesai');
+// -------------------------------------------------------------

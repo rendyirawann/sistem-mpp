@@ -13,30 +13,15 @@ return new class extends Migration
     {
         Schema::create('antrians', function (Blueprint $table) {
             $table->id();
-
-            $table->foreignId('loket_id')
-                ->constrained('lokets')
-                ->cascadeOnDelete();
-
-            $table->integer('nomor_urut');
-            $table->string('nomor_antrian', 10);
-            $table->date('tanggal');
-
-            $table->enum('status', [
-                'menunggu',
-                'dipanggil',
-                'selesai',
-                'batal'
-            ])->default('menunggu');
-
-            $table->timestamp('waktu_ambil')->useCurrent();
-            $table->timestamp('waktu_panggil')->nullable();
-            $table->timestamp('waktu_selesai')->nullable();
-
+            $table->string('nama_instansi')->nullable(); // Disdukcapil, Samsat, dll
+            $table->string('nama_layanan')->nullable();  // KTP, Pajak, dll
+            $table->string('nik')->nullable();           // Data Diri
+            $table->string('nama_warga')->nullable();    // Data Diri
+            $table->string('no_hp')->nullable();         // Data Diri
+            $table->integer('nomor_urut')->nullable();
+            $table->string('nomor_antrian')->nullable(); // A-001
+            $table->enum('status', ['menunggu', 'dipanggil', 'selesai'])->default('menunggu');
             $table->timestamps();
-
-            // index untuk performa
-            $table->index(['loket_id', 'tanggal']);
         });
     }
 

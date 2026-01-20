@@ -2,20 +2,20 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Str;
 
-class Skpd extends Model
+class Customer extends Model
 {
-    protected $table = 'skpd';
+    use HasFactory;
+
+    protected $table = 'customers';
 
     protected $fillable = [
-        'nama_skpd',
-        'kepala_skpd',
-        'nip_kepala',
-        'isaktif',
-        'logo_skpd',
-        'no_antrian',
+        'nik',
+        'nama',
+        'no_hp',
     ];
 
     public $incrementing = false;
@@ -32,13 +32,8 @@ class Skpd extends Model
         });
     }
 
-    /* =======================
-     | RELATIONS
-     ======================= */
-
-    // SKPD memiliki banyak loket
-    public function lokets()
+    public function antrians()
     {
-        return $this->hasMany(Loket::class);
+        return $this->hasMany(Antrian::class);
     }
 }
