@@ -12,7 +12,9 @@ class Antrian extends Model
     protected $table = 'antrians';
 
     protected $fillable = [
+        'skpd_id',
         'loket_id',
+        'customer_id',
         'nomor_urut',
         'nomor_antrian',
         'tanggal',
@@ -29,28 +31,34 @@ class Antrian extends Model
         'waktu_selesai' => 'datetime',
     ];
 
-    /**
-     * Relasi:
-     * Antrian milik satu Loket
-     */
+    /* =======================
+     | RELATIONS
+     ======================= */
+
+    public function skpd()
+    {
+        return $this->belongsTo(Skpd::class);
+    }
+
     public function loket()
     {
         return $this->belongsTo(Loket::class);
     }
 
-    /**
-     * Scope:
-     * Antrian hari ini
-     */
+    public function customer()
+    {
+        return $this->belongsTo(Customer::class);
+    }
+
+    /* =======================
+     | QUERY SCOPES
+     ======================= */
+
     public function scopeHariIni($query)
     {
         return $query->whereDate('tanggal', now()->toDateString());
     }
 
-    /**
-     * Scope:
-     * Berdasarkan Loket
-     */
     public function scopeByLoket($query, $loketId)
     {
         return $query->where('loket_id', $loketId);

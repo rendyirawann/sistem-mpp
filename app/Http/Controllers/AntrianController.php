@@ -2,127 +2,79 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Antrian;
-use App\Models\Loket;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\DB;
+use Carbon\Carbon;
+use App\Models\{
+    Skpd,
+    Loket,
+    Antrian,
+    Customer
+};
 
 class AntrianController extends Controller
 {
     /**
-     * Ambil nomor antrian (tombol antrian)
+     * HALAMAN KIOS
      */
-    public function ambilAntrian(Request $request, $kodeLoket)
+    public function index()
     {
-        DB::beginTransaction();
+        // Ambil SKPD aktif + loket aktif
+        $skpd = Skpd::with(['lokets' => function ($q) {
+            $q->where('isaktif', 1);
+        }])
+        ->where('isAktif', true)
+        ->get();
 
-        try {
-            $loket = Loket::where('kode_loket', $kodeLoket)
-                ->where('status', 'aktif')
-                ->firstOrFail();
-
-            // ambil antrian terakhir hari ini
-            $lastQueue = Antrian::where('loket_id', $loket->id)
-                ->whereDate('tanggal', now())
-                ->lockForUpdate()
-                ->orderByDesc('nomor_urut')
-                ->first();
-
-            $nextNumber = ($lastQueue->nomor_urut ?? 0) + 1;
-
-            $antrian = Antrian::create([
-                'loket_id' => $loket->id,
-                'nomor_urut' => $nextNumber,
-                'nomor_antrian' => $loket->prefix_antrian . str_pad($nextNumber, 3, '0', STR_PAD_LEFT),
-                'tanggal' => now()->toDateString(),
-                'status' => 'menunggu',
-            ]);
-
-            DB::commit();
-
-            return response()->json([
-                'status' => true,
-                'message' => 'Antrian berhasil diambil',
-                'data' => $antrian,
-            ]);
-        } catch (\Exception $e) {
-            DB::rollBack();
-
-            return response()->json([
-                'status' => false,
-                'message' => 'Gagal mengambil antrian',
-                'error' => $e->getMessage(),
-            ], 500);
-        }
+        return view('kios', compact('skpd'));
     }
 
     /**
-     * List antrian hari ini per loket
+     * AMBIL ANTRIAN
      */
-    public function listHariIni($kodeLoket)
+    public function ambilAntrian(Request $request)
     {
-        $loket = Loket::where('kode_loket', $kodeLoket)->firstOrFail();
-
-        $antrians = Antrian::where('loket_id', $loket->id)
-            ->whereDate('tanggal', now())
-            ->orderBy('nomor_urut')
-            ->get();
-
-        return response()->json([
-            'status' => true,
-            'loket' => $loket->nama_loket,
-            'data' => $antrians,
-        ]);
-    }
-
-    /**
-     * Panggil antrian berikutnya
-     */
-    public function panggilAntrian($kodeLoket)
-    {
-        $loket = Loket::where('kode_loket', $kodeLoket)->firstOrFail();
-
-        $antrian = Antrian::where('loket_id', $loket->id)
-            ->whereDate('tanggal', now())
-            ->where('status', 'menunggu')
-            ->orderBy('nomor_urut')
-            ->first();
-
-        if (!$antrian) {
-            return response()->json([
-                'status' => false,
-                'message' => 'Tidak ada antrian menunggu',
-            ]);
-        }
-
-        $antrian->update([
-            'status' => 'dipanggil',
-            'waktu_panggil' => now(),
+        $request->validate([
+            'skpd_id'  => 'required|exists:skpd,id',
+            'loket_id' => 'required|exists:lokets,id',
+            'nik'      => 'required|min:16',
+            'nama'     => 'required',
+            'no_hp'    => 'required',
         ]);
 
-        return response()->json([
-            'status' => true,
-            'message' => 'Antrian dipanggil',
-            'data' => $antrian,
-        ]);
-    }
+        // CUSTOMER
+        $customer = Customer::firstOrCreate(
+            ['nik' => $request->nik],
+            [
+                'nama'  => $request->nama,
+                'no_hp' => $request->no_hp,
+            ]
+        );
 
-    /**
-     * Selesaikan antrian
-     */
-    public function selesaiAntrian($id)
-    {
-        $antrian = Antrian::findOrFail($id);
+        // NOMOR URUT HARI INI PER LOKET
+        $tanggal = Carbon::today();
 
-        $antrian->update([
-            'status' => 'selesai',
-            'waktu_selesai' => now(),
+        $lastUrut = Antrian::where('loket_id', $request->loket_id)
+            ->whereDate('tanggal', $tanggal)
+            ->max('nomor_urut');
+
+        $nomorUrut = $lastUrut ? $lastUrut + 1 : 1;
+
+        // PREFIX DARI DB (prefix_tenant)
+        $loket = Loket::findOrFail($request->loket_id);
+        $kodeTiket = $loket->prefix_tenant . '-' . str_pad($nomorUrut, 3, '0', STR_PAD_LEFT);
+
+        // SIMPAN ANTRIAN
+        Antrian::create([
+            'skpd_id'       => $request->skpd_id,
+            'loket_id'      => $request->loket_id,
+            'customer_id'   => $customer->id,
+            'nomor_urut'    => $nomorUrut,
+            'nomor_antrian' => $kodeTiket,
+            'tanggal'       => $tanggal,
+            'status'        => 0,
+            'waktu_ambil'   => now(),
         ]);
 
-        return response()->json([
-            'status' => true,
-            'message' => 'Antrian selesai',
-            'data' => $antrian,
-        ]);
+        return redirect()->back()->with('tiket', $kodeTiket);
     }
 }
