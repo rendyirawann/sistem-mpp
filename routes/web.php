@@ -43,9 +43,8 @@ Route::post('/login')
     ->middleware('throttle:5,1')
     ->name('login');
 
-Route::get('/dashboard', [DashboardController::class, 'index'])
-    ->middleware(['auth'])
-    ->name('dashboard');
+Route::get('/dashboard', [DashboardController::class, 'index'])->middleware(['auth'])->name('dashboard');
+Route::get('/dashboard/detail', [DashboardController::class, 'detail'])->middleware(['auth'])->name('dashboard.detail');
 
 Route::middleware('auth')->group(function () {
 

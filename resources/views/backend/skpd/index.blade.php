@@ -1,5 +1,5 @@
 @extends('backend.layout.app')
-@section('title', 'Skpd Management')
+@section('title', 'Intansi Management')
 @section('content')
 
 
@@ -27,7 +27,7 @@
                 <!--end::Item-->
 
                 <!--begin::Item-->
-                <li class="breadcrumb-item text-muted">Skpd Management</li>
+                <li class="breadcrumb-item text-muted">Intansi Management</li>
                 <!--end::Item-->
                 <!--begin::Item-->
                 <li class="breadcrumb-item">
@@ -35,7 +35,7 @@
                 </li>
                 <!--end::Item-->
                 <!--begin::Item-->
-                <li class="breadcrumb-item text-gray-900">Skpd List</li>
+                <li class="breadcrumb-item text-gray-900">Intansi List</li>
                 <!--end::Item-->
             </ul>
             <!--end::Breadcrumb-->
