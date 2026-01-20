@@ -123,6 +123,24 @@
     <!--end::Input-->
     <span class="text-danger error-text roles_error_edit"></span> <!--end::Input-->
 </div>
+
+<div class="mb-7">
+    <label class="required fw-semibold fs-6 mb-2">Instansi</label>
+
+    <select name="skpd_id" id="Editskpd" class="form-control form-control-solid">
+        <option disabled>Pilih Instansi</option>
+
+        @foreach ($skpd as $sk)
+            <option value="{{ $sk->id }}"
+                {{ $user->skpd_id === $sk->id ? 'selected' : '' }}>
+                {{ $sk->nama_skpd }}
+            </option>
+        @endforeach
+    </select>
+
+    <span class="text-danger error-text skpd_id_error_edit"></span>
+</div>
+
 <!--end::Input group-->
 
 

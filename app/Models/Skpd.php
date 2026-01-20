@@ -10,13 +10,12 @@ class Skpd extends Model
     protected $table = 'skpd';
 
     protected $fillable = [
-        'kode_skpd',
         'nama_skpd',
         'kepala_skpd',
         'nip_kepala',
-        'isAktif',
-        'latitude',
-        'longitude',
+        'isaktif',
+        'logo_skpd',
+        'no_antrian',
     ];
 
     public $incrementing = false;

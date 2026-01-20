@@ -38,7 +38,7 @@ License: For each use you must have a valid license purchased only from above li
     <meta property="og:url" content="https://keenthemes.com/metronic" />
     <meta property="og:site_name" content="Metronic by Keenthemes" />
     <link rel="canonical" href="http://preview.keenthemes.com?page=index" />
-    <link rel="shortcut icon" href="{{ asset('assets/media/logos/favicon.ico') }}" />
+    <link rel="shortcut icon" href="{{ asset('assets/media/logos/logo_deliserdang.png') }}" />
     <!--begin::Fonts(mandatory for all pages)-->
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Inter:300,400,500,600,700" />
     <!--end::Fonts-->
@@ -120,8 +120,8 @@ License: For each use you must have a valid license purchased only from above li
                                 <a href="?page=index" class="d-flex align-items-center me-lg-20 me-5">
                                     <img alt="Logo" src="{{ asset('assets/media/logos/demo-35-small.svg') }}"
                                         class="h-20px d-sm-none d-inline" />
-                                    <img alt="Logo" src="{{ asset('assets/media/logos/demo-35.svg') }}"
-                                        class="h-20px h-lg-25px theme-light-show d-none d-sm-inline" />
+                                    <img alt="Logo" src="{{ asset('assets/media/logos/mpp_clean.svg') }}"
+                                        class="h-40px h-lg-60px"alt="MPP">
                                     <img alt="Logo" src="{{ asset('assets/media/logos/demo-35-dark.png') }}"
                                         class="h-20px h-lg-25px theme-dark-show d-none d-sm-inline" />
                                 </a>
@@ -147,7 +147,7 @@ License: For each use you must have a valid license purchased only from above li
                 <!--begin::Wrapper container-->
                 <div class="app-container container-fluid d-flex flex-row flex-column-fluid">
                     <!--begin::Sidebar-->
-                    @include('backend.layout.sidebar')
+
                     <!--end::Sidebar-->
                     <!--begin::Main-->
                     <div class="app-main flex-column flex-row-fluid" id="kt_app_main">

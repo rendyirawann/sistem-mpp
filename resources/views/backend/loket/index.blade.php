@@ -1,5 +1,5 @@
 @extends('backend.layout.app')
-@section('title', 'Skpd Management')
+@section('title', 'Loket Management')
 @section('content')
 
 
@@ -10,7 +10,7 @@
         <!--begin::Page title-->
         <div class="page-title d-flex flex-column justify-content-center flex-wrap me-3">
             <!--begin::Title-->
-            <h1 class="page-heading d-flex text-gray-900 fw-bold fs-3 flex-column justify-content-center my-0">Skpd
+            <h1 class="page-heading d-flex text-gray-900 fw-bold fs-3 flex-column justify-content-center my-0">Loket
                 List</h1>
             <!--end::Title-->
             <!--begin::Breadcrumb-->
@@ -27,7 +27,7 @@
                 <!--end::Item-->
 
                 <!--begin::Item-->
-                <li class="breadcrumb-item text-muted">Skpd Management</li>
+                <li class="breadcrumb-item text-muted">Layanan Management</li>
                 <!--end::Item-->
                 <!--begin::Item-->
                 <li class="breadcrumb-item">
@@ -35,7 +35,7 @@
                 </li>
                 <!--end::Item-->
                 <!--begin::Item-->
-                <li class="breadcrumb-item text-gray-900">Skpd List</li>
+                <li class="breadcrumb-item text-gray-900">Layanan List</li>
                 <!--end::Item-->
             </ul>
             <!--end::Breadcrumb-->
@@ -68,7 +68,7 @@
             </div>
             <!--end::Wrapper-->
             <!--begin::Button-->
-            @can('skpd.create')
+            @can('loket.create')
             <button type="button" id="btn_tambah_data" class="btn btn-sm btn-primary">
                 <i class="ki-outline ki-plus fs-2"></i>Add</button>
             @endcan
@@ -90,8 +90,8 @@
                 <!--begin::Search-->
                 <div class="d-flex align-items-center position-relative my-1">
                     <i class="ki-outline ki-magnifier fs-3 position-absolute ms-5"></i>
-                    <input type="text" data-kt-skpd-table-filter="search" id="search"
-                        class="form-control  w-250px ps-13" placeholder="Search skpd" />
+                    <input type="text" data-kt-loket-table-filter="search" id="search"
+                        class="form-control  w-250px ps-13" placeholder="Search loket" />
                 </div>
                 <!--end::Search-->
             </div>
@@ -100,17 +100,17 @@
             <div class="card-toolbar">
                 <!--begin::Group actions-->
                 <div class="d-flex justify-content-end align-items-center d-none me-3"
-                    data-kt-skpd-table-toolbar="selected">
+                    data-kt-loket-table-toolbar="selected">
                     <div class="fw-bold me-5">
-                        <span class="me-2" data-kt-skpd-table-select="selected_count"></span>Selected
+                        <span class="me-2" data-kt-loket-table-select="selected_count"></span>Selected
                     </div>
-                    <button type="button" class="btn btn-sm btn-danger" data-kt-skpd-table-select="delete_selected"> <i
+                    <button type="button" class="btn btn-sm btn-danger" data-kt-loket-table-select="delete_selected"> <i
                             class="ki-outline ki-trash  me-2"></i>Delete
                         Selected</button>
                 </div>
                 <!--end::Group actions-->
                 <!--begin::Toolbar-->
-                <div class="d-flex justify-content-end" data-kt-skpd-table-toolbar="base">
+                <div class="d-flex justify-content-end" data-kt-loket-table-toolbar="base">
                     <!--begin::Reload Data-->
                     <button type="button" class="btn btn-sm btn-primary " id="refresh-table-btn">
                         <span class="indicator-label">
@@ -136,7 +136,7 @@
             <table class="table align-middle table-row-dashed fs-6 gy-5 chimox" id="chimox">
                 <thead>
                     <tr class="text-start text-muted fw-bold fs-7 text-uppercase gs-0">
-                        @can('skpd.massdelete')
+                        @can('loket.massdelete')
                         <th class="w-10px pe-2">
                             <div class="form-check form-check-sm form-check-custom  me-3">
                                 <input class="form-check-input" type="checkbox" data-kt-check="true"
@@ -144,11 +144,12 @@
                             </div>
                         </th>
                         @endcan
-                        <th class="min-w-150px ">Nama Intansi</th>
-                        <th class="min-w-120px ">Kepala Intansi</th>
-                        <th class="min-w-140px text-center">NIP Kepala</th>
+                        <th class="min-w-150px ">Nama Instansi</th>
+                        <th class="min-w-150px ">Nama Layanan</th>
+                        <th class="min-w-120px ">Kode Tenant</th>
+                        <th class="min-w-140px text-center">Prefix</th>
                         <th class="min-w-100px ">Status</th>
-                        @canany(['skpd.show', 'skpd.edit', 'skpd.delete'])
+                        @canany(['loket.show', 'loket.edit', 'loket.delete'])
                         <th class="min-w-120px text-center">Action</th>
                         @endcanany
                     </tr>
@@ -173,9 +174,9 @@
         <!--begin::Modal content-->
         <div class="modal-content" id="tambah-modal-content">
             <!--begin::Modal header-->
-            <div class="modal-header border-gray-300" id="kt_modal_add_skpd_header">
+            <div class="modal-header border-gray-300" id="kt_modal_add_loket_header">
                 <!--begin::Modal title-->
-                <h2 class="fw-bold">Add Skpd</h2>
+                <h2 class="fw-bold">Add Loket</h2>
                 <!--end::Modal title-->
                 <!--begin::Close-->
                 <div class="btn btn-icon btn-sm btn-active-icon-primary" data-bs-dismiss="modal"
@@ -191,108 +192,60 @@
                 <form method="post" id="FormTambahModalID" class="form" enctype="multipart/form-data">
                     @csrf
                     <!--begin::Scroll-->
-                    <div class="d-flex flex-column scroll-y px-5 px-lg-10" id="kt_modal_add_skpd_scroll"
+                    <div class="d-flex flex-column scroll-y px-5 px-lg-10" id="kt_modal_add_loket_scroll"
                         data-kt-scroll="true" data-kt-scroll-activate="true" data-kt-scroll-max-height="auto"
-                        data-kt-scroll-dependencies="#kt_modal_add_skpd_header"
-                        data-kt-scroll-wrappers="#kt_modal_add_skpd_scroll" data-kt-scroll-offset="300px">
+                        data-kt-scroll-dependencies="#kt_modal_add_loket_header"
+                        data-kt-scroll-wrappers="#kt_modal_add_loket_scroll" data-kt-scroll-offset="300px">
                         <!--begin::Input group-->
-                        <div class="fv-row mb-7">
-                            <!--begin::Label-->
-                            <label class="d-block fw-semibold fs-6 mb-5">Logo Instansi</label>
-                            <!--end::Label-->
-                            <!--begin::Image placeholder-->
-                            <style>
-                                .image-input-placeholder {
-                                    background-image: url('{{ URL::to('assets/media/svg/files/blank-image.svg') }}');
-                                }
-
-                                [data-bs-theme="dark"] .image-input-placeholder {
-                                    background-image: url('{{ URL::to('assets/media/svg/files/blank-image-dark.svg') }}');
-                                }
-                            </style>
-                            <!--end::Image placeholder-->
-                            <!--begin::Image input-->
-                            <div class="image-input image-input-outline image-input-placeholder"
-                                data-kt-image-input="true">
-                                <!--begin::Preview existing avatar-->
-                                <div class="image-input-wrapper w-125px h-125px" id="default-image"
-                                    style="background-image: url({{ URL::to('assets/media/svg/files/blank-image.svg') }});">
-                                </div>
-                                <!--end::Preview existing avatar-->
-                                <!--begin::Label-->
-                                <label
-                                    class="btn btn-icon btn-circle btn-active-color-primary w-25px h-25px bg-body shadow"
-                                    data-kt-image-input-action="change" data-bs-toggle="tooltip"
-                                    title="Change Logo Instansi">
-                                    <i class="ki-outline ki-pencil fs-7"></i>
-                                    <!--begin::Inputs-->
-                                    <input type="file" name="logo_skpd" id="logo_skpd"
-                                        accept=".png, .jpg, .jpeg" />
-                                    <input type="hidden" name="avatar_remove" />
-                                    <!--end::Inputs-->
-                                </label>
-                                <!--end::Label-->
-                                <!--begin::Cancel-->
-                                <span
-                                    class="btn btn-icon btn-circle btn-active-color-primary w-25px h-25px bg-body shadow"
-                                    data-kt-image-input-action="cancel" data-bs-toggle="tooltip"
-                                    title="Cancel avatar">
-                                    <i class="ki-outline ki-cross fs-2"></i>
-                                </span>
-                                <!--end::Cancel-->
-                                <!--begin::Remove-->
-                                <span
-                                    class="btn btn-icon btn-circle btn-active-color-primary w-25px h-25px bg-body shadow"
-                                    data-kt-image-input-action="remove" data-bs-toggle="tooltip"
-                                    title="Remove avatar">
-                                    <i class="ki-outline ki-cross fs-2"></i>
-                                </span>
-                                <!--end::Remove-->
-                            </div>
-                            <!--end::Image input-->
-                            <!--begin::Hint-->
-                            <div class="form-text">Allowed file types: png, jpg, jpeg.</div>
-                            <span class="text-danger error-text avatar_error_add"></span>
-
-                            <!--end::Hint-->
-                        </div>
                         <!--end::Input group-->
                         <!--begin::Input group-->
                         <!--end::Input group-->
                         <!--begin::Input group-->
                         <div class="fv-row mb-7">
                             <!--begin::Label-->
-                            <label class="required fw-semibold fs-6 mb-2">Nama Instansi</label>
+                            <label class="required fw-semibold fs-6 mb-2">Nama Layanan</label>
                             <!--end::Label-->
                             <!--begin::Input-->
-                            <input type="text" name="nama_skpd" id="nama_skpd" class="form-control"
+                            <input type="text" name="nama_loket" id="nama_loket" class="form-control"
                                 placeholder="Dinas/Badan" />
-                            <span class="text-danger error-text nama_skpd_error_add"></span>
+                            <span class="text-danger error-text nama_loket_error_add"></span>
                             <!--end::Input-->
                         </div>
                         <!--end::Input group-->
                         <!--begin::Input group-->
                         <div class="fv-row mb-7">
                             <!--begin::Label-->
-                            <label class="required fw-semibold fs-6 mb-2">Nama Kadis</label>
+                            <label class="required fw-semibold fs-6 mb-2">Kode Tenant</label>
                             <!--end::Label-->
                             <!--begin::Input-->
-                            <input type="text" name="kepala_skpd" id="kepala_skpd" class="form-control"
+                            <input type="text" name="kode_tenant" id="kode_tenant" class="form-control"
                                 placeholder="Ade Guna" />
-                            <span class="text-danger error-text kepala_skpd_error_add"></span>
+                            <span class="text-danger error-text kode_tenant_error_add"></span>
                             <!--end::Input-->
                         </div>
                         <!--end::Input group-->
                         <!--begin::Input group-->
                         <div class="fv-row mb-7">
                             <!--begin::Label-->
-                            <label for="password" class="required fw-semibold fs-6 mb-2">Nip Kadis</label>
+                            <label for="prefix" class="required fw-semibold fs-6 mb-2 text-left d-block">Prefix</label>
                             <!--end::Label-->
                             <!--begin::Input-->
-                            <input type="text" name="nip_kepala" id="nip_kepala" class="form-control"
-                                placeholder="198909152025211075" />
-                            <span class="text-danger error-text nip_kepala_error_add"></span>
+                            <input type="text" name="prefix_tenant" id="prefix_tenant" class="form-control"
+                                placeholder="A" />
+                            <span class="text-danger error-text prefix_tenant_error_add"></span>
                             <!--end::Input-->
+                        </div>
+                        <div class="mb-5">
+                            <!--begin::Label-->
+                            <label class="required fw-semibold fs-6 mb-5">Instansi</label>
+                            <!--end::Label-->
+                            <select class="form-control mb-3 mb-lg-0" name="skpd_id" id="skpd_id">
+                                <option selected="selected" disabled>Pilih Instansi</option>
+                                @foreach ($skpd as $sk)
+                                    <option value="{{ $sk->id }}">{{ $sk->nama_skpd }}</option>
+                                @endforeach
+                            </select>
+                            <span class="text-danger error-text skpd_error_add"></span>
                         </div>
                         <!--end::Input group-->
                         <!--begin::Input group-->
@@ -346,8 +299,8 @@
     aria-labelledby="staticBackdropLabel" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered mw-750px">
         <div class="modal-content" id="edit-modal-content">
-            <div class="modal-header border-gray-300" id="kt_modal_edit_skpd_header">
-                <h2 class="fw-bold">Edit skpd</h2>
+            <div class="modal-header border-gray-300" id="kt_modal_edit_loket_header">
+                <h2 class="fw-bold">Edit loket</h2>
                 <!--begin::Close-->
                 <div class="btn btn-icon btn-sm btn-active-icon-primary" data-bs-dismiss="modal">
                     <i class="ki-outline ki-cross fs-1 text-dark"></i>
@@ -359,10 +312,10 @@
                     @method('PUT')
                     @csrf
                     <!--begin::Scroll-->
-                    <div class="d-flex flex-column scroll-y px-5 px-lg-10" id="kt_modal_edit_skpd_scroll"
+                    <div class="d-flex flex-column scroll-y px-5 px-lg-10" id="kt_modal_edit_loket_scroll"
                         data-kt-scroll="true" data-kt-scroll-activate="true" data-kt-scroll-max-height="auto"
-                        data-kt-scroll-dependencies="#kt_modal_edit_skpd_header"
-                        data-kt-scroll-wrappers="#kt_modal_edit_skpd_scroll" data-kt-scroll-offset="300px">
+                        data-kt-scroll-dependencies="#kt_modal_edit_loket_header"
+                        data-kt-scroll-wrappers="#kt_modal_edit_loket_scroll" data-kt-scroll-offset="300px">
                         <div class="fv-row mb-7" id="EditRowModalBody"></div>
                         <input type="hidden" name="action" id="action" />
                     </div>
@@ -390,7 +343,7 @@
     <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content" id="hapus-modal-content">
             <div class="modal-header border-gray-300">
-                <h2 class="modal-title">Delete skpd</h2>
+                <h2 class="modal-title">Delete loket</h2>
                 <!--begin::Close-->
                 <div class="btn btn-icon btn-sm btn-active-icon-primary" data-bs-dismiss="modal">
                     <i class="ki-outline ki-cross fs-1 text-dark"></i>
@@ -416,20 +369,20 @@
 
 
 
-<!-- Modal Ban skpd -->
-<div class="modal fade" id="ModalBanskpd" tabindex="-1" aria-labelledby="ModalBanskpdLabel" aria-hidden="true">
+<!-- Modal Ban loket -->
+<div class="modal fade" id="ModalBanloket" tabindex="-1" aria-labelledby="ModalBanloketLabel" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content">
 
             <div class="modal-header border-gray-300">
-                <h3 class="modal-title" id="ModalBanskpdLabel">Ban skpd</h3>
+                <h3 class="modal-title" id="ModalBanloketLabel">Ban loket</h3>
                 <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
             </div>
 
             <div class="modal-body">
 
-                <!-- ID skpd -->
-                <input type="hidden" id="ban_skpd_id">
+                <!-- ID loket -->
+                <input type="hidden" id="ban_loket_id">
 
                 <!-- Alasan Ban -->
                 <div class="mb-4">
@@ -452,7 +405,7 @@
 
             <div class="modal-footer">
                 <button class="btn btn-sm btn-light" data-bs-dismiss="modal">Batal</button>
-                <button class="btn btn-sm btn-danger" id="btnBanskpd">Ban skpd</button>
+                <button class="btn btn-sm btn-danger" id="btnBanloket">Ban loket</button>
             </div>
         </div>
     </div>
@@ -505,6 +458,7 @@
     });
 </script>
 <script>
+    let table;
     function debounce(func, wait) {
         let timeout;
         return function(...args) {
@@ -513,18 +467,17 @@
         };
     }
     $(document).ready(function () {
+        const canShow = @json(auth()->user()->can('loket.show'));
+        const canEdit = @json(auth()->user()->can('loket.edit'));
+        const canDelete = @json(auth()->user()->can('loket.delete'));
+        const canMassDelete = @json(auth()->user()->can('loket.massdelete'));
 
-        const canShow = @json(auth()->user()->can('skpd.show'));
-        const canEdit = @json(auth()->user()->can('skpd.edit'));
-        const canDelete = @json(auth()->user()->can('skpd.delete'));
-        const canMassDelete = @json(auth()->user()->can('skpd.massdelete'));
-
-        var table = $('#chimox').DataTable({
+        table = $('#chimox').DataTable({
             processing: true,
             serverSide: true,
             ordering: false,
             ajax: {
-                url: "{{ route('get-skpd') }}",
+                url: "{{ route('get-loket') }}",
                 type: "GET"
             },
             columns: [
@@ -535,22 +488,17 @@
                     render: function (data) {
                         return `
                             <div class="form-check form-check-sm form-check-custom">
-                                <input class="form-check-input"
+                                <input class="form-check-input row-check"
                                     type="checkbox"
                                     value="${data.id}">
                             </div>`;
                     }
+
                 } : null,
-                { data: 'nama_skpd' },
-                { data: 'kepala_skpd' },
-                {
-                    data: 'nip_kepala',
-                    className: 'text-center nip-cell',
-                    render: function (data) {
-                        if (!data) return '-';
-                        return data.match(/.{1,6}/g).join(' ');
-                    }
-                },
+                { data: 'nama_instansi' },
+                { data: 'nama_loket' },
+                { data: 'kode_tenant' },
+                {data: 'prefix_tenant'},
                 { data: 'isaktif' },
 
                 (canShow || canEdit || canDelete) ? {
@@ -600,7 +548,7 @@
         $('#btn-add-data').prop('disabled', true);
 
         $.ajax({
-            url: "{{ route('skpd.store') }}", // ⬅️ ROUTE STORE SKPD
+            url: "{{ route('loket.store') }}", // ⬅️ ROUTE STORE loket
             method: "POST",
             data: new FormData(form),
             processData: false,
@@ -649,26 +597,42 @@
 
 
     function updateToolbar() {
-        let count = $('#chimox tbody input.form-check-input:checked').length;
+        let count = $('#chimox tbody .row-check:checked').length;
 
-        $('[data-kt-skpd-table-select="selected_count"]').text(count);
+        $('[data-kt-loket-table-select="selected_count"]').text(count);
 
         if (count > 0) {
-            $('[data-kt-skpd-table-toolbar="selected"]').removeClass('d-none');
+            $('[data-kt-loket-table-toolbar="selected"]').removeClass('d-none');
         } else {
-            $('[data-kt-skpd-table-toolbar="selected"]').addClass('d-none');
+            $('[data-kt-loket-table-toolbar="selected"]').addClass('d-none');
         }
     }
 
+
     // checkbox per row
-    $('#chimox').on('change', 'input.form-check-input', function () {
+    // $('#chimox').on('change', 'input.form-check-input', function () {
+    //     updateToolbar();
+
+    //     let allChecked =
+    //         $('#chimox tbody input.form-check-input').length ===
+    //         $('#chimox tbody input.form-check-input:checked').length;
+
+    //     $('[data-kt-check]').prop('checked', allChecked);
+    // });
+    $(document).on('change', '.row-check', function () {
         updateToolbar();
 
         let allChecked =
-            $('#chimox tbody input.form-check-input').length ===
-            $('#chimox tbody input.form-check-input:checked').length;
+            $('.row-check').length === $('.row-check:checked').length;
 
         $('[data-kt-check]').prop('checked', allChecked);
+    });
+
+    $(document).on('change', '[data-kt-check]', function () {
+        let checked = $(this).is(':checked');
+        let target = $(this).data('kt-check-target');
+        $(target).prop('checked', checked);
+        updateToolbar();
     });
 
     // select all
@@ -679,13 +643,15 @@
         updateToolbar();
     });
 
-    $('button[data-kt-skpd-table-select="delete_selected"]').on('click', function () {
+    $(document).on('click', '[data-kt-loket-table-select="delete_selected"]', function () {
 
     let ids = [];
 
-    $('#chimox tbody input.form-check-input:checked').each(function () {
+    $('#chimox tbody .row-check:checked').each(function () {
         ids.push($(this).val());
     });
+
+    console.log('IDS LOKET:', ids); // 🔥 WAJIB ADA
 
     if (ids.length === 0) {
         Swal.fire('Warning', 'Tidak ada data dipilih', 'warning');
@@ -694,37 +660,42 @@
 
     Swal.fire({
         title: 'Yakin hapus?',
-        text: `Anda akan menghapus ${ids.length} SKPD`,
+        text: `Anda akan menghapus ${ids.length} Loket`,
         icon: 'warning',
         showCancelButton: true,
         confirmButtonText: 'Ya, hapus!',
-        cancelButtonText: 'Batal',
-        customClass: {
-            confirmButton: 'btn btn-danger btn-sm',
-            cancelButton: 'btn btn-secondary btn-sm'
-        }
-        }).then((result) => {
+        cancelButtonText: 'Batal'
+    }).then((result) => {
+
         if (result.isConfirmed) {
+
             $.ajax({
-                url: "{{ route('skpd.mass-delete') }}",
-                method: "POST",
+                url: "{{ route('loket.mass-delete') }}",
+                type: "POST",
                 data: {
                     ids: ids,
                     _token: "{{ csrf_token() }}"
                 },
                 success: function (res) {
+
                     Swal.fire('Berhasil', res.message, 'success');
-                    table.ajax.reload();
+
+                    table.ajax.reload(null, false); // 🔥 PENTING
                     $('[data-kt-check]').prop('checked', false);
                     updateToolbar();
                 },
-                error: function () {
-                    Swal.fire('Error', 'Gagal hapus data', 'error');
+                error: function (xhr) {
+                    Swal.fire(
+                        'Error',
+                        xhr.responseJSON?.message ?? 'Gagal hapus data',
+                        'error'
+                    );
                 }
             });
         }
     });
 });
+
 
     let editId = null;
 
@@ -733,7 +704,7 @@
         editId = $(this).data('id');
 
         $.ajax({
-            url: "{{ route('skpd.edit', ':id') }}".replace(':id', editId),
+            url: "{{ route('loket.edit', ':id') }}".replace(':id', editId),
             type: 'GET',
             success: function (res) {
 
@@ -743,7 +714,7 @@
                 // set action form update
                 $('#FormEditModalID').attr(
                     'action',
-                    "{{ route('skpd.update', ':id') }}".replace(':id', editId)
+                    "{{ route('loket.update', ':id') }}".replace(':id', editId)
                 );
 
                 // tampilkan modal
@@ -824,7 +795,7 @@
         }
 
         $.ajax({
-            url: "{{ route('skpd.destroy', ':id') }}".replace(':id', deleteId),
+            url: "{{ route('loket.destroy', ':id') }}".replace(':id', deleteId),
             type: 'DELETE',
             data: {
                 _token: $('meta[name="csrf-token"]').attr('content')
@@ -849,17 +820,17 @@
 
 <script>
     function openBanModal(id) {
-        $('#ban_skpd_id').val(id);
+        $('#ban_loket_id').val(id);
         $('#ban_reason').val('');
         $('#ban_duration').val('permanent');
-        $('#ModalBanskpd').modal('show');
+        $('#ModalBanloket').modal('show');
     }
 
 
 
-    $('#btnBanskpd').click(function() {
+    $('#btnBanloket').click(function() {
 
-        let id = $('#ban_skpd_id').val();
+        let id = $('#ban_loket_id').val();
         let reason = $('#ban_reason').val();
         let duration = $('#ban_duration').val();
 
@@ -869,7 +840,7 @@
         }
 
         $.ajax({
-            url: `/skpd/${id}/ban`,
+            url: `/loket/${id}/ban`,
             method: 'POST',
             data: {
                 _token: $('meta[name="csrf-token"]').attr('content'),
@@ -878,21 +849,21 @@
             },
             success: function(res) {
                 Swal.fire("Berhasil", res.success, "success");
-                $('#ModalBanskpd').modal('hide');
+                $('#ModalBanloket').modal('hide');
                 $('#datatable').DataTable().ajax.reload();
             },
             error: function(xhr) {
-                Swal.fire("Error", "Gagal melakukan ban skpd!", "error");
+                Swal.fire("Error", "Gagal melakukan ban loket!", "error");
             }
         });
 
     });
 
 
-    function unbanskpd(id) {
+    function unbanloket(id) {
 
         Swal.fire({
-            title: "Unban skpd?",
+            title: "Unban loket?",
             icon: "info",
             showCancelButton: true,
             confirmButtonText: "Ya, Unban",
@@ -905,7 +876,7 @@
             if (result.isConfirmed) {
 
                 $.ajax({
-                    url: `/skpd/${id}/unban`,
+                    url: `/loket/${id}/unban`,
                     method: "POST",
                     data: {
                         _token: $('meta[name="csrf-token"]').attr('content')
@@ -915,7 +886,7 @@
                         $('#datatable').DataTable().ajax.reload();
                     },
                     error: function() {
-                        Swal.fire("Error", "Gagal unban skpd!", "error");
+                        Swal.fire("Error", "Gagal unban loket!", "error");
                     }
                 });
 

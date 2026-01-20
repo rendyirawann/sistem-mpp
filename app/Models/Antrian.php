@@ -2,23 +2,35 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Str;
 
 class Antrian extends Model
 {
-    use HasFactory;
+    public $incrementing = false;
+    protected $keyType = 'string';
 
-    protected $table = 'antrians';
+    protected static function boot()
+    {
+        parent::boot();
+        static::creating(function ($model) {
+            if (!$model->id) {
+                $model->id = (string) Str::uuid();
+            }
+        });
+    }
 
     protected $fillable = [
         'skpd_id',
         'loket_id',
         'customer_id',
-        'nomor_urut',
+         'nomor_urut',
         'nomor_antrian',
         'tanggal',
+        'no_urut',
+        'no_antrian',
         'status',
+        'tanggal',
         'waktu_ambil',
         'waktu_panggil',
         'waktu_selesai',
@@ -54,13 +66,12 @@ class Antrian extends Model
      | QUERY SCOPES
      ======================= */
 
-    public function scopeHariIni($query)
+ 
+    public function scopeHariIni($q)
     {
-        return $query->whereDate('tanggal', now()->toDateString());
+        return $q->whereDate('tanggal', now());
     }
 
-    public function scopeByLoket($query, $loketId)
-    {
-        return $query->where('loket_id', $loketId);
-    }
+    public function scopeByLoket($q, $loketId)
+   
 }

@@ -49,6 +49,7 @@ class User extends Authenticatable implements BannableContract
         'no_wa',
         'avatar',
         'last_ip',
+        'skpd_id',
         'last_login',
     ];
 
@@ -76,5 +77,5 @@ class User extends Authenticatable implements BannableContract
         ];
     }
 
- 
+
 }
