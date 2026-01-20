@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Antrian;
 use App\Models\Skpd;
 use App\Models\Loket;
+use Illuminate\Http\Request;
 use Auth;
 
 class DashboardController extends Controller
@@ -70,5 +71,90 @@ class DashboardController extends Controller
         ];
 
         return view('backend.dashboard.index', compact('data'));
+    }
+
+    public function detail(Request $request)
+    {
+        $type = $request->type;
+
+        // ===============================
+        // BASE QUERY
+        // ===============================
+        $antrianQuery = Antrian::query();
+        $loketQuery   = Loket::query();
+
+        // 🔐 FILTER SKPD (KECUALI SUPERADMIN)
+        if (!auth()->user()->hasRole('Superadmin')) {
+            $antrianQuery->where('skpd_id', auth()->user()->skpd_id);
+            $loketQuery->where('skpd_id', auth()->user()->skpd_id);
+        }
+
+        switch ($type) {
+
+            // ===============================
+            // ANTRIAN
+            // ===============================
+            case 'antrian_all':
+                $data = (clone $antrianQuery)
+                            ->orderBy('no_urut')
+                            ->get();
+                $view = 'backend.dashboard.detail.antrian';
+                break;
+
+            case 'antrian_today':
+                $data = (clone $antrianQuery)
+                            ->hariIni()
+                            ->orderBy('no_urut')
+                            ->get();
+                $view = 'backend.dashboard.detail.antrian';
+                break;
+
+            case 'antrian_menunggu':
+                $data = (clone $antrianQuery)
+                            ->where('status', 0)
+                            ->orderBy('no_urut')
+                            ->get();
+                $view = 'backend.dashboard.detail.antrian';
+                break;
+
+            case 'antrian_dipanggil':
+                $data = (clone $antrianQuery)
+                            ->where('status', 1)
+                            ->orderBy('no_urut')
+                            ->get();
+                $view = 'backend.dashboard.detail.antrian';
+                break;
+
+            // ===============================
+            // LOKET
+            // ===============================
+            case 'loket_all':
+                $data = (clone $loketQuery)
+                            ->orderBy('nama_loket')
+                            ->get();
+                $view = 'backend.dashboard.detail.loket';
+                break;
+
+            case 'loket_aktif':
+                $data = (clone $loketQuery)
+                            ->where('isaktif', 1)
+                            ->orderBy('nama_loket')
+                            ->get();
+                $view = 'backend.dashboard.detail.loket';
+                break;
+
+            case 'loket_nonaktif':
+                $data = (clone $loketQuery)
+                            ->where('isaktif', 0)
+                            ->orderBy('nama_loket')
+                            ->get();
+                $view = 'backend.dashboard.detail.loket';
+                break;
+
+            default:
+                abort(404);
+        }
+
+        return view($view, compact('data'));
     }
 }

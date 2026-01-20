@@ -30,6 +30,7 @@ use App\Http\Controllers\Backend\Master\Wilayah\WilayahDesaController;
 
 // ANTRIAN
 use App\Http\Controllers\Backend\Antrian\AntrianController;
+use App\Http\Controllers\FrontController;
 use App\Http\Controllers\Backend\Loket\LoketController;
 // SKPD
 use App\Http\Controllers\Backend\Skpd\SkpdController;
@@ -43,9 +44,8 @@ Route::post('/login')
     ->middleware('throttle:5,1')
     ->name('login');
 
-Route::get('/dashboard', [DashboardController::class, 'index'])
-    ->middleware(['auth'])
-    ->name('dashboard');
+Route::get('/dashboard', [DashboardController::class, 'index'])->middleware(['auth'])->name('dashboard');
+Route::get('/dashboard/detail', [DashboardController::class, 'detail'])->middleware(['auth'])->name('dashboard.detail');
 
 Route::middleware('auth')->group(function () {
 
@@ -180,9 +180,9 @@ require __DIR__ . '/auth.php';
 //use App\Http\Controllers\AntrianController; // Pastikan baris ini ada di paling atas file, kalau sudah ada hapus yang ini.
 
 // 1. Halaman Depan Kios (Memanggil AntrianController fungsi index)
-Route::get('/', [AntrianController::class, 'index'])->name('home');
+Route::get('/', [FrontController::class, 'index'])->name('home');
 
 // 2. Proses Ambil Antrian (Saat tombol Input ditekan)
-Route::post('/ambil-antrian', [AntrianController::class, 'ambilAntrian'])->name('ambil.antrian');
+Route::post('/ambil-antrian', [FrontController::class, 'ambilAntrian'])->name('ambil.antrian');
 
 // -------------------------------------------------------------

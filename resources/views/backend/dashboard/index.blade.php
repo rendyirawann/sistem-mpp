@@ -37,14 +37,14 @@
 
         <!-- TOTAL ANTRIAN -->
         <div class="col-xl-3 col-md-6">
-            <div class="card card-flush shadow-sm h-100">
+            <div class="card card-flush shadow-sm h-100 cursor-pointer"onclick="openDetail('antrian_all')">
                 <div class="card-body text-center">
                     <i class="ki-outline ki-chart-simple fs-2tx text-primary mb-3"></i>
                     <div class="fs-2hx fw-bold text-primary">
                         {{ $data['total_antrian'] ?? 0 }}
                     </div>
                     <div class="fw-semibold text-gray-500">
-                        Total Antrian
+                        Total Antrian/Pengunjung
                     </div>
                 </div>
             </div>
@@ -52,7 +52,7 @@
 
         <!-- ANTRIAN HARI INI -->
         <div class="col-xl-3 col-md-6">
-            <div class="card card-flush shadow-sm h-100">
+            <div class="card card-flush shadow-sm h-100 cursor-pointer"onclick="openDetail('antrian_today')">
                 <div class="card-body text-center">
                     <i class="ki-outline ki-calendar fs-2tx text-success mb-3"></i>
                     <div class="fs-2hx fw-bold text-success">
@@ -67,7 +67,7 @@
 
         <!-- ANTRIAN MENUNGGU -->
         <div class="col-xl-3 col-md-6">
-            <div class="card card-flush shadow-sm h-100">
+            <div class="card card-flush shadow-sm h-100 cursor-pointer"onclick="openDetail('antrian_menunggu')">
                 <div class="card-body text-center">
                     <i class="ki-outline ki-time fs-2tx text-warning mb-3"></i>
                     <div class="fs-2hx fw-bold text-warning">
@@ -82,7 +82,7 @@
 
         <!-- ANTRIAN DIPANGGIL -->
         <div class="col-xl-3 col-md-6">
-            <div class="card card-flush shadow-sm h-100">
+            <div class="card card-flush shadow-sm h-100 cursor-pointer"onclick="openDetail('antrian_dipanggil')">
                 <div class="card-body text-center">
                     <i class="ki-outline ki-check-circle fs-2tx text-info mb-3"></i>
                     <div class="fs-2hx fw-bold text-info">
@@ -102,7 +102,7 @@
 
         <!-- TOTAL LOKET -->
         <div class="col-xl-3 col-md-6">
-            <div class="card card-flush shadow-sm h-100">
+            <div class="card card-flush shadow-sm h-100 cursor-pointer"onclick="openDetail('loket_all')">
                 <div class="card-body text-center">
                     <i class="ki-outline ki-abstract-26 fs-2tx text-dark mb-3"></i>
                     <div class="fs-2hx fw-bold text-dark">
@@ -117,7 +117,7 @@
 
         <!-- Layanan AKTIF -->
         <div class="col-xl-3 col-md-6">
-            <div class="card card-flush shadow-sm h-100">
+            <div class="card card-flush shadow-sm h-100 cursor-pointer"onclick="openDetail('loket_aktif')">
                 <div class="card-body text-center">
                     <i class="ki-outline ki-check fs-2tx text-success mb-3"></i>
                     <div class="fs-2hx fw-bold text-success">
@@ -132,7 +132,7 @@
 
         <!-- LOKET NONAKTIF -->
         <div class="col-xl-3 col-md-6">
-            <div class="card card-flush shadow-sm h-100">
+            <div class="card card-flush shadow-sm h-100 cursor-pointer"onclick="openDetail('loket_nonaktif')">
                 <div class="card-body text-center">
                     <i class="ki-outline ki-cross fs-2tx text-danger mb-3"></i>
                     <div class="fs-2hx fw-bold text-danger">
@@ -159,10 +159,69 @@
                 </div>
             </div>
         </div>
-
     </div>
-
 </div>
-<!--end::Content-->
+<!-- Modal Detail Dashboard -->
+<div class="modal fade" id="modalDetailDashboard" tabindex="-1">
+    <div class="modal-dialog modal-xl modal-dialog-centered modal-dialog-scrollable">
+        <div class="modal-content">
 
+            <div class="modal-header">
+                <h5 class="modal-title" id="modalDetailTitle">Detail</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+
+            <div class="modal-body" id="modalDetailBody">
+                <div class="text-center py-10">
+                    <span class="spinner-border"></span>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+<!--end::Content-->
 @endsection
+@push('scripts')
+<script>
+function openDetail(type) {
+    $('#modalDetailDashboard').modal('show');
+    $('#modalDetailBody').html(`
+        <div class="text-center py-10">
+            <span class="spinner-border"></span>
+        </div>
+    `);
+
+    let titleMap = {
+        antrian_all: 'Detail Total Antrian',
+        antrian_today: 'Detail Antrian Hari Ini',
+        antrian_menunggu: 'Detail Antrian Menunggu',
+        antrian_dipanggil: 'Detail Antrian Dipanggil',
+        loket_all: 'Detail Semua Layanan',
+        loket_aktif: 'Detail Layanan Aktif',
+        loket_nonaktif: 'Detail Layanan Nonaktif',
+    };
+
+    $('#modalDetailTitle').text(titleMap[type] ?? 'Detail');
+
+    $.get("{{ route('dashboard.detail') }}", { type }, function (res) {
+        $('#modalDetailBody').html(res);
+    }).fail(function () {
+        $('#modalDetailBody').html(`
+            <div class="alert alert-danger">
+                Gagal memuat data
+            </div>
+        `);
+    });
+}
+</script>
+
+<style>
+.cursor-pointer { cursor: pointer; }
+.card.cursor-pointer:hover {
+    transform: translateY(-3px);
+    transition: .2s;
+}
+</style>
+@endpush

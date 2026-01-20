@@ -147,7 +147,7 @@
                         <th class="min-w-150px ">Nama Instansi</th>
                         <th class="min-w-150px ">Nama Layanan</th>
                         <th class="min-w-120px ">Kode Tenant</th>
-                        <th class="min-w-140px text-center">Prefix</th>
+                        <th class="min-w-140px">Prefix</th>
                         <th class="min-w-100px ">Status</th>
                         @canany(['loket.show', 'loket.edit', 'loket.delete'])
                         <th class="min-w-120px text-center">Action</th>
