@@ -11,7 +11,7 @@ use App\Models\{
     Customer
 };
 
-class AntrianController extends Controller
+class FrontController extends Controller
 {
     /**
      * HALAMAN KIOS

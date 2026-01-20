@@ -23,10 +23,10 @@ class Loket extends Model
         'isaktif'
     ];
 
-    public function skpd()
-    {
-        return $this->belongsTo(Skpd::class);
-    }
+    // public function skpd()
+    // {
+    //     return $this->belongsTo(Skpd::class);
+    // }
 
     public function antrians()
     {
