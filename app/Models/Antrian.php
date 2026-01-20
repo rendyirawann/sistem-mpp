@@ -24,6 +24,9 @@ class Antrian extends Model
         'skpd_id',
         'loket_id',
         'customer_id',
+         'nomor_urut',
+        'nomor_antrian',
+        'tanggal',
         'no_urut',
         'no_antrian',
         'status',
@@ -40,13 +43,35 @@ class Antrian extends Model
         'waktu_selesai' => 'datetime',
     ];
 
-    public function scopeHariIni($q)
-    {
-        return $q->whereDate('tanggal', now());
-    }
+    /* =======================
+     | RELATIONS
+     ======================= */
 
     public function skpd()
     {
         return $this->belongsTo(Skpd::class);
     }
+
+    public function loket()
+    {
+        return $this->belongsTo(Loket::class);
+    }
+
+    public function customer()
+    {
+        return $this->belongsTo(Customer::class);
+    }
+
+    /* =======================
+     | QUERY SCOPES
+     ======================= */
+
+ 
+    public function scopeHariIni($q)
+    {
+        return $q->whereDate('tanggal', now());
+    }
+
+    public function scopeByLoket($q, $loketId)
+   
 }

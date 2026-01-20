@@ -23,22 +23,14 @@ class Loket extends Model
         'isaktif'
     ];
 
-    /**
-     * Relasi:
-     * 1 Loket memiliki banyak Antrian
-     */
+    public function skpd()
+    {
+        return $this->belongsTo(Skpd::class);
+    }
+
     public function antrians()
     {
         return $this->hasMany(Antrian::class);
-    }
-
-    /**
-     * Relasi:
-     * 1 Loket memiliki banyak Counter (opsional)
-     */
-    public function counters()
-    {
-        return $this->hasMany(Counter::class);
     }
 
     public function skpd()
