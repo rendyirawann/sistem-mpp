@@ -168,19 +168,7 @@
                     <!--end:Menu link-->
                 </div>
                 <!--end:Menu item-->
-
-
                 <!--begin:Menu item-->
-                <div class="menu-item">
-                    <!--begin:Menu link-->
-                    <a class="menu-link py-3">
-                        <span class="menu-icon">
-                            <i class="ki-outline ki-abstract-26 fs-2"></i>
-                        </span>
-                        <span class="menu-title">Documentation</span>
-                    </a>
-                    <!--end:Menu link-->
-                </div>
                 <!--end:Menu item-->
             </div>
             <!--end:Menu sub-->
@@ -188,12 +176,12 @@
         <!--end:Menu item-->
 
 
-        <div class="menu-item menu-here-bg me-0 me-lg-2 menu-hover-bg menu-hover-bg-warning">
+        <!-- <div class="menu-item menu-here-bg me-0 me-lg-2 menu-hover-bg menu-hover-bg-warning">
             <a class="menu-link px-4">
 
                 <span class="menu-title">Configuration</span>
             </a>
-        </div>
+        </div> -->
     </div>
     <!--end::Menu-->
 </div>
