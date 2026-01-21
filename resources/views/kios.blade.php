@@ -117,12 +117,42 @@
             {{ session('tiket') }}
         </h1>
         <a href="/" class="bg-blue-600 text-white px-6 py-3 rounded-full">
-            SELESAI
+            AMBIL ANTRIAN
         </a>
     </div>
 </div>
 @endif
+{{-- ================= ERROR VALIDATION ================= --}}
 
+@if ($errors->any())
+<div class="fixed inset-0 bg-black bg-opacity-80 flex items-center justify-center z-50" id="errorModal">
+    <div class="bg-white p-8 rounded-3xl text-center max-w-md w-full mx-4 shadow-2xl">
+        <div class="flex justify-center mb-4">
+            <div class="bg-red-100 p-4 rounded-full">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-10 w-10 text-red-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                </svg>
+            </div>
+        </div>
+
+        <h2 class="text-2xl font-black text-gray-800 mb-2">GAGAL</h2>
+        <p class="text-gray-500 mb-6 text-sm">Mohon periksa kembali data Anda:</p>
+
+        <div class="bg-red-50 border border-red-100 rounded-xl p-4 mb-6 text-left">
+            <ul class="list-disc list-inside text-red-600 text-sm font-medium space-y-1">
+                @foreach ($errors->all() as $error)
+                    <li>{{ $error }}</li>
+                @endforeach
+            </ul>
+        </div>
+
+        <button onclick="document.getElementById('errorModal').style.display='none'" 
+                class="w-full bg-red-600 hover:bg-red-700 text-white font-bold py-3 px-6 rounded-full transition duration-200">
+            TUTUP
+        </button>
+    </div>
+</div>
+@endif
 {{-- ================= SCRIPT ================= --}}
 <script>
     const skpdData = @json($skpd);

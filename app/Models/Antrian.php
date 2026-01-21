@@ -73,5 +73,11 @@ class Antrian extends Model
     }
 
     public function scopeByLoket($q, $loketId)
-   
+    {
+        if ($loketId) {
+            return $q->where('loket_id', $loketId);
+        }
+
+        return $q;
+    }
 }
