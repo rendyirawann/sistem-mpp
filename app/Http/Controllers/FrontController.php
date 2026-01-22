@@ -10,6 +10,7 @@ use App\Models\{
     Antrian,
     Customer
 };
+use Illuminate\Support\Facades\Validator;
 
 class FrontController extends Controller
 {
@@ -33,13 +34,45 @@ class FrontController extends Controller
      */
     public function ambilAntrian(Request $request)
     {
-        $request->validate([
-            'skpd_id'  => 'required|exists:skpd,id',
-            'loket_id' => 'required|exists:lokets,id',
-            'nik'      => 'required|min:16',
-            'nama'     => 'required',
-            'no_hp'    => 'required',
-        ]);
+    
+        $validator = Validator::make($request->all(), [
+        // === RULES (Aturannya) ===
+        'skpd_id'  => 'required|exists:skpd,id',
+        'loket_id' => 'required|exists:lokets,id',
+        'nik'      => 'required|numeric|digits:16',
+        'nama'     => 'required|string|max:100',
+        'no_hp'    => 'required|numeric',
+    ], [
+        // === MESSAGES (Kata-kata Errornya) ===
+        'required' => 'Kolom :attribute wajib diisi.',
+        'numeric'  => 'Kolom :attribute harus berupa angka.',
+        'digits'   => 'Kolom :attribute harus berisi :digits digit.',
+        'exists'   => 'Data :attribute tidak ditemukan di sistem.',
+        'max'      => 'Kolom :attribute maksimal :max karakter.',
+        'string'   => 'Kolom :attribute harus berupa teks.',
+    ], [
+        // === ATTRIBUTES (Alias Nama Kolom Biar Cakep) ===
+        // Biar errornya "NIK harus angka", bukan "nik harus angka" (huruf kecil)
+        'skpd_id'  => 'SKPD',
+        'loket_id' => 'Loket',
+        'nik'      => 'NIK',
+        'nama'     => 'Nama Lengkap',
+        'no_hp'    => 'Nomor HP',
+    ]);
+        // 2. Cek Jika Gagal
+        if ($validator->fails()) {
+            // Kalau Request datang dari AJAX, balikin JSON
+            if ($request->expectsJson() || $request->ajax()) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Validasi gagal',
+                    'errors'  => $validator->errors()
+                ], 422);
+            }
+            
+            // Kalau Request biasa, balikin redirect kayak biasa
+            return redirect()->back()->withErrors($validator)->withInput();
+        }
 
         // CUSTOMER
         $customer = Customer::firstOrCreate(
@@ -55,7 +88,7 @@ class FrontController extends Controller
 
         $lastUrut = Antrian::where('loket_id', $request->loket_id)
             ->whereDate('tanggal', $tanggal)
-            ->max('nomor_urut');
+            ->max('no_urut');
 
         $nomorUrut = $lastUrut ? $lastUrut + 1 : 1;
 
@@ -68,8 +101,8 @@ class FrontController extends Controller
             'skpd_id'       => $request->skpd_id,
             'loket_id'      => $request->loket_id,
             'customer_id'   => $customer->id,
-            'nomor_urut'    => $nomorUrut,
-            'nomor_antrian' => $kodeTiket,
+            'no_urut'    => $nomorUrut,
+            'no_antrian' => $kodeTiket,
             'tanggal'       => $tanggal,
             'status'        => 0,
             'waktu_ambil'   => now(),
