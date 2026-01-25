@@ -103,7 +103,7 @@ class FrontController extends Controller
 
         // Header
         $printer->text("MPP\n");
-        $printer->text("KABUPATEN XXXXX\n");
+        $printer->text("KABUPATEN DELI SERDANG\n");
         $printer->text("--------------------------------\n");
 
         // Nomor Antrian
