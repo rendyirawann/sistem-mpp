@@ -669,7 +669,7 @@ class SkpdController extends Controller
             }
 
             // Ambil data SKPD untuk logging sebelum dihapus
-            $skpds = Skpd::whereIn('id', $ids)->get();
+            $skpd = Skpd::whereIn('id', $ids)->get();
 
             // Hapus data SKPD
             Skpd::whereIn('id', $ids)->delete();
@@ -681,7 +681,7 @@ class SkpdController extends Controller
             // ===============================
             // LOG ACTIVITY (AUDIT FULL)
             // ===============================
-            foreach ($skpds as $skpd) {
+            foreach ($skpd as $skpd) {
                 activity()
                     ->useLog('massdelete skpd')
                     ->causedBy(Auth::user())

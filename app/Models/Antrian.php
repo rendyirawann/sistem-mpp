@@ -2,50 +2,53 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Support\Str;
 
 class Antrian extends Model
 {
+    use HasFactory;
+
+    protected $table = 'antrians';
+
+    /**
+     * Karena pakai UUID
+     */
     public $incrementing = false;
     protected $keyType = 'string';
 
-    protected static function boot()
-    {
-        parent::boot();
-        static::creating(function ($model) {
-            if (!$model->id) {
-                $model->id = (string) Str::uuid();
-            }
-        });
-    }
-
+    /**
+     * Field yang boleh diisi mass-assignment
+     */
     protected $fillable = [
+        'id',
+        'customer_id',
         'skpd_id',
         'loket_id',
-        'customer_id',
-         'nomor_urut',
-        'nomor_antrian',
-        'tanggal',
-        'no_urut',
+        'nomor_urut',
         'no_antrian',
         'status',
         'tanggal',
         'waktu_ambil',
-        'waktu_panggil',
-        'waktu_selesai',
     ];
 
+    /**
+     * Cast tipe data agar sesuai database
+     */
     protected $casts = [
-        'tanggal' => 'date',
+        'nomor_urut'  => 'integer',
+        'status'      => 'integer',
+        'tanggal'     => 'date',
         'waktu_ambil' => 'datetime',
-        'waktu_panggil' => 'datetime',
-        'waktu_selesai' => 'datetime',
     ];
 
-    /* =======================
-     | RELATIONS
-     ======================= */
+    /**
+     * ================= RELATION =================
+     */
+    public function customer()
+    {
+        return $this->belongsTo(Customer::class);
+    }
 
     public function skpd()
     {
@@ -55,29 +58,5 @@ class Antrian extends Model
     public function loket()
     {
         return $this->belongsTo(Loket::class);
-    }
-
-    public function customer()
-    {
-        return $this->belongsTo(Customer::class);
-    }
-
-    /* =======================
-     | QUERY SCOPES
-     ======================= */
-
- 
-    public function scopeHariIni($q)
-    {
-        return $q->whereDate('tanggal', now());
-    }
-
-    public function scopeByLoket($q, $loketId)
-    {
-        if ($loketId) {
-            return $q->where('loket_id', $loketId);
-        }
-
-        return $q;
     }
 }
