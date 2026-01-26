@@ -23,30 +23,57 @@
             font-family: 'Plus Jakarta Sans', sans-serif;
         }
 
-        ::-webkit-scrollbar {
-            width: 6px;
+        /* Scrollbar hanya custom di layar besar */
+        @media (min-width: 1024px) {
+            ::-webkit-scrollbar {
+                width: 6px;
+            }
+
+            ::-webkit-scrollbar-track {
+                background: #f1f5f9;
+            }
+
+            ::-webkit-scrollbar-thumb {
+                background: #cbd5e1;
+                border-radius: 4px;
+            }
+
+            ::-webkit-scrollbar-thumb:hover {
+                background: #94a3b8;
+            }
         }
 
-        ::-webkit-scrollbar-track {
-            background: #f1f5f9;
+        /* Animasi kedip halus untuk titik dua pada jam */
+        .blink {
+            animation: blinker 1s linear infinite;
         }
 
-        ::-webkit-scrollbar-thumb {
-            background: #cbd5e1;
-            border-radius: 4px;
-        }
-
-        ::-webkit-scrollbar-thumb:hover {
-            background: #94a3b8;
+        @keyframes blinker {
+            50% {
+                opacity: 0;
+            }
         }
     </style>
 </head>
 
-<body class="bg-slate-50 h-screen w-screen flex overflow-hidden selection:bg-blue-200 selection:text-blue-900">
+{{-- 
+    PERBAIKAN RESPONSIVE DI BODY:
+    1. min-h-screen: Agar tinggi minimal selayar, tapi bisa lebih panjang (scroll) di HP.
+    2. flex-col: Default (HP) susun ke bawah.
+    3. lg:flex-row: Layar Besar (Laptop) susun ke samping.
+    4. lg:h-screen lg:overflow-hidden: Hanya di Laptop kunci tinggi layar (Kios Mode).
+--}}
+
+<body
+    class="bg-slate-50 min-h-screen w-full flex flex-col lg:flex-row lg:h-screen lg:overflow-hidden selection:bg-blue-200 selection:text-blue-900">
 
     {{-- ================= KIRI: SIDEBAR INFORMASI ================= --}}
+    {{-- 
+         HP: w-full (Lebar Penuh), h-auto (Tinggi menyesuaikan isi).
+         Laptop: w-3/12, h-full.
+    --}}
     <div
-        class="w-3/12 bg-gradient-to-br from-blue-700 to-blue-900 text-white p-6 flex flex-col justify-between relative overflow-hidden shadow-2xl z-20">
+        class="w-full lg:w-3/12 bg-gradient-to-br from-blue-700 to-blue-900 text-white p-6 lg:p-4 flex flex-col justify-between relative overflow-hidden shadow-2xl z-20 shrink-0">
 
         {{-- Hiasan Background --}}
         <div
@@ -56,112 +83,147 @@
             class="absolute bottom-0 left-0 -ml-20 -mb-20 w-60 h-60 bg-blue-400 rounded-full mix-blend-multiply filter blur-3xl opacity-20 animate-blob animation-delay-2000">
         </div>
 
-        <div class="relative z-10 flex flex-col h-full">
-            <div class="text-center mb-6 shrink-0">
-                <div
-                    class="inline-flex items-center justify-center w-12 h-12 bg-white/10 backdrop-blur-sm rounded-xl mb-3 border border-white/20 shadow-inner">
-                    <i class="fa fa-building-columns text-xl"></i>
+        <div class="relative z-10 flex flex-col h-full gap-6 lg:gap-0">
+
+            {{-- HEADER ATAS (LOGO & JUDUL) --}}
+            <div class="text-center mb-0 lg:mb-3 shrink-0">
+                <div class="mb-2 flex justify-center">
+                    <img src="{{ asset('images/logo_pemda.png') }}" alt="Logo Pemda"
+                        class="w-16 lg:w-16 h-auto drop-shadow-lg hover:scale-105 transition-transform duration-500">
                 </div>
-                <h1 class="text-2xl font-extrabold tracking-tight leading-none">KIOS ANTRIAN</h1>
-                <p class="text-blue-200 text-xs mt-1 font-medium tracking-wider">MPP DELI SERDANG</p>
+
+                <h1 class="text-xl lg:text-xl font-extrabold tracking-tight leading-none">KIOS ANTRIAN</h1>
+                <p class="text-blue-200 text-[10px] mt-0.5 font-medium tracking-wider">MPP DELI SERDANG</p>
+
+                {{-- JAM DIGITAL --}}
+                <div
+                    class="mt-4 lg:mt-3 bg-white/10 backdrop-blur-md border border-white/10 rounded-xl p-3 lg:p-2 shadow-lg">
+                    <p class="text-[9px] text-blue-200 font-bold tracking-[0.2em] uppercase mb-0">WAKTU SAAT INI</p>
+                    <div
+                        class="flex justify-center items-baseline gap-1 text-3xl font-black tracking-tighter drop-shadow-sm">
+                        <span id="jam-jam">00</span>
+                        <span class="blink text-blue-300">:</span>
+                        <span id="jam-menit">00</span>
+                        <span class="text-base text-blue-300 font-bold ml-1" id="jam-detik">00</span>
+                    </div>
+                    <p id="jam-tanggal"
+                        class="text-[10px] font-medium text-white/90 mt-0 border-t border-white/10 pt-1">
+                        Senin, 1 Januari 2024
+                    </p>
+                </div>
             </div>
 
-            <div class="flex-1 flex flex-col justify-center gap-4">
+            <div class="flex-1 flex flex-col justify-center gap-4 lg:gap-3">
+
                 {{-- Card Jam Operasional --}}
-                <div class="bg-white/10 backdrop-blur-md border border-white/10 rounded-2xl p-5 space-y-3 shadow-lg">
+                <div
+                    class="bg-white/10 backdrop-blur-md border border-white/10 rounded-xl p-4 lg:p-3 space-y-2 shadow-lg">
                     <div class="flex items-center space-x-3">
-                        <div class="w-8 h-8 rounded-full bg-blue-500/20 flex items-center justify-center shrink-0">
-                            <i class="fa fa-clock text-sm"></i>
+                        <div class="w-6 h-6 rounded-full bg-blue-500/20 flex items-center justify-center shrink-0">
+                            <i class="fa fa-clock text-xs"></i>
                         </div>
                         <div>
-                            <p class="text-[10px] text-blue-200 uppercase font-bold tracking-wider">Jam Operasional</p>
-                            <p class="font-bold text-base">08.00 – 15.00 WIB</p>
+                            <p class="text-[9px] text-blue-200 uppercase font-bold tracking-wider">Jam Operasional</p>
+                            <p class="font-bold text-sm">08.00 – 15.00 WIB</p>
                         </div>
                     </div>
                     <div class="flex items-center space-x-3">
-                        <div class="w-8 h-8 rounded-full bg-blue-500/20 flex items-center justify-center shrink-0">
-                            <i class="fa fa-calendar-days text-sm"></i>
+                        <div class="w-6 h-6 rounded-full bg-blue-500/20 flex items-center justify-center shrink-0">
+                            <i class="fa fa-calendar-days text-xs"></i>
                         </div>
                         <div>
-                            <p class="text-[10px] text-blue-200 uppercase font-bold tracking-wider">Hari Kerja</p>
-                            <p class="font-bold text-base">Senin – Jumat</p>
+                            <p class="text-[9px] text-blue-200 uppercase font-bold tracking-wider">Hari Kerja</p>
+                            <p class="font-bold text-sm">Senin – Jumat</p>
                         </div>
-                    </div>
-                    <div class="pt-3 border-t border-white/10">
-                        <p class="text-xs text-blue-100 flex items-start gap-2 leading-tight">
-                            <i class="fa fa-circle-info mt-0.5"></i>
-                            <span>Silakan pilih instansi tujuan pada layar di sebelah kanan.</span>
-                        </p>
                     </div>
                 </div>
 
-                {{-- Card MONITOR PANGGILAN --}}
                 {{-- Card MONITOR PANGGILAN --}}
                 <div id="notifikasiPanggilan"
-                    class="bg-gradient-to-br from-yellow-400 to-yellow-500 text-gray-900 rounded-2xl p-5 shadow-xl border-4 border-white/20 flex flex-col items-center text-center relative overflow-hidden group">
+                    class="bg-gradient-to-br from-yellow-400 to-yellow-500 text-gray-900 rounded-xl p-4 shadow-xl border-4 border-white/20 flex flex-col items-center text-center relative overflow-hidden group">
                     <div class="absolute top-0 left-0 w-full h-1 bg-white/40"></div>
                     <i
-                        class="fa fa-bullhorn absolute -right-4 -bottom-4 text-7xl text-yellow-600 opacity-10 transform -rotate-12 group-hover:scale-110 transition-transform duration-700"></i>
+                        class="fa fa-bullhorn absolute -right-4 -bottom-4 text-6xl text-yellow-600 opacity-10 transform -rotate-12 group-hover:scale-110 transition-transform duration-700"></i>
 
                     <div
-                        class="bg-white text-yellow-600 rounded-xl w-10 h-10 flex items-center justify-center mb-2 shadow-lg z-10 ring-2 ring-yellow-300/50">
-                        <i class="fa fa-volume-high text-lg animate-pulse"></i>
+                        class="bg-white text-yellow-600 rounded-lg w-8 h-8 flex items-center justify-center mb-1 shadow-lg z-10 ring-2 ring-yellow-300/50">
+                        <i class="fa fa-volume-high text-sm animate-pulse"></i>
                     </div>
 
-                    <p class="text-[9px] font-bold uppercase tracking-[0.2em] mb-0 opacity-70 z-10 text-gray-800">
+                    <p class="text-[8px] font-bold uppercase tracking-[0.2em] mb-0 opacity-70 z-10 text-gray-800">
                         PANGGILAN TERAKHIR</p>
 
-                    {{-- NOMOR ANTRIAN --}}
                     <h2 id="panggilanNo"
-                        class="text-6xl font-black tracking-tighter my-1 z-10 text-gray-900 drop-shadow-sm">---</h2>
+                        class="text-5xl font-black tracking-tighter my-0 z-10 text-gray-900 drop-shadow-sm">---</h2>
 
-                    {{-- 🔥 BARU: NAMA SKPD --}}
                     <p id="panggilanSkpd"
-                        class="text-xs font-extrabold text-gray-800 mb-2 z-10 uppercase leading-tight line-clamp-2 px-2">
+                        class="text-[10px] font-extrabold text-gray-800 mb-1 z-10 uppercase leading-tight line-clamp-2 px-1">
                         ---</p>
 
-                    {{-- NAMA LOKET --}}
                     <div
-                        class="bg-gray-900/10 backdrop-blur-sm px-4 py-1 rounded-full border border-gray-900/5 z-10 w-full">
+                        class="bg-gray-900/10 backdrop-blur-sm px-3 py-1 rounded-full border border-gray-900/5 z-10 w-full">
                         <span id="panggilanLoket"
-                            class="text-xs font-bold text-gray-900 uppercase block truncate">Menunggu...</span>
+                            class="text-[10px] font-bold text-gray-900 uppercase block truncate">Menunggu...</span>
                     </div>
                 </div>
             </div>
 
-            <div class="text-center text-[10px] text-blue-300/60 relative z-10 mt-4 shrink-0">
-                <p>&copy; {{ date('Y') }} Mall Pelayanan Publik Deli Serdang</p>
+            <div class="text-center text-[9px] text-blue-300/60 relative z-10 mt-4 lg:mt-2 shrink-0">
+                <p>&copy; {{ date('Y') }} MPP Deli Serdang</p>
             </div>
         </div>
     </div>
 
     {{-- ================= KANAN: MENU UTAMA ================= --}}
-    <div class="w-9/12 p-8 relative overflow-y-auto bg-slate-50 scroll-smooth">
+    {{-- 
+         HP: w-full (Lebar Penuh).
+         Laptop: w-9/12, overflow-y-auto (Scroll area kanan saja).
+    --}}
+    <div class="w-full lg:w-9/12 p-4 lg:p-8 relative bg-slate-50 lg:overflow-y-auto scroll-smooth">
+
         <div class="flex justify-between items-center mb-6 sticky top-0 bg-slate-50/90 backdrop-blur-sm z-20 py-2">
             <div>
-                <h2 class="text-2xl font-bold text-slate-800">Daftar Layanan</h2>
-                <p class="text-sm text-slate-500">Pilih instansi yang ingin Anda tuju</p>
+                <h2 class="text-xl lg:text-2xl font-bold text-slate-800">Daftar Layanan</h2>
+                <p class="text-xs lg:text-sm text-slate-500">Pilih instansi yang ingin Anda tuju</p>
             </div>
-            <div
-                class="bg-white px-3 py-1.5 rounded-full shadow-sm border border-slate-200 flex items-center gap-2 text-xs font-medium text-slate-600">
-                <span class="w-2 h-2 rounded-full bg-green-500 animate-pulse"></span>
-                Sistem Online
+
+            <div class="flex items-center gap-3">
+                <button
+                    onclick="document.getElementById('modalLokasi').classList.remove('hidden'); document.getElementById('modalLokasi').classList.add('flex');"
+                    class="w-8 h-8 rounded-full bg-blue-100 text-blue-600 hover:bg-blue-600 hover:text-white flex items-center justify-center transition-all shadow-sm border border-blue-200"
+                    title="Info Lokasi Stand">
+                    <i class="fa fa-question text-sm font-bold"></i>
+                </button>
+
+                <div
+                    class="bg-white px-3 py-1.5 rounded-full shadow-sm border border-slate-200 flex items-center gap-2 text-xs font-medium text-slate-600">
+                    <span class="w-2 h-2 rounded-full bg-green-500 animate-pulse"></span>
+                    <span class="hidden sm:inline">Sistem Online</span>
+                    <span class="sm:hidden">Online</span>
+                </div>
             </div>
         </div>
 
-        <div class="grid grid-cols-2 md:grid-cols-3 xl:grid-cols-4 gap-4 pb-10">
+        {{-- Grid: 1 Kolom di HP, 2 di Tablet, 3-4 di Laptop --}}
+        <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-4 gap-4 pb-10">
             @foreach ($skpd as $item)
                 <button
-                    class="group bg-white rounded-3xl p-5 text-center border border-slate-100 shadow-[0_2px_10px_-5px_rgba(0,0,0,0.05)] hover:shadow-[0_20px_40px_-15px_rgba(37,99,235,0.15)] hover:-translate-y-1 transition-all duration-300 flex flex-col items-center justify-center h-full min-h-[160px] relative overflow-hidden"
+                    class="group bg-white rounded-3xl p-5 text-center border border-slate-100 shadow-[0_2px_10px_-5px_rgba(0,0,0,0.05)] hover:shadow-[0_20px_40px_-15px_rgba(37,99,235,0.15)] hover:-translate-y-1 transition-all duration-300 flex flex-col items-center justify-center h-full min-h-[140px] lg:min-h-[160px] relative overflow-hidden"
                     onclick="openLayanan('{{ $item->id }}')">
                     <div
                         class="absolute inset-0 bg-blue-50 opacity-0 group-hover:opacity-100 transition-opacity duration-300 rounded-3xl">
                     </div>
                     <div class="relative z-10 flex flex-col items-center h-full justify-center">
                         <div
-                            class="w-16 h-16 mx-auto bg-blue-50 rounded-2xl flex items-center justify-center mb-3 group-hover:bg-blue-600 group-hover:rotate-6 transition-all duration-300 shadow-inner group-hover:shadow-blue-300/50">
-                            <i
-                                class="fa fa-building text-3xl text-blue-600 group-hover:text-white transition-colors duration-300"></i>
+                            class="w-14 h-14 lg:w-16 lg:h-16 mx-auto bg-blue-50 rounded-2xl flex items-center justify-center mb-3 group-hover:bg-blue-600 group-hover:rotate-6 transition-all duration-300 shadow-inner group-hover:shadow-blue-300/50">
+                            @if ($item->logo_skpd)
+                                {{-- <img src="{{ asset('storage/' . $item->logo_skpd) }}" class="w-10 h-10 object-contain"> --}}
+                                <i
+                                    class="fa fa-building-columns text-2xl lg:text-3xl text-blue-600 group-hover:text-white transition-colors duration-300"></i>
+                            @else
+                                <i
+                                    class="fa fa-building text-2xl lg:text-3xl text-blue-600 group-hover:text-white transition-colors duration-300"></i>
+                            @endif
                         </div>
                         <p
                             class="font-bold text-slate-700 text-sm md:text-base leading-snug group-hover:text-blue-700 transition-colors line-clamp-3">
@@ -173,7 +235,10 @@
         </div>
     </div>
 
-    {{-- ================= MODAL 1: PILIH LAYANAN ================= --}}
+    {{-- ================= MODAL, AUDIO, SCRIPT (TIDAK ADA PERUBAHAN) ================= --}}
+
+    {{-- ... (BAGIAN MODAL COPY PASTE DARI YANG LAMA SAJA KARENA SAMA) ... --}}
+
     <div id="modalLayanan"
         class="fixed inset-0 bg-slate-900/60 hidden items-center justify-center z-50 backdrop-blur-sm transition-all duration-300 p-4">
         <div
@@ -194,7 +259,6 @@
         </div>
     </div>
 
-    {{-- ================= MODAL 2: FORM INPUT ================= --}}
     <div id="modalForm"
         class="fixed inset-0 bg-slate-900/60 hidden items-center justify-center z-50 backdrop-blur-sm transition-all duration-300 p-4">
         <div
@@ -215,7 +279,6 @@
                     <input type="hidden" name="skpd_id" id="inputSkpd">
                     <input type="hidden" name="loket_id" id="inputLoket">
 
-                    {{-- Input NIK --}}
                     <div class="space-y-1">
                         <label class="block text-slate-600 text-xs font-bold uppercase tracking-wide ml-1">NIK</label>
                         <div class="relative">
@@ -226,7 +289,6 @@
                                 placeholder="Masukkan 16 digit NIK">
                         </div>
                     </div>
-                    {{-- Input Nama --}}
                     <div class="space-y-1">
                         <label class="block text-slate-600 text-xs font-bold uppercase tracking-wide ml-1">Nama
                             Lengkap</label>
@@ -238,7 +300,6 @@
                                 placeholder="Nama sesuai KTP">
                         </div>
                     </div>
-                    {{-- Input HP --}}
                     <div class="space-y-1">
                         <label class="block text-slate-600 text-xs font-bold uppercase tracking-wide ml-1">No. HP /
                             WA</label>
@@ -260,45 +321,93 @@
         </div>
     </div>
 
-    {{-- ================= MODAL 3: TIKET BERHASIL (FIXED) ================= --}}
+    <div id="modalLokasi"
+        class="fixed inset-0 bg-slate-900/60 hidden items-center justify-center z-50 backdrop-blur-sm transition-all duration-300 p-4">
+        <div
+            class="bg-white rounded-[2rem] w-full max-w-lg shadow-2xl overflow-hidden animate-in fade-in zoom-in duration-200">
+            <div
+                class="bg-gradient-to-r from-slate-700 to-slate-800 text-white p-5 flex items-center shadow-lg relative">
+                <button
+                    onclick="document.getElementById('modalLokasi').classList.add('hidden'); document.getElementById('modalLokasi').classList.remove('flex');"
+                    class="mr-4 hover:bg-white/20 w-8 h-8 flex items-center justify-center rounded-full transition backdrop-blur-sm">
+                    <i class="fa fa-times"></i>
+                </button>
+                <div>
+                    <p class="text-slate-300 text-[10px] font-bold uppercase tracking-wider mb-0.5">Informasi Area</p>
+                    <h2 class="text-xl font-bold leading-none">Lokasi Stand Layanan</h2>
+                </div>
+            </div>
+            <div class="p-6 bg-slate-50 space-y-4">
+
+                {{-- Item Lokasi 1 --}}
+                <div class="bg-white border border-slate-200 p-4 rounded-2xl flex items-center gap-4 shadow-sm">
+                    <div
+                        class="w-12 h-12 bg-blue-100 text-blue-600 rounded-xl flex items-center justify-center text-xl shrink-0">
+                        <i class="fa fa-building-user"></i>
+                    </div>
+                    <div>
+                        <h4 class="font-bold text-slate-800">Polres & Samsat</h4>
+                        <p class="text-sm text-slate-500 flex items-center gap-2"><i
+                                class="fa fa-arrow-left text-xs"></i> Sebelah Kiri Gedung</p>
+                    </div>
+                </div>
+
+                {{-- Item Lokasi 2 --}}
+                <div class="bg-white border border-slate-200 p-4 rounded-2xl flex items-center gap-4 shadow-sm">
+                    <div
+                        class="w-12 h-12 bg-blue-100 text-blue-600 rounded-xl flex items-center justify-center text-xl shrink-0">
+                        <i class="fa fa-network-wired"></i>
+                    </div>
+                    <div>
+                        <h4 class="font-bold text-slate-800">Dinas Kominfostan</h4>
+                        <p class="text-sm text-slate-500 flex items-center gap-2">Sebelah Kanan Gedung <i
+                                class="fa fa-arrow-right text-xs"></i></p>
+                    </div>
+                </div>
+
+                {{-- Item Lokasi 3 --}}
+                <div class="bg-white border border-slate-200 p-4 rounded-2xl flex items-center gap-4 shadow-sm">
+                    <div
+                        class="w-12 h-12 bg-blue-100 text-blue-600 rounded-xl flex items-center justify-center text-xl shrink-0">
+                        <i class="fa fa-mug-hot"></i>
+                    </div>
+                    <div>
+                        <h4 class="font-bold text-slate-800">Kantin & Toilet</h4>
+                        <p class="text-sm text-slate-500">Lantai 1 Belakang</p>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
     @if (session('tiket'))
         <div
             class="fixed inset-0 bg-slate-900/80 flex items-center justify-center z-[60] backdrop-blur-md animate-in fade-in duration-300 p-4">
             <div
                 class="bg-white p-8 rounded-[2rem] text-center shadow-2xl transform scale-100 max-w-sm w-full relative overflow-hidden border-4 border-white/50">
-
-                {{-- FIX: Ditambahkan 'pointer-events-none' agar tidak menghalangi klik --}}
                 <div
                     class="absolute inset-0 bg-[radial-gradient(#3b82f6_1px,transparent_1px)] [background-size:16px_16px] opacity-10 pointer-events-none">
                 </div>
-
                 <div
                     class="mb-4 inline-flex items-center justify-center w-20 h-20 bg-green-100 rounded-full text-green-500 animate-bounce relative z-10">
                     <i class="fa fa-check text-4xl"></i>
                 </div>
-
                 <p class="text-slate-400 font-bold text-xs tracking-widest uppercase mb-1 relative z-10">BERHASIL
                     DICETAK</p>
                 <p class="text-slate-600 font-medium text-base relative z-10">Nomor Antrian Anda:</p>
-
                 <h1
                     class="text-6xl font-black text-blue-600 my-4 tracking-tighter drop-shadow-sm bg-blue-50 py-3 rounded-2xl border border-blue-100 relative z-10">
                     {{ session('tiket') }}
                 </h1>
-
                 <p class="text-slate-500 mb-6 px-2 text-xs leading-relaxed relative z-10">Silakan duduk dan menunggu
                     nomor Anda dipanggil.</p>
-
-                {{-- FIX: Ditambahkan 'relative z-20' agar tombol paling atas --}}
                 <a href="/"
-                    class="block w-full bg-slate-900 text-white py-3 rounded-xl font-bold hover:bg-slate-800 transition shadow-lg text-sm relative z-20">
-                    SELESAI
-                </a>
+                    class="block w-full bg-slate-900 text-white py-3 rounded-xl font-bold hover:bg-slate-800 transition shadow-lg text-sm relative z-20">SELESAI</a>
             </div>
         </div>
     @endif
 
-    {{-- ================= MODAL ERROR ================= --}}
     @if ($errors->any())
         <div class="fixed inset-0 bg-slate-900/80 flex items-center justify-center z-[60] backdrop-blur-sm"
             id="errorModal">
@@ -324,11 +433,34 @@
         </div>
     @endif
 
-    {{-- Audio Element --}}
     <audio id="tingtung" src="{{ asset('assets/audio/tingtung.mp3') }}"></audio>
 
     <script>
-        // --- DATA & MODAL ---
+        function updateClock() {
+            const now = new Date();
+            const days = ['Minggu', 'Senin', 'Selasa', 'Rabu', 'Kamis', 'Jumat', 'Sabtu'];
+            const months = ['Januari', 'Februari', 'Maret', 'April', 'Mei', 'Juni', 'Juli', 'Agustus', 'September',
+                'Oktober', 'November', 'Desember'
+            ];
+
+            const h = String(now.getHours()).padStart(2, '0');
+            const m = String(now.getMinutes()).padStart(2, '0');
+            const s = String(now.getSeconds()).padStart(2, '0');
+
+            document.getElementById('jam-jam').innerText = h;
+            document.getElementById('jam-menit').innerText = m;
+            document.getElementById('jam-detik').innerText = s;
+
+            const dayName = days[now.getDay()];
+            const dateNum = now.getDate();
+            const monthName = months[now.getMonth()];
+            const year = now.getFullYear();
+
+            document.getElementById('jam-tanggal').innerText = `${dayName}, ${dateNum} ${monthName} ${year}`;
+        }
+        setInterval(updateClock, 1000);
+        updateClock();
+
         const skpdData = @json($skpd);
 
         function openLayanan(skpdId) {
@@ -357,11 +489,8 @@
         }
 
         function closeModal() {
-            // Tutup Modal Layanan
             document.getElementById('modalLayanan').classList.add('hidden');
             document.getElementById('modalLayanan').classList.remove('flex');
-
-            // Tutup Modal Form juga (Penting agar reset ke awal)
             document.getElementById('modalForm').classList.add('hidden');
             document.getElementById('modalForm').classList.remove('flex');
         }
@@ -383,9 +512,6 @@
             document.getElementById('modalLayanan').classList.add('flex');
         }
 
-        // ==========================================
-        //  LOGIKA LONG POLLING (FIXED: UNDEFINED & PERSISTENCE)
-        // ==========================================
         const bell = document.getElementById('tingtung');
         const notifElem = document.getElementById('notifikasiPanggilan');
         let speechQueue = [];
@@ -414,29 +540,21 @@
 
                 const data = await response.json();
 
-                // Validasi data
                 if (!data || !data.no_antrian) return;
 
-                // Inisialisasi Tampilan Awal (Tanpa Suara)
                 if (lastCallTime === null) {
                     lastCallTime = data.waktu_panggil;
                     console.log("Init Data:", data.no_antrian);
-
-                    // Update Tampilan Langsung (Termasuk SKPD)
                     document.getElementById('panggilanNo').innerText = data.no_antrian;
-                    document.getElementById('panggilanSkpd').innerText = data.nama_skpd; // 🔥 Update SKPD
+                    document.getElementById('panggilanSkpd').innerText = data.nama_skpd;
                     document.getElementById('panggilanLoket').innerText = data.nama_loket;
                     return;
                 }
 
-                // Jika ada Panggilan Baru
                 if (data.waktu_panggil !== lastCallTime) {
                     console.log("🔥 CALL BARU!", data);
                     lastCallTime = data.waktu_panggil;
-
-                    // Panggil fungsi visual dengan parameter lengkap
                     tampilkanOverlay(data.no_antrian, data.nama_loket, data.nama_skpd);
-
                     putarAudio(data);
                 }
             } catch (error) {
@@ -446,31 +564,26 @@
         }
 
         setInterval(cekServer, 3000);
+
         window.addEventListener('click', function(e) {
             const modalLayanan = document.getElementById('modalLayanan');
             const modalForm = document.getElementById('modalForm');
+            const modalLokasi = document.getElementById('modalLokasi');
 
-            // Cek 1: Jika Modal Layanan terbuka dan user klik area gelapnya
-            if (e.target === modalLayanan) {
-                closeModal();
-            }
-
-            // Cek 2: Jika Modal Form terbuka dan user klik area gelapnya
-            if (e.target === modalForm) {
-                closeModal(); // Langsung tutup semua & kembali ke menu utama
+            if (e.target === modalLayanan) closeModal();
+            if (e.target === modalForm) closeModal();
+            if (e.target === modalLokasi) {
+                modalLokasi.classList.add('hidden');
+                modalLokasi.classList.remove('flex');
             }
         });
 
-        // --- UPDATE FUNGSI TAMPILAN (Terima parameter skpd) ---
         function tampilkanOverlay(nomor, loket, skpd) {
             document.getElementById('panggilanNo').innerText = nomor;
             document.getElementById('panggilanLoket').innerText = loket;
-
-            // Jika SKPD kosong, tulis "-" atau "Instansi"
-            document.getElementById('panggilanSkpd').innerText = skpd ? skpd : 'MPP DELI SERDANG';
+            document.getElementById('panggilanSkpd').innerText = skpd;
 
             const card = document.getElementById('notifikasiPanggilan');
-            // Reset animasi
             card.classList.remove('animate-pulse', 'ring-4', 'ring-yellow-300');
             void card.offsetWidth;
             card.classList.add('animate-pulse', 'ring-4', 'ring-yellow-300');
@@ -493,13 +606,9 @@
                 });
             }
 
-            // --- PERBAIKAN: Beri nilai default jika nama_skpd kosong ---
-            // Jika data.nama_skpd ada isinya, pakai itu. Jika tidak, kosongkan string.
-            let namaInstansi = data.nama_skpd ? data.nama_skpd : '';
-
             let kalimat = [
                 `Nomor antrian. ${data.no_antrian}.`,
-                `Silakan menuju. ${namaInstansi}.`
+                `Silakan menuju. ${data.nama_skpd}.`
             ];
 
             kalimat.forEach(txt => speechQueue.push(txt));
