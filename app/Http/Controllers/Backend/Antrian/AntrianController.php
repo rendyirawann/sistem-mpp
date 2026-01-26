@@ -8,6 +8,7 @@ use App\Models\Antrian;
 use Yajra\DataTables\Facades\DataTables;
 use DB;
 use Auth;
+// use App\Events\PanggilanAntrian;
 
 class AntrianController extends Controller
 {
@@ -86,8 +87,8 @@ class AntrianController extends Controller
                     default => '-',
                 };
             })
-            ->addColumn('is_active', fn ($row) => (int)$row->status === 1)
-            ->addColumn('is_first', fn ($row) => $row->id === $firstWaitingId)
+            ->addColumn('is_active', fn($row) => (int)$row->status === 1)
+            ->addColumn('is_first', fn($row) => $row->id === $firstWaitingId)
             ->rawColumns(['status_label'])
             ->make(true);
     }
@@ -170,7 +171,7 @@ class AntrianController extends Controller
             ], 404);
         }
 
-        // 🔁 JIKA SUDAH DIPANGGIL → BOLEH ULANGI
+        // 🔁 JIKA SUDAH DIPANGGIL → UPDATE WAKTU SAJA (AGAR KIOS BUNYI LAGI)
         if ($antrian->status == 1) {
             $antrian->update([
                 'waktu_panggil' => now()
@@ -182,7 +183,7 @@ class AntrianController extends Controller
             ]);
         }
 
-        // 🔒 CEK ANTRIAN TERKECIL YANG MASIH MENUNGGU
+        // 🔒 CEK ANTRIAN TERKECIL YANG MASIH MENUNGGU (VALIDASI URUTAN)
         $antrianPertama = Antrian::query()
             ->hariIni()
             ->where('status', 0)
@@ -192,6 +193,7 @@ class AntrianController extends Controller
             ->orderBy('no_urut')
             ->first();
 
+        // Validasi urutan (Opsional: bisa dimatikan kalau mau panggil acak)
         if (!$antrianPertama || $antrianPertama->id !== $antrian->id) {
             return response()->json([
                 'success' => false,
@@ -199,17 +201,20 @@ class AntrianController extends Controller
             ], 422);
         }
 
-        // ✅ PANGGIL ANTRIAN TERDEPAN
+        // ✅ PANGGIL ANTRIAN BARU
         $antrian->update([
             'status'        => 1,
             'waktu_panggil' => now()
         ]);
+
+        // --- [HAPUS BAGIAN BROADCAST INI] ---
+        // $dataLengkap = ...
+        // broadcast(new PanggilanAntrian($dataLengkap));
+        // ------------------------------------
 
         return response()->json([
             'success' => true,
             'message' => 'Antrian berhasil dipanggil'
         ]);
     }
-
-
 }
