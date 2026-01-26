@@ -124,15 +124,13 @@
 @endsection
 
 <audio id="tingtung" src="{{ asset('assets/audio/tingtung.mp3') }}"></audio>
-
 @push('scripts')
     <script src="{{ asset('assets/plugins/custom/datatables/datatables.bundle.js') }}"></script>
     <script src="https://code.responsivevoice.org/responsivevoice.js?key=jQZ2zcdq"></script>
     <script>
         let table;
-        // --- KONFIGURASI TIMER ---
-        let isGlobalCooldown = false; // Status apakah sedang menunggu audio
-        const COOLDOWN_TIME = 24000; // 12 Detik (Sesuaikan durasi audio bell + suara)
+        let speechQueue = [];
+        let isSpeaking = false;
 
         $(document).ready(function() {
 
@@ -167,25 +165,31 @@
                         data: null,
                         className: 'text-center',
                         render: function(d) {
-                            // Render Tombol seperti biasa
                             if (d.status == 1) {
-                                return `<button class="btn btn-secondary btn-sm btn-call"><i class="ki-outline ki-notification fs-4"></i> Panggil Ulang</button>`;
+                                return `
+                            <button class="btn btn-secondary btn-sm btn-call">
+                                <i class="ki-outline ki-notification fs-4"></i>
+                            </button>`;
                             }
                             if (d.status == 0 && !d.is_first) {
-                                return `<button class="btn btn-light btn-sm" disabled><i class="ki-outline ki-lock fs-4"></i></button>`;
+                                return `
+                            <button class="btn btn-light btn-sm" disabled>
+                                <i class="ki-outline ki-lock fs-4"></i>
+                            </button>`;
                             }
-                            return `<button class="btn btn-success btn-sm btn-call"><i class="ki-outline ki-notification-on"></i> Panggil</button>`;
+                            return `
+                        <button class="btn btn-success btn-sm btn-call">
+                            <i class="ki-outline ki-notification-on"></i>
+                        </button>`;
                         }
                     }
                 ],
-                // 🔥 LOGIKA PENTING: Kunci tombol paksa setelah tabel reload jika timer masih jalan
-                drawCallback: function(settings) {
-                    if (isGlobalCooldown) {
-                        $('.btn-call').prop('disabled', true).addClass('disabled');
-                    }
-                },
+
+                // 🔥 INI KUNCI HIGHLIGHT
                 rowCallback: function(row, data) {
+
                     $(row).removeClass('antrian-active antrian-first');
+
                     if (data.is_active) {
                         $(row).addClass('antrian-active');
                     } else if (data.is_first) {
@@ -194,25 +198,137 @@
                 }
             });
 
-            // --- EVENT KLIK TOMBOL PANGGIL ---
+            function buildFormalText(data) {
+                return [
+                    `Perhatian.`,
+                    `Panggilan Untuk Nomor antrian ${data.no_antrian}`,
+                    `Silakan Menuju Loket.`
+                ];
+            }
+
+            function speakIndonesiaQueuedPro(sentences, onDone = null) {
+
+                sentences.forEach((text, index) => {
+                    speechQueue.push({
+                        text,
+                        delay: index === 0 ? 0 : 600 // jeda antar kalimat
+                    });
+                });
+
+                // ulangi 1x lagi (opsional PRO)
+                sentences.forEach((text, index) => {
+                    speechQueue.push({
+                        text,
+                        delay: 500
+                    });
+                });
+
+                speechQueue.push({
+                    text: null,
+                    onDone
+                });
+
+                if (!isSpeaking) {
+                    processSpeechQueuePro();
+                }
+            }
+
+            function processSpeechQueuePro() {
+
+                if (speechQueue.length === 0) {
+                    isSpeaking = false;
+                    return;
+                }
+
+                isSpeaking = true;
+                let item = speechQueue.shift();
+
+                if (item.text === null) {
+                    if (typeof item.onDone === 'function') item.onDone();
+                    processSpeechQueuePro();
+                    return;
+                }
+
+                let utterance = new SpeechSynthesisUtterance(item.text);
+                utterance.lang = 'id-ID';
+                utterance.rate = 0.9; // 🔥 pelan
+                utterance.pitch = 0.9; // 🔥 formal
+                utterance.volume = 1;
+
+                let voices = speechSynthesis.getVoices();
+                let indoVoice = voices.find(v => v.lang === 'id-ID');
+                if (indoVoice) utterance.voice = indoVoice;
+
+                utterance.onend = () => {
+                    setTimeout(processSpeechQueuePro, item.delay || 500);
+                };
+
+                utterance.onerror = () => {
+                    processSpeechQueuePro();
+                };
+
+                speechSynthesis.speak(utterance);
+            }
+
+
+
+            // $('#tabel-antrian').on('click', '.btn-call', function () {
+
+            // let btn  = $(this);
+            // let data = table.row(btn.closest('tr')).data();
+            // let bell = document.getElementById('tingtung');
+
+            // if (!data) return;
+
+            // // 🔒 kunci tombol
+            // btn.prop('disabled', true).addClass('disabled');
+
+            // // 🔔 bell
+            // bell.pause();
+            // bell.currentTime = 0;
+            // bell.play().catch(()=>{});
+
+            // let sentences = buildFormalText(data);
+
+            // // ⏱️ jeda bell → suara
+            // setTimeout(() => {
+
+            //     speakIndonesiaQueuedPro(sentences, function () {
+            //         // 🔓 buka tombol SETELAH SEMUA selesai
+            //         btn.prop('disabled', false).removeClass('disabled');
+            //     });
+
+            // }, 1200);
+            // // 🔄 update status ke server
+            // $.ajax({
+            //     url: "{{ route('antrian.panggil') }}",
+            //     type: "POST",
+            //     data: {
+            //         _token: "{{ csrf_token() }}",
+            //         id: data.id
+            //     },
+            //     success: function (res) {
+            //         loadInfo();
+            //         table.ajax.reload(null, false);
+            //     },
+            //     error: function () {
+            //         alert('Gagal memanggil antrian');
+            //         btn.prop('disabled', false).removeClass('disabled');
+            //     }
+            // });
+
+            // });
+
             $('#tabel-antrian').on('click', '.btn-call', function() {
                 let btn = $(this);
                 let data = table.row(btn.closest('tr')).data();
 
-                // 1. Cek apakah sedang cooldown? Jika ya, stop.
-                if (isGlobalCooldown) return;
-
                 if (!data) return;
 
-                // 2. AKTIFKAN MODE COOLDOWN (Kunci Semua)
-                isGlobalCooldown = true;
+                // 1. Kunci tombol biar gak dipencet berkali-kali
+                btn.prop('disabled', true).addClass('disabled');
 
-                // Ubah tampilan tombol yang diklik
-                btn.html('<i class="spinner-border spinner-border-sm"></i>').prop('disabled', true);
-                // Disable semua tombol lain seketika
-                $('.btn-call').prop('disabled', true).addClass('disabled');
-
-                // 3. REQUEST SERVER
+                // 2. Langsung Request ke Server (Tanpa Play Audio disini)
                 $.ajax({
                     url: "{{ route('antrian.panggil') }}",
                     type: "POST",
@@ -221,61 +337,25 @@
                         id: data.id
                     },
                     success: function(res) {
-                        // Reload data tabel & Info box
+                        // Reload tabel untuk update status
                         loadInfo();
                         table.ajax.reload(null, false);
 
-                        // 4. MULAI TIMER UNTUK BUKA KUNCI
-                        startCooldownTimer();
+                        // Buka kunci tombol lagi (opsional, atau biarkan disabled kalau sudah dipanggil)
+                        setTimeout(() => {
+                            btn.prop('disabled', false).removeClass('disabled');
+                        }, 1000);
                     },
                     error: function() {
                         alert('Gagal memanggil antrian');
-                        // Jika error, langsung buka kunci
-                        isGlobalCooldown = false;
-                        table.ajax.reload(null, false);
+                        btn.prop('disabled', false).removeClass('disabled');
                     }
                 });
             });
 
-            // --- FUNGSI TIMER HITUNG MUNDUR ---
-            function startCooldownTimer() {
-                let timeLeft = COOLDOWN_TIME / 1000; // Konversi ke detik
-                let refreshBtn = $('#refresh-table-btn');
-                let originalLabel = refreshBtn.find('.indicator-label').html(); // Simpan teks asli
-
-                // Ubah teks tombol refresh jadi timer
-                refreshBtn.prop('disabled', true);
-                refreshBtn.find('.indicator-label').html(
-                    `<i class="ki-outline ki-time me-2"></i> Silahkan Tunggu (${timeLeft}s)`);
-
-                const timerInterval = setInterval(() => {
-                    timeLeft--;
-                    refreshBtn.find('.indicator-label').html(
-                        `<i class="ki-outline ki-time me-2"></i> Silahkan Tunggu (${timeLeft}s)`);
-
-                    if (timeLeft <= 0) {
-                        clearInterval(timerInterval);
-
-                        // WAKTU HABIS: Buka Kunci
-                        isGlobalCooldown = false;
-
-                        // Kembalikan tombol refresh
-                        refreshBtn.find('.indicator-label').html(
-                            `<i class="ki-outline ki-arrows-loop me-2"></i> Refresh`);
-                        refreshBtn.find('.indicator-progress').hide();
-                        refreshBtn.find('.indicator-label').show();
-                        refreshBtn.prop('disabled', false);
-
-                        // Buka kunci tombol di tabel
-                        $('.btn-call').prop('disabled', false).removeClass('disabled');
-                    }
-                }, 1000);
-            }
 
             // 🔄 Tombol refresh manual
             $('#refresh-table-btn').on('click', function() {
-                // Jangan refresh kalau sedang cooldown audio
-                if (isGlobalCooldown) return;
 
                 const btn = $(this);
                 btn.find('.indicator-label').hide();
@@ -288,7 +368,10 @@
                     btn.find('.indicator-progress').hide();
                     btn.find('.indicator-label').show();
                 }, 500);
+
             });
+
+
         });
     </script>
 @endpush

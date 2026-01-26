@@ -18,7 +18,7 @@
             <div class="symbol symbol-40px me-5">
 
                 @if (Auth::user()->avatar)
-                    <img class="navbar-avatar-img" src="{{ asset('storage/user/avatar/' . Auth::user()->avatar) }}"
+                    <img class="navbar-avatar-img" src="{{ asset('storage/app/public/user/avatar/' . Auth::user()->avatar) }}"
                         alt="{{ Auth::user()->name }}" />
                 @else
                     <div
