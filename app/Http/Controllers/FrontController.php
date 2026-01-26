@@ -70,7 +70,7 @@ class FrontController extends Controller
             'status'      => 0, // 0 = menunggu (SESUAI DATABASE)
         ]);
 
-   // ================= FORMAT TIKET =================
+        // ================= FORMAT TIKET =================
         $kodeTiket = $loket->kode_tenant . '-' . str_pad($nextNumber, 3, '0', STR_PAD_LEFT);
 
         // ================= EKSEKUSI CETAK (BAGIAN PENTING) =================
@@ -79,7 +79,12 @@ class FrontController extends Controller
             // Menggunakan smb://localhost agar lebih stabil di XAMPP
             $namaPrinter = "smb://localhost/printer_kios";
             
-            $this->printTiket($kodeTiket, $loket->nama_loket, $namaPrinter);
+            // AMBIL NAMA TENANT (SKPD) DARI RELASI
+            // Pastikan $loket->skpd ada isinya (biasanya otomatis terambil karena relasi belongsTo)
+            $namaTenant = $loket->skpd->nama_skpd;
+
+            // Kirim $namaTenant menggantikan $loket->nama_loket
+            $this->printTiket($kodeTiket, $namaTenant, $namaPrinter);
 
         } catch (\Exception $e) {
             // Jika error, catat di log tapi JANGAN hentikan aplikasi
@@ -117,7 +122,7 @@ class FrontController extends Controller
 
         // Layanan
         $printer->feed(1);
-        $printer->text("LAYANAN\n");
+        $printer->text("INTANSI\n");
         $printer->text(strtoupper($namaLoket) . "\n");
 
         // Waktu
