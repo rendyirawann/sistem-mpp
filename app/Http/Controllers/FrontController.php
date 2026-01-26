@@ -12,6 +12,12 @@ use App\Models\{
 };
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Str;
+use Illuminate\Support\Facades\Log;
+
+// ESC/POS (DISIAPKAN, BELUM DIPAKAI)
+use Mike42\Escpos\Printer;
+use Mike42\Escpos\PrintConnectors\WindowsPrintConnector;
 
 class FrontController extends Controller
 {
@@ -109,6 +115,19 @@ class FrontController extends Controller
             'status'        => 0,
             'waktu_ambil'   => now(),
         ]);
+      
+        // ================= EKSEKUSI CETAK (BAGIAN PENTING) =================
+        try {
+            // Pastikan Printer sudah di-SHARE dengan nama "printer_kios" di Windows
+            // Menggunakan smb://localhost agar lebih stabil di XAMPP
+            $namaPrinter = "smb://localhost/printer_kios";
+            
+            $this->printTiket($kodeTiket, $loket->nama_loket, $namaPrinter);
+
+        } catch (\Exception $e) {
+            // Jika error, catat di log tapi JANGAN hentikan aplikasi
+            Log::error("Gagal Cetak Tiket: " . $e->getMessage());
+        }
 
         return redirect()->back()->with('tiket', $kodeTiket);
     }
@@ -148,4 +167,50 @@ class FrontController extends Controller
 
         return response()->json($last);
     }
+  
+   /**
+     * FUNGSI CETAK TIKET
+     */
+    private function printTiket($kodeTiket, $namaLoket, $printerName)
+    {
+        $connector = new WindowsPrintConnector($printerName);
+        $printer   = new Printer($connector);
+
+        $printer->setJustification(Printer::JUSTIFY_CENTER);
+
+        // Header
+        $printer->text("MPP\n");
+        $printer->text("KABUPATEN DELI SERDANG\n");
+        $printer->text("--------------------------------\n");
+
+        // Nomor Antrian
+        $printer->feed(1);
+        $printer->text("NOMOR ANTRIAN\n");
+        $printer->feed(1);
+
+        $printer->setTextSize(3, 3);
+        $printer->text($kodeTiket . "\n");
+        $printer->setTextSize(1, 1);
+
+        // Layanan
+        $printer->feed(1);
+        $printer->text("LAYANAN\n");
+        $printer->text(strtoupper($namaLoket) . "\n");
+
+        // Waktu
+        $printer->text("--------------------------------\n");
+        $printer->text("Tgl : " . now()->format('d-m-Y H:i') . "\n");
+        $printer->text("--------------------------------\n");
+
+        // Footer
+        $printer->feed(1);
+        $printer->text("Silakan menunggu dipanggil\n");
+        $printer->feed(2);
+
+        // Cut
+        $printer->cut();
+        $printer->close();
+    }
 }
+
+
