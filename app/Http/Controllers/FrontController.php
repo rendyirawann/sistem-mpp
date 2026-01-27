@@ -3,11 +3,15 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\Models\Customer;
-use App\Models\Antrian;
-use App\Models\Loket;
-use App\Models\Skpd;
 use Carbon\Carbon;
+use App\Models\{
+    Skpd,
+    Loket,
+    Antrian,
+    Customer
+};
+use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Log;
 
@@ -18,85 +22,153 @@ use Mike42\Escpos\PrintConnectors\WindowsPrintConnector;
 class FrontController extends Controller
 {
     /**
-     * Halaman kios
+     * HALAMAN KIOS
      */
     public function index()
     {
-        $skpd = Skpd::with('lokets')->get();
+
+        // Ambil SKPD aktif + loket aktif
+        $skpd = Skpd::with(['lokets' => function ($q) {
+            $q->where('isaktif', 1);
+        }])
+            ->where('isAktif', true)
+            ->get();
+
         return view('kios', compact('skpd'));
     }
 
     /**
-     * Proses ambil antrian
+     * AMBIL ANTRIAN
      */
     public function ambilAntrian(Request $request)
     {
-        // ================= VALIDASI =================
-        $request->validate([
-            'skpd_id'  => 'required',
-            'loket_id' => 'required',
-            'nik'      => 'required',
-            'nama'     => 'required',
-            'no_hp'    => 'required',
+
+        $validator = Validator::make($request->all(), [
+            // === RULES (Aturannya) ===
+            'skpd_id'  => 'required|exists:skpd,id',
+            'loket_id' => 'required|exists:lokets,id',
+            'nik'      => 'required|numeric|digits:16',
+            'nama'     => 'required|string|max:100',
+            'no_hp'    => 'required|numeric',
+        ], [
+            // === MESSAGES (Kata-kata Errornya) ===
+            'required' => 'Kolom :attribute wajib diisi.',
+            'numeric'  => 'Kolom :attribute harus berupa angka.',
+            'digits'   => 'Kolom :attribute harus berisi :digits digit.',
+            'exists'   => 'Data :attribute tidak ditemukan di sistem.',
+            'max'      => 'Kolom :attribute maksimal :max karakter.',
+            'string'   => 'Kolom :attribute harus berupa teks.',
+        ], [
+            // === ATTRIBUTES (Alias Nama Kolom Biar Cakep) ===
+            // Biar errornya "NIK harus angka", bukan "nik harus angka" (huruf kecil)
+            'skpd_id'  => 'SKPD',
+            'loket_id' => 'Loket',
+            'nik'      => 'NIK',
+            'nama'     => 'Nama Lengkap',
+            'no_hp'    => 'Nomor HP',
         ]);
+        // 2. Cek Jika Gagal
+        if ($validator->fails()) {
+            // Kalau Request datang dari AJAX, balikin JSON
+            if ($request->expectsJson() || $request->ajax()) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Validasi gagal',
+                    'errors'  => $validator->errors()
+                ], 422);
+            }
 
-        // ================= SIMPAN CUSTOMER =================
-        $customer = Customer::create([
-            'id'    => (string) Str::uuid(),
-            'nik'   => $request->nik,
-            'nama'  => $request->nama,
-            'no_hp' => $request->no_hp,
-        ]);
+            // Kalau Request biasa, balikin redirect kayak biasa
+            return redirect()->back()->withErrors($validator)->withInput();
+        }
 
-        // ================= AMBIL LOKET =================
-        $loket = Loket::findOrFail($request->loket_id);
+        // CUSTOMER
+        $customer = Customer::firstOrCreate(
+            ['nik' => $request->nik],
+            [
+                'nama'  => $request->nama,
+                'no_hp' => $request->no_hp,
+            ]
+        );
 
-        // ================= HITUNG NOMOR URUT =================
-        $today = Carbon::today();
+        // NOMOR URUT HARI INI PER LOKET
+        $tanggal = Carbon::today();
 
-        $lastNumber = Antrian::where('loket_id', $loket->id)
-            ->whereDate('created_at', $today)
+        $lastUrut = Antrian::where('loket_id', $request->loket_id)
+            ->whereDate('tanggal', $tanggal)
             ->max('no_urut');
 
-        $nextNumber = ($lastNumber ?? 0) + 1;
+        $nomorUrut = $lastUrut ? $lastUrut + 1 : 1;
 
-        // ================= SIMPAN ANTRIAN =================
+        // PREFIX DARI DB (prefix_tenant)
+        $loket = Loket::findOrFail($request->loket_id);
+        $kodeTiket = $loket->prefix_tenant . '-' . str_pad($nomorUrut, 3, '0', STR_PAD_LEFT);
+
+        // SIMPAN ANTRIAN
         Antrian::create([
-            'id'          => (string) Str::uuid(),
-            'customer_id' => $customer->id,
-            'skpd_id'     => $request->skpd_id,
-            'loket_id'    => $loket->id,
-            'no_urut'  => $nextNumber,
-            'status'      => 0, // 0 = menunggu (SESUAI DATABASE)
+            'skpd_id'       => $request->skpd_id,
+            'loket_id'      => $request->loket_id,
+            'customer_id'   => $customer->id,
+            'no_urut'    => $nomorUrut,
+            'no_antrian' => $kodeTiket,
+            'tanggal'       => $tanggal,
+            'status'        => 0,
+            'waktu_ambil'   => now(),
         ]);
-
-        // ================= FORMAT TIKET =================
-        $kodeTiket = $loket->kode_tenant . '-' . str_pad($nextNumber, 3, '0', STR_PAD_LEFT);
-
+      
         // ================= EKSEKUSI CETAK (BAGIAN PENTING) =================
         try {
             // Pastikan Printer sudah di-SHARE dengan nama "printer_kios" di Windows
             // Menggunakan smb://localhost agar lebih stabil di XAMPP
             $namaPrinter = "smb://localhost/printer_kios";
             
-            // AMBIL NAMA TENANT (SKPD) DARI RELASI
-            // Pastikan $loket->skpd ada isinya (biasanya otomatis terambil karena relasi belongsTo)
-            $namaTenant = $loket->skpd->nama_skpd;
-
-            // Kirim $namaTenant menggantikan $loket->nama_loket
-            $this->printTiket($kodeTiket, $namaTenant, $namaPrinter);
+            $this->printTiket($kodeTiket, $loket->nama_loket, $namaPrinter);
 
         } catch (\Exception $e) {
             // Jika error, catat di log tapi JANGAN hentikan aplikasi
             Log::error("Gagal Cetak Tiket: " . $e->getMessage());
         }
 
-        // ================= KEMBALI KE KIOS + TAMPILKAN TIKET =================
-        return redirect('/')
-            ->with('tiket', $kodeTiket);
+        return redirect()->back()->with('tiket', $kodeTiket);
     }
 
-    /**
+    public function checkLastPanggilan()
+    {
+        // Ambil data panggilan terakhir hari ini
+        // Kita gunakan DB::raw pada JOIN untuk menghindari error Collation (Error 500)
+        $last = Antrian::select(
+            'antrians.*',
+            'lokets.nama_loket',
+            'skpd.nama_skpd'
+        )
+            ->leftJoin('lokets', function ($join) {
+                $join->on(
+                    DB::raw('lokets.id COLLATE utf8mb4_unicode_ci'),
+                    '=',
+                    DB::raw('antrians.loket_id COLLATE utf8mb4_unicode_ci')
+                );
+            })
+            ->leftJoin('skpd', function ($join) {
+                $join->on(
+                    DB::raw('skpd.id COLLATE utf8mb4_unicode_ci'),
+                    '=',
+                    DB::raw('antrians.skpd_id COLLATE utf8mb4_unicode_ci')
+                );
+            })
+            ->whereDate('antrians.tanggal', Carbon::today())
+            ->where('antrians.status', 1) // Status Dipanggil
+            ->orderBy('antrians.waktu_panggil', 'desc')
+            ->first();
+
+        // Return kosong jika tidak ada data
+        if (!$last) {
+            return response()->json(null);
+        }
+
+        return response()->json($last);
+    }
+  
+   /**
      * FUNGSI CETAK TIKET
      */
     private function printTiket($kodeTiket, $namaLoket, $printerName)
@@ -122,7 +194,7 @@ class FrontController extends Controller
 
         // Layanan
         $printer->feed(1);
-        $printer->text("INTANSI\n");
+        $printer->text("LAYANAN\n");
         $printer->text(strtoupper($namaLoket) . "\n");
 
         // Waktu
@@ -140,3 +212,5 @@ class FrontController extends Controller
         $printer->close();
     }
 }
+
+
