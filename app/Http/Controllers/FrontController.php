@@ -115,15 +115,19 @@ class FrontController extends Controller
             'status'        => 0,
             'waktu_ambil'   => now(),
         ]);
-      
+
         // ================= EKSEKUSI CETAK (BAGIAN PENTING) =================
         try {
             // Pastikan Printer sudah di-SHARE dengan nama "printer_kios" di Windows
             // Menggunakan smb://localhost agar lebih stabil di XAMPP
             $namaPrinter = "smb://localhost/printer_kios";
-            
-            $this->printTiket($kodeTiket, $loket->nama_loket, $namaPrinter);
 
+            // AMBIL NAMA TENANT (SKPD) DARI RELASI
+            // Pastikan $loket->skpd ada isinya (biasanya otomatis terambil karena relasi belongsTo)
+            $namaTenant = $loket->skpd->nama_skpd;
+
+            // Kirim $namaTenant menggantikan $loket->nama_loket
+            $this->printTiket($kodeTiket, $namaTenant, $namaPrinter);
         } catch (\Exception $e) {
             // Jika error, catat di log tapi JANGAN hentikan aplikasi
             Log::error("Gagal Cetak Tiket: " . $e->getMessage());
@@ -167,11 +171,11 @@ class FrontController extends Controller
 
         return response()->json($last);
     }
-  
-   /**
+
+    /**
      * FUNGSI CETAK TIKET
      */
-    private function printTiket($kodeTiket, $namaLoket, $printerName)
+    private function printTiket($kodeTiket, $namaSkpd, $printerName)
     {
         $connector = new WindowsPrintConnector($printerName);
         $printer   = new Printer($connector);
@@ -194,8 +198,19 @@ class FrontController extends Controller
 
         // Layanan
         $printer->feed(1);
-        $printer->text("LAYANAN\n");
-        $printer->text(strtoupper($namaLoket) . "\n");
+        $printer->text("LOKET\n");
+
+        // === LOGIKA TEXT WRAPPING ===
+        $namaSkpdUpper = strtoupper($namaSkpd);
+
+        // Angka 30 adalah batas aman karakter per baris untuk kertas 58mm (biasanya max 32)
+        // Parameter "\n" memaksa pindah baris
+        // Parameter false artinya jangan potong kata di tengah jalan (tunggu spasi)
+        $namaSkpdWrapped = wordwrap($namaSkpdUpper, 30, "\n", false);
+
+        $printer->text($namaSkpdWrapped . "\n");
+        // ============================
+
 
         // Waktu
         $printer->text("--------------------------------\n");
@@ -212,5 +227,3 @@ class FrontController extends Controller
         $printer->close();
     }
 }
-
-
