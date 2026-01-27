@@ -321,10 +321,13 @@
         </div>
     </div>
 
+    {{-- MODAL LOKASI (SUDAH BERSIH DARI TEKS MANUAL) --}}
     <div id="modalLokasi"
         class="fixed inset-0 bg-slate-900/60 hidden items-center justify-center z-50 backdrop-blur-sm transition-all duration-300 p-4">
         <div
             class="bg-white rounded-[2rem] w-full max-w-lg shadow-2xl overflow-hidden animate-in fade-in zoom-in duration-200">
+            
+            {{-- Header Modal --}}
             <div
                 class="bg-gradient-to-r from-slate-700 to-slate-800 text-white p-5 flex items-center shadow-lg relative">
                 <button
@@ -337,46 +340,43 @@
                     <h2 class="text-xl font-bold leading-none">Lokasi Stand Layanan</h2>
                 </div>
             </div>
-            <div class="p-6 bg-slate-50 space-y-4">
 
-                {{-- Item Lokasi 1 --}}
-                <div class="bg-white border border-slate-200 p-4 rounded-2xl flex items-center gap-4 shadow-sm">
-                    <div
-                        class="w-12 h-12 bg-blue-100 text-blue-600 rounded-xl flex items-center justify-center text-xl shrink-0">
-                        <i class="fa fa-building-user"></i>
-                    </div>
-                    <div>
-                        <h4 class="font-bold text-slate-800">Polres & Samsat</h4>
-                        <p class="text-sm text-slate-500 flex items-center gap-2"><i
-                                class="fa fa-arrow-left text-xs"></i> Sebelah Kiri Gedung</p>
-                    </div>
-                </div>
+            {{-- Body Modal (Looping Database) --}}
+            <div class="p-6 bg-slate-50 space-y-4 max-h-[60vh] overflow-y-auto">
+                
+                {{-- Cek apakah ada data SKPD --}}
+                @forelse ($skpd as $item)
+                    
+                    {{-- Hanya render elemen jika kolom 'lokasi' di database TIDAK KOSONG --}}
+                    @if (!empty($item->lokasi))
+                        <div class="bg-white border border-slate-200 p-4 rounded-2xl flex items-center gap-4 shadow-sm hover:shadow-md transition-shadow">
+                            
+                            {{-- Ikon Gedung --}}
+                            <div class="w-12 h-12 bg-blue-100 text-blue-600 rounded-xl flex items-center justify-center text-xl shrink-0">
+                                <i class="fa fa-building-user"></i>
+                            </div>
+                            
+                            {{-- Teks Nama SKPD & Lokasi --}}
+                            <div>
+                                <h4 class="font-bold text-slate-800">{{ $item->nama_skpd }}</h4>
+                                <p class="text-sm text-slate-500 flex items-center gap-2 mt-1">
+                                    <i class="fa fa-map-pin text-xs text-red-500"></i> 
+                                    {{ $item->lokasi }}
+                                </p>
+                            </div>
+                        </div>
+                    @endif
 
-                {{-- Item Lokasi 2 --}}
-                <div class="bg-white border border-slate-200 p-4 rounded-2xl flex items-center gap-4 shadow-sm">
-                    <div
-                        class="w-12 h-12 bg-blue-100 text-blue-600 rounded-xl flex items-center justify-center text-xl shrink-0">
-                        <i class="fa fa-network-wired"></i>
+                @empty
+                    {{-- Jika tabel SKPD kosong melompong --}}
+                    <div class="text-center text-slate-400 py-10">
+                        <i class="fa fa-info-circle text-2xl mb-2"></i>
+                        <p>Belum ada informasi lokasi.</p>
                     </div>
-                    <div>
-                        <h4 class="font-bold text-slate-800">Dinas Kominfostan</h4>
-                        <p class="text-sm text-slate-500 flex items-center gap-2">Sebelah Kanan Gedung <i
-                                class="fa fa-arrow-right text-xs"></i></p>
-                    </div>
-                </div>
+                @endforelse
 
-                {{-- Item Lokasi 3 --}}
-                <div class="bg-white border border-slate-200 p-4 rounded-2xl flex items-center gap-4 shadow-sm">
-                    <div
-                        class="w-12 h-12 bg-blue-100 text-blue-600 rounded-xl flex items-center justify-center text-xl shrink-0">
-                        <i class="fa fa-mug-hot"></i>
-                    </div>
-                    <div>
-                        <h4 class="font-bold text-slate-800">Kantin & Toilet</h4>
-                        <p class="text-sm text-slate-500">Lantai 1 Belakang</p>
-                    </div>
-                </div>
-
+                {{-- SAYA SUDAH MENGHAPUS BAGIAN HARDCODED (Polres, Kominfostan, Kantin) DISINI --}}
+                
             </div>
         </div>
     </div>
