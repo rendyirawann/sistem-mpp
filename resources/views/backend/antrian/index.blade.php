@@ -2,149 +2,355 @@
 @section('title', 'Panggilan Antrian')
 @section('content')
 
-    <!--begin::Toolbar-->
-    <div id="kt_app_toolbar" class="app-toolbar d-flex flex-stack py-4 py-lg-8">
+    <div id="kt_app_toolbar" class="app-toolbar d-flex flex-stack py-3">
         <div class="d-flex flex-grow-1 flex-stack flex-wrap gap-2">
-            <!--begin::Page title-->
             <div class="page-title d-flex flex-column justify-content-center me-3">
                 <h1 class="page-heading fw-bold fs-3 my-0">Panggilan Antrian</h1>
-                <ul class="breadcrumb breadcrumb-separatorless fw-semibold fs-7 my-0 pt-1">
-                    <li class="breadcrumb-item text-muted">Home</li>
-                    <li class="breadcrumb-item">
-                        <span class="bullet bg-gray-500 w-5px h-2px"></span>
-                    </li>
-                    <li class="breadcrumb-item text-muted">Antrian</li>
-                    <li class="breadcrumb-item">
-                        <span class="bullet bg-gray-500 w-5px h-2px"></span>
-                    </li>
-                    <li class="breadcrumb-item text-gray-900">Panggilan</li>
-                </ul>
             </div>
-            <!--end::Page title-->
         </div>
     </div>
-    <!--end::Toolbar-->
 
-    <!--begin::Content-->
     <div id="kt_app_content" class="app-content flex-column-fluid">
 
-        <!--begin::Info Cards-->
-        <div class="row g-5 mb-7">
-            @php
-                $cards = [
-                    [
-                        'id' => 'jumlah-antrian',
-                        'label' => 'Jumlah Antrian',
-                        'icon' => 'ki-user-tick',
-                        'color' => 'warning',
-                    ],
-                    [
-                        'id' => 'antrian-sekarang',
-                        'label' => 'Antrian Sekarang',
-                        'icon' => 'ki-profile-circle',
-                        'color' => 'success',
-                    ],
-                    [
-                        'id' => 'antrian-selanjutnya',
-                        'label' => 'Antrian Selanjutnya',
-                        'icon' => 'ki-people',
-                        'color' => 'info',
-                    ],
-                    ['id' => 'sisa-antrian', 'label' => 'Sisa Antrian', 'icon' => 'ki-user', 'color' => 'danger'],
-                ];
-            @endphp
+        {{-- ROW ATAS: MONITOR & STATISTIK (Dibuat Lebih Kecil/Compact) --}}
+        <div class="row g-4 mb-5">
 
-            @foreach ($cards as $c)
-                <div class="col-xl-3 col-md-6">
-                    <div class="card card-flush shadow-sm">
-                        <div class="card-body d-flex align-items-center">
-                            <div class="symbol symbol-45px me-4">
-                                <span class="symbol-label bg-light-{{ $c['color'] }}">
-                                    <i class="ki-outline {{ $c['icon'] }} fs-2 text-{{ $c['color'] }}"></i>
-                                </span>
+            {{-- 1. KOLOM KIRI: STATISTIK (Lebih Kecil) --}}
+            <div class="col-xl-4">
+                <div class="row g-3">
+                    <div class="col-12">
+                        {{-- Total Masuk --}}
+                        <div class="card card-flush shadow-sm bg-light-primary border-primary border-start border-4"
+                            style="min-height: 80px">
+                            <div class="card-body d-flex align-items-center py-3 px-4">
+                                <i class="ki-outline ki-user-tick fs-2 text-primary me-3"></i>
+                                <div>
+                                    <div id="jumlah-antrian" class="fs-3 fw-bold text-gray-800">-</div>
+                                    <div class="fw-semibold text-gray-600 fs-8">Total Masuk</div>
+                                </div>
                             </div>
-                            <div>
-                                <div id="{{ $c['id'] }}" class="fs-2 fw-bold text-{{ $c['color'] }}">-</div>
-                                <div class="fw-semibold text-gray-500">{{ $c['label'] }}</div>
+                        </div>
+                    </div>
+                    <div class="col-6">
+                        {{-- Menunggu --}}
+                        <div class="card card-flush shadow-sm bg-light-warning border-warning border-start border-4"
+                            style="min-height: 80px">
+                            <div class="card-body py-3 px-2 text-center">
+                                <div id="sisa-antrian" class="fs-3 fw-bold text-gray-800">-</div>
+                                <div class="fw-semibold text-gray-600 fs-8">Menunggu</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-6">
+                        {{-- Selesai --}}
+                        <div class="card card-flush shadow-sm bg-light-success border-success border-start border-4"
+                            style="min-height: 80px">
+                            <div class="card-body py-3 px-2 text-center">
+                                <div id="antrian-selesai" class="fs-3 fw-bold text-gray-800">-</div>
+                                <div class="fw-semibold text-gray-600 fs-8">Selesai</div>
                             </div>
                         </div>
                     </div>
                 </div>
-            @endforeach
-        </div>
-        <!--end::Info Cards-->
+            </div>
 
-        <!--begin::Table Card-->
-        <div class="card border border-gray-300 shadow-sm">
-            <!--begin::Card header-->
-            <div class="card-header border-bottom border-gray-300">
-                <div class="card-title">
-                    <h3 class="fw-bold m-0">Daftar Antrian</h3>
+            {{-- 2. KOLOM KANAN: MONITOR (Lebih Kecil/Compact) --}}
+            {{-- 2. KOLOM KANAN: MONITOR (Compact & Posisi SKPD Diatas) --}}
+            <div class="col-xl-8">
+                <div class="row h-100 g-3">
+
+                    {{-- KARTU 1: SEDANG DIPANGGIL --}}
+                    <div class="col-md-6">
+                        <div class="card card-flush shadow-sm h-100 text-white position-relative overflow-hidden"
+                            style="background: linear-gradient(135deg, #10b981 0%, #059669 100%); border: 1px solid #34d399; min-height: 180px;">
+
+                            <div class="position-absolute top-0 end-0 opacity-10 pe-2 pt-2">
+                                <i class="ki-outline ki-notification-on fs-3x text-white"></i>
+                            </div>
+
+                            <div class="card-body d-flex flex-column justify-content-center text-center py-3">
+                                <h3 class="text-white opacity-90 text-uppercase fw-bold ls-1 mb-0 fs-8">
+                                    <i
+                                        class="ki-outline ki-sound me-1 animate__animated animate__flash animate__infinite"></i>
+                                    Sedang Dipanggil
+                                </h3>
+
+                                <div id="current-loading" class="my-3"><span
+                                        class="spinner-border spinner-border-sm text-white"></span></div>
+
+                                <div id="current-content" style="display:none;">
+                                    <h1 id="current-nomor" class="fw-black text-white mb-0 mt-1"
+                                        style="font-size: 3.5rem; line-height: 1;">---</h1>
+
+                                    {{-- POSISI BARU: SKPD DI ATAS, LOKET DI BAWAH --}}
+                                    <div class="mt-2 d-flex flex-column align-items-center">
+                                        <span id="current-skpd"
+                                            class="fw-bold fs-6 text-white text-uppercase lh-sm px-2">---</span>
+                                        <div class="bg-white bg-opacity-20 rounded px-2 py-0 backdrop-blur-sm mt-1">
+                                            <span id="current-loket" class="fs-8 fw-semibold">---</span>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div id="current-empty" style="display:none;" class="py-3 opacity-50">
+                                    <span class="fs-6">Belum ada panggilan</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    {{-- KARTU 2: GILIRAN BERIKUTNYA --}}
+                    <div class="col-md-6">
+                        <div class="card card-flush shadow-sm h-100 text-white"
+                            style="background: linear-gradient(135deg, #1e1e2f 0%, #2b2b40 100%); border: 1px solid #444; min-height: 180px;">
+
+                            <div class="card-body d-flex flex-column justify-content-center text-center py-3">
+                                <h3 class="text-white opacity-50 text-uppercase fw-bold ls-1 mb-0 fs-8">
+                                    <i class="ki-outline ki-arrow-right me-1"></i> Giliran Berikutnya
+                                </h3>
+
+                                <div id="next-loading" class="my-3"><span
+                                        class="spinner-border spinner-border-sm text-white"></span></div>
+
+                                <div id="next-content" style="display:none;">
+                                    <h1 id="next-nomor" class="fw-black text-white mb-0 mt-1 opacity-75"
+                                        style="font-size: 3.5rem; line-height: 1;">---</h1>
+
+                                    {{-- POSISI BARU: SKPD DI ATAS, LOKET DI BAWAH --}}
+                                    <div class="mt-2 d-flex flex-column align-items-center">
+                                        <span id="next-skpd"
+                                            class="fw-bold fs-6 text-white text-uppercase lh-sm px-2 opacity-90">---</span>
+                                        <div class="border border-secondary rounded px-2 py-0 text-gray-400 fs-8 mt-1">
+                                            <span id="next-loket" class="text-white">---</span>
+                                        </div>
+                                        <span id="next-waktu" class="fs-9 text-gray-500 mt-1">--:--</span>
+                                    </div>
+                                </div>
+
+                                <div id="next-empty" style="display:none;" class="py-3 opacity-50">
+                                    <i class="ki-outline ki-check-circle fs-1 mb-1"></i><br>
+                                    <span class="fs-8">Antrian Kosong</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
                 </div>
-                <div class="card-toolbar">
+            </div>
+        </div>
+
+        {{-- TABEL ANTRIAN --}}
+        <div class="card border border-gray-300 shadow-sm">
+            <div class="card-header border-bottom border-gray-300 min-h-60px">
+                <div class="card-title">
+                    <h3 class="fw-bold m-0 fs-5">Daftar Antrian</h3>
+                </div>
+                <div class="card-toolbar gap-2">
+                    {{-- TOMBOL HISTORY (MODAL) --}}
+                    <button type="button" class="btn btn-sm btn-light-primary" data-bs-toggle="modal"
+                        data-bs-target="#modalHistory" onclick="loadHistoryInModal()">
+                        <i class="ki-outline ki-time-history fs-4 me-1"></i> Riwayat
+                    </button>
+
                     <button type="button" class="btn btn-sm btn-primary" id="refresh-table-btn">
-                        <span class="indicator-label">
-                            <i class="ki-outline ki-arrows-loop me-2"></i> Refresh
-                        </span>
-                        <span class="indicator-progress" style="display:none">
-                            Please wait...
-                            <span class="spinner-border spinner-border-sm ms-2"></span>
-                        </span>
+                        <span class="indicator-label"><i class="ki-outline ki-arrows-loop me-1"></i> Refresh</span>
+                        <span class="indicator-progress" style="display:none">Wait... <span
+                                class="spinner-border spinner-border-sm ms-2"></span></span>
                     </button>
                 </div>
             </div>
-            <!--end::Card header-->
-
-            <!--begin::Card body-->
-            <div class="card-body py-4 position-relative">
-                <div id="loket-loading"
-                    class="position-absolute top-50 start-50 translate-middle d-none text-center z-index-3">
-                    <span class="spinner-border text-primary mb-2"></span>
-                    <div class="fw-semibold text-gray-600">Loading...</div>
-                </div>
-                <table id="tabel-antrian" class="table align-middle table-row-dashed fs-6 gy-5">
+            <div class="card-body py-4">
+                <table id="tabel-antrian" class="table align-middle table-row-dashed fs-6 gy-4">
                     <thead>
-                        <tr class="text-muted fw-bold fs-7 text-uppercase">
-                            <th class="text-center">Nomor Antrian</th>
+                        <tr class="text-muted fw-bold fs-7 text-uppercase bg-light">
+                            <th class="text-center ps-4 rounded-start">Nomor</th>
                             <th class="text-center">Status</th>
                             <th class="text-center">Layanan</th>
-                            <th class="text-center">Panggil</th>
+                            <th class="text-center rounded-end">Aksi</th>
                         </tr>
                     </thead>
                     <tbody class="fw-semibold text-gray-600"></tbody>
                 </table>
             </div>
-            <!--end::Card body-->
         </div>
-        <!--end::Table Card-->
-
     </div>
-    <!--end::Content-->
 
+    {{-- MODAL RIWAYAT PANGGILAN --}}
+    <div class="modal fade" id="modalHistory" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered mw-500px">
+            <div class="modal-content">
+                <div class="modal-header pb-0 border-0 justify-content-end">
+                    <div class="btn btn-sm btn-icon btn-active-color-primary" data-bs-dismiss="modal">
+                        <i class="ki-outline ki-cross fs-1"></i>
+                    </div>
+                </div>
+                <div class="modal-body scroll-y px-10 px-lg-15 pt-0 pb-15">
+                    <div class="mb-13 text-center">
+                        <h1 class="mb-3">Riwayat Panggilan</h1>
+                        <div class="text-muted fw-semibold fs-5">Daftar panggilan antrian terakhir hari ini</div>
+                    </div>
+
+                    <div id="modal-history-list" class="hover-scroll-overlay-y pe-2" style="max-height: 300px">
+                        <div class="text-center text-muted py-5">
+                            <span class="spinner-border spinner-border-sm"></span> Memuat data...
+                        </div>
+                    </div>
+
+                    <div class="text-center mt-5">
+                        <button type="button" class="btn btn-light" data-bs-dismiss="modal">Tutup</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 @endsection
-
-<audio id="tingtung" src="{{ asset('assets/audio/tingtung.mp3') }}"></audio>
 
 @push('scripts')
     <script src="{{ asset('assets/plugins/custom/datatables/datatables.bundle.js') }}"></script>
-    <script src="https://code.responsivevoice.org/responsivevoice.js?key=jQZ2zcdq"></script>
-    <script>
+
+    {{-- WAJIB: Load Javascript Module --}}
+    <script type="module">
         let table;
-        // --- KONFIGURASI TIMER ---
-        let isGlobalCooldown = false; // Status apakah sedang menunggu audio
-        const COOLDOWN_TIME = 24000; // 12 Detik (Sesuaikan durasi audio bell + suara)
+        let isGlobalCooldown = false;
+        const COOLDOWN_TIME = 30000;
+
+        // Buat Global Function agar bisa dipanggil onclick HTML
+        window.loadHistoryInModal = function() {
+            $('#modal-history-list').html(
+                '<div class="text-center text-muted py-5"><span class="spinner-border spinner-border-sm"></span> Memuat data...</div>'
+            );
+
+            $.ajax({
+                url: "{{ route('antrian.history') }}",
+                type: "GET",
+                success: function(data) {
+                    let html = '';
+                    if (data.length > 0) {
+                        data.forEach((item, index) => {
+                            let bgClass = index === 0 ? 'bg-light-primary border-primary' :
+                                'bg-light border-gray-200';
+                            let textClass = index === 0 ? 'text-primary' : 'text-gray-800';
+                            let jam = item.waktu_panggil ? item.waktu_panggil : '-';
+
+                            html += `
+                                <div class="d-flex align-items-center mb-3 p-3 border rounded ${bgClass}">
+                                    <div class="me-4 text-center" style="min-width: 60px;">
+                                        <span class="fs-2 fw-bold ${textClass} d-block">${item.no_antrian}</span>
+                                    </div>
+                                    <div class="flex-grow-1">
+                                        {{-- SKPD DI ATAS (BOLD), LOKET DI BAWAH (KECIL) --}}
+                                        <div class="fw-bold text-gray-800 fs-7">${item.nama_skpd}</div>
+                                        <div class="text-muted fs-8">${item.nama_loket}</div>
+                                        <div class="text-muted fs-9 mt-1">Dipanggil: <span class="fw-bold text-dark">${jam}</span></div>
+                                    </div>
+                                    ${index === 0 ? '<span class="badge badge-sm badge-primary">Baru</span>' : ''}
+                                </div>
+                            `;
+                        });
+                    } else {
+                        html =
+                            `<div class="text-center text-muted fs-6 py-10"><i class="ki-outline ki-file-sheet fs-1 mb-2"></i><br>Belum ada riwayat panggilan</div>`;
+                    }
+                    $('#modal-history-list').html(html);
+                },
+                error: function() {
+                    $('#modal-history-list').html(
+                        '<div class="text-center text-danger py-5">Gagal memuat data.</div>');
+                }
+            });
+        }
 
         $(document).ready(function() {
 
+            // --- 1. Load Info (Statistik & Hero) ---
             function loadInfo() {
                 $('#jumlah-antrian').load("{{ route('antrian.jumlah') }}");
-                $('#antrian-sekarang').load("{{ route('antrian.sekarang') }}");
-                $('#antrian-selanjutnya').load("{{ route('antrian.selanjutnya') }}");
                 $('#sisa-antrian').load("{{ route('antrian.sisa') }}");
+                $('#antrian-selesai').load("{{ route('antrian.selesai') }}");
+                loadHeroCard();
+                // loadHistoryInModal(); // Tidak perlu diload otomatis biar ringan, user klik dulu baru load
             }
 
+            function loadHeroCard() {
+                $.ajax({
+                    url: "{{ route('antrian.global-info') }}",
+                    type: "GET",
+                    success: function(res) {
+                        $('#current-loading, #next-loading').hide();
+
+                        // UPDATE CARD "SEDANG DIPANGGIL"
+                        // UPDATE CARD SEDANG DIPANGGIL
+                        if (res.current.status === 'exist') {
+                            $('#current-empty').hide();
+                            $('#current-content').show();
+                            if ($('#current-nomor').text() !== res.current.no_antrian) {
+                                $('#current-nomor').text(res.current.no_antrian);
+                                $('#current-nomor').removeClass('animate__animated animate__heartBeat');
+                                void document.getElementById("current-nomor").offsetWidth;
+                                $('#current-nomor').addClass('animate__animated animate__heartBeat');
+                            }
+                            // Data SKPD & Loket sudah ditukar posisinya di HTML
+                            $('#current-loket').text(res.current.loket);
+                            $('#current-skpd').text(res.current.skpd);
+                        } else {
+                            $('#current-content').hide();
+                            $('#current-empty').show();
+                        }
+
+                        // UPDATE CARD BERIKUTNYA
+                        if (res.next.status === 'exist') {
+                            $('#next-empty').hide();
+                            $('#next-content').show();
+                            $('#next-nomor').text(res.next.no_antrian);
+                            $('#next-loket').text(res.next.loket);
+                            $('#next-skpd').text(res.next.skpd);
+                            $('#next-waktu').text(res.next.waktu);
+                        } else {
+                            $('#next-content').hide();
+                            $('#next-empty').show();
+                        }
+                    }
+                });
+            }
+
+            // Init Load
             loadInfo();
 
+            // --- 2. WEBSOCKET LISTENER ---
+            setTimeout(() => {
+                if (window.Echo) {
+                    const channel = window.Echo.channel('antrian-channel');
+
+                    channel.listen('.panggilan-baru', (e) => {
+                        console.log("🔔 Ada panggilan:", e);
+                        table.ajax.reload(null, false);
+                        loadInfo();
+                    });
+
+                    channel.listen('.antrian-baru', (e) => {
+                        console.log("🎫 Tiket baru dicetak!");
+                        table.ajax.reload(null, false);
+                        loadInfo();
+                    });
+
+                    // 🔥 LISTENER BARU: GLOBAL COOLDOWN
+                    channel.listen('.cooldown-started', (e) => {
+                        console.log("⏳ Cooldown dimulai global:", e.duration);
+
+                        // Jalankan fungsi timer (walaupun bukan kita yang klik)
+                        // Pastikan timer tidak jalan dobel
+                        if (!isGlobalCooldown) {
+                            startCooldownTimer(e.duration);
+                        }
+                    });
+
+                } else {
+                    console.error("Reverb tidak terdeteksi");
+                }
+            }, 1000);
+
+            // --- 3. DATATABLES ---
+            // --- UPDATE KOLOM LAYANAN DI TABEL ---
             table = $('#tabel-antrian').DataTable({
                 processing: true,
                 serverSide: true,
@@ -153,7 +359,7 @@
                 ajax: "{{ route('antrian.get') }}",
                 columns: [{
                         data: 'no_antrian',
-                        className: 'text-center'
+                        className: 'text-center fw-bold fs-4 text-dark'
                     },
                     {
                         data: 'status_label',
@@ -161,58 +367,48 @@
                     },
                     {
                         data: 'nama_loket',
-                        className: 'text-center'
+                        className: 'text-center',
+                        // CUSTOM RENDER UNTUK KOLOM LAYANAN
+                        render: function(data, type, row) {
+                            return `
+                                <div class="d-flex flex-column align-items-center">
+                                    <span class="fw-bold text-gray-800 fs-7">${row.nama_skpd}</span>
+                                    <span class="text-muted fs-8">${row.nama_loket}</span>
+                                </div>
+                            `;
+                        }
                     },
                     {
                         data: null,
                         className: 'text-center',
                         render: function(d) {
-                            // Render Tombol seperti biasa
-                            if (d.status == 1) {
-                                return `<button class="btn btn-secondary btn-sm btn-call"><i class="ki-outline ki-notification fs-4"></i> Panggil Ulang</button>`;
-                            }
-                            if (d.status == 0 && !d.is_first) {
+                            if (d.status == 2)
+                                return `<button class="btn btn-light btn-sm text-gray-500" disabled><i class="ki-outline ki-check-circle fs-4"></i> Selesai</button>`;
+                            if (d.status == 1)
+                                return `<button class="btn btn-secondary btn-sm btn-call"><i class="ki-outline ki-notification fs-4"></i> Recall</button>`;
+                            if (d.status == 0 && !d.is_first)
                                 return `<button class="btn btn-light btn-sm" disabled><i class="ki-outline ki-lock fs-4"></i></button>`;
-                            }
                             return `<button class="btn btn-success btn-sm btn-call"><i class="ki-outline ki-notification-on"></i> Panggil</button>`;
                         }
                     }
                 ],
-                // 🔥 LOGIKA PENTING: Kunci tombol paksa setelah tabel reload jika timer masih jalan
                 drawCallback: function(settings) {
-                    if (isGlobalCooldown) {
-                        $('.btn-call').prop('disabled', true).addClass('disabled');
-                    }
-                },
-                rowCallback: function(row, data) {
-                    $(row).removeClass('antrian-active antrian-first');
-                    if (data.is_active) {
-                        $(row).addClass('antrian-active');
-                    } else if (data.is_first) {
-                        $(row).addClass('antrian-first');
-                    }
+                    if (isGlobalCooldown) $('.btn-call').prop('disabled', true).addClass('disabled');
                 }
             });
 
-            // --- EVENT KLIK TOMBOL PANGGIL ---
+            // --- 4. LOGIC KLIK TOMBOL PANGGIL ---
             $('#tabel-antrian').on('click', '.btn-call', function() {
                 let btn = $(this);
                 let data = table.row(btn.closest('tr')).data();
 
-                // 1. Cek apakah sedang cooldown? Jika ya, stop.
                 if (isGlobalCooldown) return;
-
                 if (!data) return;
 
-                // 2. AKTIFKAN MODE COOLDOWN (Kunci Semua)
                 isGlobalCooldown = true;
-
-                // Ubah tampilan tombol yang diklik
                 btn.html('<i class="spinner-border spinner-border-sm"></i>').prop('disabled', true);
-                // Disable semua tombol lain seketika
                 $('.btn-call').prop('disabled', true).addClass('disabled');
 
-                // 3. REQUEST SERVER
                 $.ajax({
                     url: "{{ route('antrian.panggil') }}",
                     type: "POST",
@@ -221,73 +417,63 @@
                         id: data.id
                     },
                     success: function(res) {
-                        // Reload data tabel & Info box
                         loadInfo();
                         table.ajax.reload(null, false);
-
-                        // 4. MULAI TIMER UNTUK BUKA KUNCI
                         startCooldownTimer();
                     },
-                    error: function() {
-                        alert('Gagal memanggil antrian');
-                        // Jika error, langsung buka kunci
+                    error: function(err) {
+                        alert(err.responseJSON ? err.responseJSON.message : 'Gagal memanggil');
                         isGlobalCooldown = false;
                         table.ajax.reload(null, false);
                     }
                 });
             });
 
-            // --- FUNGSI TIMER HITUNG MUNDUR ---
-            function startCooldownTimer() {
-                let timeLeft = COOLDOWN_TIME / 1000; // Konversi ke detik
+            // Ubah function ini agar menerima parameter duration (default 27)
+            function startCooldownTimer(durationSec = null) {
+                // Jika durationSec tidak dikirim, pakai default COOLDOWN_TIME
+                let timeLeft = durationSec ? durationSec : (COOLDOWN_TIME / 1000);
+
+                // Set flag global biar tombol gak bisa diklik
+                isGlobalCooldown = true;
+
                 let refreshBtn = $('#refresh-table-btn');
-                let originalLabel = refreshBtn.find('.indicator-label').html(); // Simpan teks asli
-
-                // Ubah teks tombol refresh jadi timer
                 refreshBtn.prop('disabled', true);
-                refreshBtn.find('.indicator-label').html(
-                    `<i class="ki-outline ki-time me-2"></i> Silahkan Tunggu (${timeLeft}s)`);
 
-                const timerInterval = setInterval(() => {
+                // Matikan semua tombol panggil
+                $('.btn-call').prop('disabled', true).addClass('disabled').html(
+                    '<i class="ki-outline ki-lock fs-4"></i>');
+
+                // Clear interval lama jika ada (biar gak tabrakan)
+                if (window.cooldownInterval) clearInterval(window.cooldownInterval);
+
+                window.cooldownInterval = setInterval(() => {
                     timeLeft--;
+
+                    // Update teks tombol refresh sebagai indikator
                     refreshBtn.find('.indicator-label').html(
-                        `<i class="ki-outline ki-time me-2"></i> Silahkan Tunggu (${timeLeft}s)`);
+                        `<span class="text-danger fw-bold"><i class="ki-outline ki-time text-danger me-2"></i> ${timeLeft}s</span>`
+                    );
 
                     if (timeLeft <= 0) {
-                        clearInterval(timerInterval);
-
-                        // WAKTU HABIS: Buka Kunci
+                        clearInterval(window.cooldownInterval);
                         isGlobalCooldown = false;
 
                         // Kembalikan tombol refresh
                         refreshBtn.find('.indicator-label').html(
-                            `<i class="ki-outline ki-arrows-loop me-2"></i> Refresh`);
-                        refreshBtn.find('.indicator-progress').hide();
-                        refreshBtn.find('.indicator-label').show();
+                            `<i class="ki-outline ki-arrows-loop me-1"></i> Refresh`);
                         refreshBtn.prop('disabled', false);
 
-                        // Buka kunci tombol di tabel
-                        $('.btn-call').prop('disabled', false).removeClass('disabled');
+                        // Refresh tabel otomatis agar tombol panggil muncul lagi (status disabled hilang)
+                        table.ajax.reload(null, false);
                     }
                 }, 1000);
             }
 
-            // 🔄 Tombol refresh manual
             $('#refresh-table-btn').on('click', function() {
-                // Jangan refresh kalau sedang cooldown audio
                 if (isGlobalCooldown) return;
-
-                const btn = $(this);
-                btn.find('.indicator-label').hide();
-                btn.find('.indicator-progress').show();
-
                 loadInfo();
                 table.ajax.reload(null, false);
-
-                setTimeout(() => {
-                    btn.find('.indicator-progress').hide();
-                    btn.find('.indicator-label').show();
-                }, 500);
             });
         });
     </script>

@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Str; // 🔥 WAJIB: Tambahkan ini untuk UUID
 
 class Antrian extends Model
 {
@@ -11,40 +12,51 @@ class Antrian extends Model
 
     protected $table = 'antrians';
 
-    /**
-     * Karena pakai UUID
-     */
+    // Konfigurasi UUID
     public $incrementing = false;
     protected $keyType = 'string';
 
     /**
-     * Field yang boleh diisi mass-assignment
+     * 🔥 FUNGSI PENTING: Otomatis isi ID dengan UUID saat create
      */
+    protected static function boot()
+    {
+        parent::boot();
+
+        static::creating(function ($model) {
+            if (empty($model->{$model->getKeyName()})) {
+                $model->{$model->getKeyName()} = (string) Str::uuid();
+            }
+        });
+    }
+
     protected $fillable = [
         'id',
         'customer_id',
         'skpd_id',
         'loket_id',
-        'nomor_urut',
+        'no_urut', // 🔥 PERBAIKAN: Di database kolomnya 'no_urut', bukan 'nomor_urut'
         'no_antrian',
         'status',
         'tanggal',
         'waktu_ambil',
+        'waktu_panggil',
+        'waktu_selesai',
     ];
 
-    /**
-     * Cast tipe data agar sesuai database
-     */
     protected $casts = [
-        'nomor_urut'  => 'integer',
+        'no_urut'     => 'integer', // Sesuaikan dengan nama kolom DB
         'status'      => 'integer',
         'tanggal'     => 'date',
         'waktu_ambil' => 'datetime',
+        'waktu_panggil' => 'datetime',
+        'waktu_selesai' => 'datetime',
     ];
 
-    /**
-     * ================= RELATION =================
-     */
+    /* =======================
+     | RELATIONS
+     ======================= */
+
     public function customer()
     {
         return $this->belongsTo(Customer::class);
@@ -58,5 +70,11 @@ class Antrian extends Model
     public function loket()
     {
         return $this->belongsTo(Loket::class);
+    }
+
+    // Scope tambahan (opsional, ada di controller sebelumnya)
+    public function scopeHariIni($q)
+    {
+        return $q->whereDate('tanggal', now());
     }
 }

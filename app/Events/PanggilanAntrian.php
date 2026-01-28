@@ -2,34 +2,47 @@
 
 namespace App\Events;
 
+use App\Models\Antrian;
 use Illuminate\Broadcasting\Channel;
 use Illuminate\Broadcasting\InteractsWithSockets;
-use Illuminate\Contracts\Broadcasting\ShouldBroadcastNow; // Pakai Now agar instan
+use Illuminate\Broadcasting\PresenceChannel;
+use Illuminate\Broadcasting\PrivateChannel;
+use Illuminate\Contracts\Broadcasting\ShouldBroadcast; // 🔥 PENTING
+use Illuminate\Contracts\Broadcasting\ShouldBroadcastNow; // 🔥 Agar instan
 use Illuminate\Foundation\Events\Dispatchable;
 use Illuminate\Queue\SerializesModels;
 
+// Tambahkan "implements ShouldBroadcastNow" agar dikirim detik itu juga
 class PanggilanAntrian implements ShouldBroadcastNow
 {
     use Dispatchable, InteractsWithSockets, SerializesModels;
 
     public $data;
 
-    public function __construct($data)
+    /**
+     * Terima data antrian yang mau dikirim
+     */
+    public function __construct($antrianData)
     {
-        // $data berisi: no_antrian, nama_loket, dll
-        $this->data = $data;
+        $this->data = $antrianData;
     }
 
+    /**
+     * Nama Channel (Radio Frekuensi)
+     */
     public function broadcastOn(): array
     {
-        // Nama channel 'kios-channel' (bisa apa saja)
+        // Channel public agar semua Kios bisa dengar
         return [
-            new Channel('kios-channel'),
+            new Channel('antrian-channel'),
         ];
     }
 
+    /**
+     * Nama Event
+     */
     public function broadcastAs()
     {
-        return 'PanggilanAntrian';
+        return 'panggilan-baru';
     }
 }

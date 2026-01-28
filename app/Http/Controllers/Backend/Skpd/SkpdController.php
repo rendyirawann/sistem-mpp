@@ -56,7 +56,12 @@ class SkpdController extends Controller
     public function getSkpd(Request $request)
     {
         $query = Skpd::query()->orderByDesc('created_at');
-        if (!empty($request->search['value'])) { $search = $request->search['value']; $query->where(function ($q) use ($search) { $q->where('nama_skpd', 'like', "%{$search}%") -> orWhere('kepala_skpd', 'like', "%{$search}%") -> orWhere('nip_kepala', 'like', "%{$search}%"); }); }
+        if (!empty($request->search['value'])) {
+            $search = $request->search['value'];
+            $query->where(function ($q) use ($search) {
+                $q->where('nama_skpd', 'like', "%{$search}%")->orWhere('kepala_skpd', 'like', "%{$search}%")->orWhere('nip_kepala', 'like', "%{$search}%")->orWhere('lokasi', 'like', "%{$search}%");
+            });
+        }
         return DataTables::of($query)
             ->addColumn('nama_skpd', function ($r) {
                 return $r->nama_skpd;
@@ -95,16 +100,18 @@ class SkpdController extends Controller
                     <ul class="dropdown-menu dropdown-menu-end fs-7">';
 
                 // 🔍 Detail
-                // if (auth()->user()->can('skpd.show')) {
-                //     $html .= '
-                //         <li>
-                //             <a class="dropdown-item d-flex align-items-center"
-                //                href="' . route('users.show', $row->id) . '">
-                //                 <i class="ki-outline ki-eye fs-5 me-2 text-info"></i>
-                //                 Detail
-                //             </a>
-                //         </li>';
-                // }
+                if (auth()->user()->can('skpd.show')) {
+                    $html .= '
+                        <li>
+                            <a href="javascript:void(0)"
+                               class="dropdown-item d-flex align-items-center"
+                               id="getShowRowData"
+                               data-id="' . $row->id . '">
+                                <i class="ki-outline ki-eye fs-5 me-2 text-info"></i>
+                                Detail
+                            </a>
+                        </li>';
+                }
 
                 // ✏️ Edit
                 if (auth()->user()->can('skpd.edit')) {
@@ -159,50 +166,53 @@ class SkpdController extends Controller
      */
 
 
-     public function store(Request $request)
-     {
-         $formattedTime = Carbon::now()->diffForHumans();
+    public function store(Request $request)
+    {
+        $formattedTime = Carbon::now()->diffForHumans();
 
-         $validator = \Validator::make($request->all(), [
+        $validator = \Validator::make($request->all(), [
             //  'kode_skpd'   => 'required|string|max:50|unique:skpd,kode_skpd',
-             'nama_skpd'   => 'required|string|max:255',
-             'kepala_skpd' => 'nullable|string|max:255',
-             'nip_kepala'  => 'nullable|string|max:25',
-             'isaktif'    => 'required|in:0,1',
-             'logo_skpd' => 'required|mimes:jpg,png,svg|max:2048',
-         ], [
+            'nama_skpd'   => 'required|string|max:255',
+            'lokasi'      => 'required|string|max:255',
+            'kepala_skpd' => 'nullable|string|max:255',
+            'nip_kepala'  => 'nullable|string|max:25',
+            'isaktif'    => 'required|in:0,1',
+            'logo_skpd' => 'required|mimes:jpg,png,svg|max:2048',
+        ], [
 
             //  'kode_skpd.required' => 'Kode SKPD wajib diisi',
             //  'kode_skpd.unique'   => 'Kode SKPD sudah digunakan',
             //  'kode_skpd.max'      => 'Kode SKPD maksimal 50 karakter',
 
-             'nama_skpd.required' => 'Nama SKPD wajib diisi',
-             'nama_skpd.max'      => 'Nama SKPD maksimal 255 karakter',
+            'nama_skpd.required' => 'Nama SKPD wajib diisi',
+            'nama_skpd.max'      => 'Nama SKPD maksimal 255 karakter',
+            'lokasi.required'    => 'Lokasi SKPD wajib diisi',
+            'lokasi.max'         => 'Nama SKPD maksimal 255 karakter',
 
-             'kepala_skpd.max'    => 'Nama Kepala SKPD maksimal 255 karakter',
-             'nip_kepala.max'     => 'NIP Kepala maksimal 25 karakter',
+            'kepala_skpd.max'    => 'Nama Kepala SKPD maksimal 255 karakter',
+            'nip_kepala.max'     => 'NIP Kepala maksimal 25 karakter',
 
             'logo_skpd.required' => 'Logo_skpd wajib diisi',
             'logo_skpd.mimes' => 'Logo_skpd harus format .jpg .png .svg',
             'logo_skpd.max' => 'Ukuran file Logo_skpd maksimal 2 MB',
 
-             'isaktif.required'  => 'Status wajib dipilih',
-             'isaktif.in'        => 'Status tidak valid',
-         ]);
+            'isaktif.required'  => 'Status wajib dipilih',
+            'isaktif.in'        => 'Status tidak valid',
+        ]);
 
-         if ($validator->fails()) {
-             return response()->json(['errors' => $validator->errors()]);
-         }
+        if ($validator->fails()) {
+            return response()->json(['errors' => $validator->errors()]);
+        }
 
-         try {
-             \DB::beginTransaction();
+        try {
+            \DB::beginTransaction();
 
-             $data = new Skpd;
-             if ($request->hasFile('logo_skpd')) {
+            $data = new Skpd;
+            if ($request->hasFile('logo_skpd')) {
                 $file      = $request->file('logo_skpd');
                 $extension = $file->getClientOriginalExtension();
 
-                $filename = 'logo_skpd-'.$data->id.'-'.time().'.'.$extension;
+                $filename = 'logo_skpd-' . $data->id . '-' . time() . '.' . $extension;
 
                 Storage::disk('public')->putFileAs(
                     'user/logo_skpd/',
@@ -212,61 +222,61 @@ class SkpdController extends Controller
 
                 $data->logo_skpd = $filename;
             }
-             $data->id          = \Ramsey\Uuid\Uuid::uuid4();
+            $data->id          = \Ramsey\Uuid\Uuid::uuid4();
             //  $data->kode_skpd   = $request->kode_skpd;
-             $data->nama_skpd   = $request->nama_skpd;
-             $data->kepala_skpd = $request->kepala_skpd;
-             $data->nip_kepala  = $request->nip_kepala;
-             $data->isaktif    = $request->isaktif;
-             $data->save();
+            $data->nama_skpd   = $request->nama_skpd;
+            $data->lokasi      = $request->lokasi;
+            $data->kepala_skpd = $request->kepala_skpd;
+            $data->nip_kepala  = $request->nip_kepala;
+            $data->isaktif    = $request->isaktif;
+            $data->save();
 
-             // ===============================
-             // FULL NEW SNAPSHOT (AUDIT)
-             // ===============================
-             $newData = $data->toArray();
-             $agent = new \Jenssegers\Agent\Agent;
+            // ===============================
+            // FULL NEW SNAPSHOT (AUDIT)
+            // ===============================
+            $newData = $data->toArray();
+            $agent = new \Jenssegers\Agent\Agent;
 
-             activity()
-                 ->useLog('Tambah Skpd')
-                 ->causedBy(auth()->user())
-                 ->performedOn($data)
-                 ->withProperties([
-                     'ip' => $request->ip(),
-                     'agent' => [
-                         'browser'     => $agent->browser() . ' ' . $agent->version($agent->browser()),
-                         'os'          => $agent->platform() . ' ' . $agent->version($agent->platform()),
-                         'device'      => $agent->device(),
-                         'is_mobile'   => $agent->isMobile(),
-                         'is_desktop'  => $agent->isDesktop(),
-                         'raw'         => $request->header('User-Agent'),
-                     ],
-                     'request' => [
-                         'method' => $request->method(),
-                         'url'    => $request->fullUrl(),
-                     ],
-                     'new' => $newData,
-                 ])
-                 ->log('Membuat data SKPD ' . $data->nama_skpd);
+            activity()
+                ->useLog('Tambah Skpd')
+                ->causedBy(auth()->user())
+                ->performedOn($data)
+                ->withProperties([
+                    'ip' => $request->ip(),
+                    'agent' => [
+                        'browser'     => $agent->browser() . ' ' . $agent->version($agent->browser()),
+                        'os'          => $agent->platform() . ' ' . $agent->version($agent->platform()),
+                        'device'      => $agent->device(),
+                        'is_mobile'   => $agent->isMobile(),
+                        'is_desktop'  => $agent->isDesktop(),
+                        'raw'         => $request->header('User-Agent'),
+                    ],
+                    'request' => [
+                        'method' => $request->method(),
+                        'url'    => $request->fullUrl(),
+                    ],
+                    'new' => $newData,
+                ])
+                ->log('Membuat data SKPD ' . $data->nama_skpd);
 
-             \DB::commit();
+            \DB::commit();
 
-             return response()->json([
-                 'success' => 'Data SKPD berhasil disimpan.',
-                 'time'    => $formattedTime,
-                 'judul'   => 'Berhasil'
-             ], 201);
+            return response()->json([
+                'success' => 'Data SKPD berhasil disimpan.',
+                'time'    => $formattedTime,
+                'judul'   => 'Berhasil'
+            ], 201);
+        } catch (\Exception $e) {
+            \DB::rollBack();
 
-         } catch (\Exception $e) {
-             \DB::rollBack();
-
-             return response()->json([
-                 'error'        => 'Terjadi kesalahan di aplikasi, hubungi Developer.',
-                 'time'         => $formattedTime,
-                 'judul'        => 'Aplikasi Error',
-                 'errorMessage' => $e->getMessage()
-             ], 500);
-         }
-     }
+            return response()->json([
+                'error'        => 'Terjadi kesalahan di aplikasi, hubungi Developer.',
+                'time'         => $formattedTime,
+                'judul'        => 'Aplikasi Error',
+                'errorMessage' => $e->getMessage()
+            ], 500);
+        }
+    }
 
 
     /**
@@ -283,13 +293,15 @@ class SkpdController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show($id): View
+    public function show($id)
     {
         // Menemukan user berdasarkan id
         $data = Skpd::findOrFail($id);
 
-        // Mengirim data ke view
-        return view('backend.skpd.show', compact('data'));
+        // Render view ke dalam string HTML (bukan return view langsung)
+        $html = view('backend.skpd.show', compact('data'))->render();
+
+        return response()->json(['html' => $html]);
     }
 
 
@@ -484,6 +496,7 @@ class SkpdController extends Controller
 
         $validator = \Validator::make($request->all(), [
             'nama_skpd'    => 'required|string|max:255',
+            'lokasi'       => 'required|string|max:255',
             'kepala_skpd'  => 'nullable|string|max:255',
             'nip_kepala'   => 'nullable|string|max:25',
             'logo_skpd' => 'mimes:jpg,png,svg|max:2048',
@@ -491,6 +504,8 @@ class SkpdController extends Controller
         ], [
             'nama_skpd.required' => 'Nama SKPD wajib diisi',
             'nama_skpd.max'      => 'Nama SKPD maksimal 255 karakter',
+            'lokasi.required'    => 'Lokasi SKPD wajib diisi',
+            'lokasi.max'         => 'Nama SKPD maksimal 255 karakter',
 
             'kepala_skpd.max'    => 'Nama Kepala SKPD maksimal 255 karakter',
             'nip_kepala.max'     => 'NIP Kepala maksimal 25 karakter',
@@ -513,15 +528,15 @@ class SkpdController extends Controller
             if ($request->hasFile('logo_skpd')) {
 
                 // Hapus file lama
-                if ($data->logo_skpd && Storage::disk('public')->exists('user/logo_skpd/'.$data->logo_skpd)) {
-                    Storage::disk('public')->delete('user/logo_skpd/'.$data->logo_skpd);
+                if ($data->logo_skpd && Storage::disk('public')->exists('user/logo_skpd/' . $data->logo_skpd)) {
+                    Storage::disk('public')->delete('user/logo_skpd/' . $data->logo_skpd);
                 }
 
                 $file = $request->file('logo_skpd');
                 $extension = $file->getClientOriginalExtension();
 
                 // Nama file aman & standar
-                $filename = 'logo_skpd-'.$data->id.'-'.time().'.'.$extension;
+                $filename = 'logo_skpd-' . $data->id . '-' . time() . '.' . $extension;
 
                 // Simpan file
                 Storage::disk('public')->putFileAs(
@@ -536,6 +551,7 @@ class SkpdController extends Controller
             // UPDATE DATA SKPD
             // ===============================
             $data->nama_skpd   = $request->nama_skpd;
+            $data->lokasi      = $request->lokasi;
             $data->kepala_skpd = $request->kepala_skpd;
             $data->nip_kepala  = $request->nip_kepala;
             $data->isaktif     = $request->isaktif;
@@ -581,7 +597,6 @@ class SkpdController extends Controller
                 'time'    => $formattedTime,
                 'judul'   => 'Berhasil',
             ]);
-
         } catch (\Exception $e) {
             \DB::rollBack();
 
@@ -639,7 +654,6 @@ class SkpdController extends Controller
                 'time' => $formattedTime,
                 'judul' => 'Berhasil'
             ]);
-
         } catch (\Exception $e) {
             DB::rollback();
 
@@ -709,7 +723,6 @@ class SkpdController extends Controller
                 'status'  => 'success',
                 'message' => count($ids) . ' SKPD berhasil dihapus'
             ]);
-
         } catch (\Exception $e) {
             DB::rollBack();
 

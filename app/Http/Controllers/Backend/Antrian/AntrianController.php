@@ -6,9 +6,12 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\Antrian;
 use Yajra\DataTables\Facades\DataTables;
-use DB;
-use Auth;
-// use App\Events\PanggilanAntrian;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Cache;
+use App\Events\PanggilanAntrian; // Event WebSocket Reverb
+use App\Events\CooldownTriggered; // <--- Import Event Baru
+
 
 class AntrianController extends Controller
 {
@@ -19,19 +22,18 @@ class AntrianController extends Controller
     }
 
     /**
-     * FILTER QUERY BERDASARKAN ROLE
+     * Helper: Filter Query Berdasarkan Role User
      */
     private function filterBySkpd($query)
     {
         if (!auth()->user()->hasRole('Superadmin')) {
             $query->where('antrians.skpd_id', auth()->user()->skpd_id);
         }
-
         return $query;
     }
 
     /**
-     * Halaman Panggilan Antrian
+     * Halaman Utama Antrian
      */
     public function index()
     {
@@ -39,7 +41,7 @@ class AntrianController extends Controller
     }
 
     /**
-     * DataTables
+     * API DataTables (List Antrian)
      */
     public function getAntrian()
     {
@@ -48,66 +50,190 @@ class AntrianController extends Controller
                 'antrians.id',
                 'antrians.no_antrian',
                 'antrians.status',
+                'antrians.loket_id',
+                'antrians.waktu_ambil',
+                'antrians.no_urut',
                 'lokets.nama_loket',
                 'skpd.nama_skpd'
             ])
+            // JOIN dengan Fix Collation (utf8mb4_unicode_ci) agar tidak Error 500
             ->leftJoin('lokets', function ($join) {
-                $join->on(
-                    DB::raw('lokets.id COLLATE utf8mb4_unicode_ci'),
-                    '=',
-                    DB::raw('antrians.loket_id COLLATE utf8mb4_unicode_ci')
-                );
+                $join->on(DB::raw('lokets.id COLLATE utf8mb4_unicode_ci'), '=', DB::raw('antrians.loket_id COLLATE utf8mb4_unicode_ci'));
             })
             ->leftJoin('skpd', function ($join) {
-                $join->on(
-                    DB::raw('skpd.id COLLATE utf8mb4_unicode_ci'),
-                    '=',
-                    DB::raw('antrians.skpd_id COLLATE utf8mb4_unicode_ci')
-                );
+                $join->on(DB::raw('skpd.id COLLATE utf8mb4_unicode_ci'), '=', DB::raw('antrians.skpd_id COLLATE utf8mb4_unicode_ci'));
             })
-            ->hariIni()
-            ->orderBy('antrians.no_urut');
+            ->hariIni();
 
+        // Filter jika bukan Superadmin
         $this->filterBySkpd($query);
 
-        $firstWaitingId = Antrian::query()
-            ->hariIni()
-            ->where('status', 0)
-            ->when(!auth()->user()->hasRole('Superadmin'), function ($q) {
-                $q->where('skpd_id', auth()->user()->skpd_id);
-            })
-            ->orderBy('no_urut')
-            ->value('id');
+        // 🔥 UBAH LOGIKA SORTING DISINI
+        // 1. Status 2 (Selesai) dilempar ke paling bawah (Nilai 1), sisanya di atas (Nilai 0)
+        // 2. Baru diurutkan berdasarkan waktu ambil tiket
+        $query->orderByRaw('CASE WHEN antrians.status = 2 THEN 1 ELSE 0 END ASC')
+            ->orderBy('antrians.waktu_ambil', 'asc')
+            ->orderBy('antrians.no_urut', 'asc');
 
         return DataTables::of($query)
             ->addColumn('status_label', function ($row) {
                 return match ((int) $row->status) {
                     0 => '<span class="badge badge-light-warning">Menunggu</span>',
                     1 => '<span class="badge badge-light-success">Dipanggil</span>',
+                    2 => '<span class="badge badge-light-primary">Selesai</span>',
                     default => '-',
                 };
             })
             ->addColumn('is_active', fn($row) => (int)$row->status === 1)
-            ->addColumn('is_first', fn($row) => $row->id === $firstWaitingId)
+            ->addColumn('is_first', function ($row) {
+                // LOGIKA GLOBAL STRICT FIFO
+                // Cari ID antrian paling lama menunggu SE-GEDUNG (Status 0 paling awal)
+                $globalFirstId = Antrian::where('status', 0)
+                    ->hariIni()
+                    ->orderBy('waktu_ambil', 'asc')
+                    ->orderBy('no_urut', 'asc')
+                    ->value('id');
+
+                // Tombol "Panggil" hanya aktif jika antrian ini adalah yang paling depan
+                return $row->id === $globalFirstId;
+            })
             ->rawColumns(['status_label'])
             ->make(true);
     }
 
+    /**
+     * Logic Utama: Memanggil Antrian (Termasuk Panggil Ulang)
+     */
+    public function panggil(Request $request)
+    {
+        // 1. CEK APAKAH SEDANG COOLDOWN (Server Side Lock)
+        // Jika ada lock di cache, tolak request
+        if (Cache::has('lock_panggilan_global')) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Sistem sedang memanggil antrian lain, harap tunggu audio selesai.'
+            ], 429); // 429 = Too Many Requests
+        }
+
+        $request->validate([
+            'id' => 'required|exists:antrians,id'
+        ]);
+
+        // 1. Ambil Data Antrian Target
+        $query = Antrian::query();
+        $this->filterBySkpd($query); // Pastikan user berhak memanggil ini
+        $antrian = $query->where('id', $request->id)->first();
+
+        if (!$antrian) {
+            return response()->json(['success' => false, 'message' => 'Data tidak ditemukan.'], 404);
+        }
+
+        // ==========================================
+        // SKENARIO A: PANGGIL ULANG (RECALL)
+        // ==========================================
+        if ($antrian->status == 1) {
+            // Update waktu panggil terakhir
+            $antrian->update(['waktu_panggil' => now()]);
+
+            // Kirim Sinyal ke WebSocket (Reverb) agar Kios bunyi lagi
+            $payload = [
+                'no_antrian' => $antrian->no_antrian,
+                'loket'      => $antrian->loket->nama_loket,
+                'skpd'       => $antrian->skpd->nama_skpd,
+                'waktu'      => now()->format('H:i')
+            ];
+            PanggilanAntrian::dispatch($payload);
+
+            // Update Cache Redis
+            $this->updateCache($antrian);
+
+            return response()->json(['success' => true, 'message' => 'Antrian dipanggil ulang']);
+        }
+
+        // ==========================================
+        // SKENARIO B: PANGGILAN BARU (STATUS 0 -> 1)
+        // ==========================================
+
+        // Cek Urutan Global (Strict FIFO)
+        // Pastikan tidak ada orang lain yang menunggu lebih lama dari orang ini
+        $antrianTerdepanGlobal = Antrian::query()
+            ->hariIni()
+            ->where('status', 0)
+            ->orderBy('waktu_ambil', 'asc')
+            ->orderBy('no_urut', 'asc')
+            ->first();
+
+        if (!$antrianTerdepanGlobal || $antrianTerdepanGlobal->id !== $antrian->id) {
+            $pesan = 'Antrian tidak berurutan!';
+            if ($antrianTerdepanGlobal) {
+                $loketName = $antrianTerdepanGlobal->loket->nama_loket ?? '-';
+                $pesan = "Harap tunggu! Antrian {$antrianTerdepanGlobal->no_antrian} di {$loketName} datang lebih dulu.";
+            }
+            return response()->json(['success' => false, 'message' => $pesan], 422);
+        }
+
+        // Eksekusi Panggil Baru
+        $antrian->update([
+            'status'        => 1,
+            'waktu_panggil' => now()
+        ]);
+
+        // Kirim WebSocket (Reverb)
+        $payload = [
+            'no_antrian' => $antrian->no_antrian,
+            'loket'      => $antrian->loket->nama_loket,
+            'skpd'       => $antrian->skpd->nama_skpd,
+            'waktu'      => now()->format('H:i')
+        ];
+        PanggilanAntrian::dispatch($payload);
+
+        // C. 🔥 FITUR BARU: TRIGGER GLOBAL COOLDOWN
+        $durasi = 30; // Detik (Sesuaikan dengan panjang audio)
+
+        // 1. Pasang Lock di Server (Redis) selama 30 detik
+        Cache::put('lock_panggilan_global', true, $durasi);
+
+        // 2. Kirim Sinyal ke Semua Admin lain agar tombolnya disable
+        CooldownTriggered::dispatch($durasi);
+
+        // Simpan Cache Redis
+        $this->updateCache($antrian);
+
+        return response()->json(['success' => true, 'message' => 'Antrian berhasil dipanggil']);
+    }
 
     /**
-     * Jumlah antrian
+     * Helper: Update Cache Redis dengan Fix Collation
+     */
+    private function updateCache($antrian)
+    {
+        // Query Join Manual dengan DB::raw agar aman dari error collation
+        $data = Antrian::select('antrians.*', 'lokets.nama_loket', 'skpd.nama_skpd')
+            ->leftJoin('lokets', function ($join) {
+                $join->on(DB::raw('lokets.id COLLATE utf8mb4_unicode_ci'), '=', DB::raw('antrians.loket_id COLLATE utf8mb4_unicode_ci'));
+            })
+            ->leftJoin('skpd', function ($join) {
+                $join->on(DB::raw('skpd.id COLLATE utf8mb4_unicode_ci'), '=', DB::raw('antrians.skpd_id COLLATE utf8mb4_unicode_ci'));
+            })
+            ->where('antrians.id', $antrian->id)
+            ->first();
+
+        // Simpan ke Redis selamanya (sampai ditimpa panggilan baru)
+        Cache::forever('panggilan_terakhir', $data);
+    }
+
+    /**
+     * Statistik: Jumlah Total Hari Ini
      */
     public function jumlah()
     {
         $query = Antrian::query()->hariIni();
-
         $this->filterBySkpd($query);
-
         return $query->count();
     }
 
     /**
-     * Antrian sekarang
+     * Statistik: Nomor Sedang Dipanggil
      */
     public function sekarang()
     {
@@ -117,12 +243,11 @@ class AntrianController extends Controller
             ->orderByDesc('waktu_panggil');
 
         $this->filterBySkpd($query);
-
         return $query->value('no_antrian') ?? '-';
     }
 
     /**
-     * Antrian selanjutnya
+     * Statistik: Nomor Selanjutnya
      */
     public function selanjutnya()
     {
@@ -132,12 +257,11 @@ class AntrianController extends Controller
             ->orderBy('no_urut');
 
         $this->filterBySkpd($query);
-
         return $query->value('no_antrian') ?? '-';
     }
 
     /**
-     * Sisa antrian
+     * Statistik: Sisa Antrian Menunggu
      */
     public function sisa()
     {
@@ -146,75 +270,99 @@ class AntrianController extends Controller
             ->where('status', 0);
 
         $this->filterBySkpd($query);
-
         return $query->count();
     }
 
     /**
-     * Panggil antrian
+     * Statistik: Jumlah Selesai
      */
-    public function panggil(Request $request)
+    public function selesai()
     {
-        $request->validate([
-            'id' => 'required|exists:antrians,id'
-        ]);
-
-        $query = Antrian::query();
-        $this->filterBySkpd($query);
-
-        $antrian = $query->where('id', $request->id)->first();
-
-        if (!$antrian) {
-            return response()->json([
-                'success' => false,
-                'message' => 'Data antrian tidak ditemukan'
-            ], 404);
-        }
-
-        // 🔁 JIKA SUDAH DIPANGGIL → UPDATE WAKTU SAJA (AGAR KIOS BUNYI LAGI)
-        if ($antrian->status == 1) {
-            $antrian->update([
-                'waktu_panggil' => now()
-            ]);
-
-            return response()->json([
-                'success' => true,
-                'message' => 'Antrian dipanggil ulang'
-            ]);
-        }
-
-        // 🔒 CEK ANTRIAN TERKECIL YANG MASIH MENUNGGU (VALIDASI URUTAN)
-        $antrianPertama = Antrian::query()
+        $query = Antrian::query()
             ->hariIni()
-            ->where('status', 0)
-            ->when(!auth()->user()->hasRole('Superadmin'), function ($q) {
-                $q->where('skpd_id', auth()->user()->skpd_id);
+            ->where('status', 2);
+
+        $this->filterBySkpd($query);
+        return $query->count();
+    }
+
+    /**
+     * API: Mengambil 5 Riwayat Panggilan Terakhir
+     */
+    public function getHistory()
+    {
+        $history = Antrian::select(
+            'antrians.no_antrian',
+            'antrians.waktu_panggil',
+            'lokets.nama_loket',
+            'skpd.nama_skpd' // <--- Tambah Select SKPD
+        )
+            // JOIN Loket
+            ->leftJoin('lokets', function ($join) {
+                $join->on(DB::raw('lokets.id COLLATE utf8mb4_unicode_ci'), '=', DB::raw('antrians.loket_id COLLATE utf8mb4_unicode_ci'));
             })
-            ->orderBy('no_urut')
+            // JOIN SKPD (Baru)
+            ->leftJoin('skpd', function ($join) {
+                $join->on(DB::raw('skpd.id COLLATE utf8mb4_unicode_ci'), '=', DB::raw('antrians.skpd_id COLLATE utf8mb4_unicode_ci'));
+            })
+            ->whereNotNull('waktu_panggil')
+            ->hariIni()
+            ->orderBy('waktu_panggil', 'desc')
+            ->take(5)
+            ->get()
+            ->map(function ($item) {
+                return [
+                    'no_antrian'    => $item->no_antrian,
+                    'nama_loket'    => $item->nama_loket,
+                    'nama_skpd'     => $item->nama_skpd, // <--- Masukkan ke Respon JSON
+                    'waktu_panggil' => \Carbon\Carbon::parse($item->waktu_panggil)
+                        ->timezone('Asia/Jakarta')
+                        ->format('H:i')
+                ];
+            });
+
+        return response()->json($history);
+    }
+
+    /**
+     * API: Info Card "Giliran Berikutnya" (Global)
+     */
+    /**
+     * API: Info Card Global (Sedang Dipanggil & Selanjutnya)
+     */
+    public function getGlobalNextInfo()
+    {
+        // 1. CARI YANG SEDANG DIPANGGIL (Status 1, Paling Baru Dipanggil)
+        $current = Antrian::where('status', 1)
+            ->hariIni()
+            ->with(['loket', 'skpd'])
+            ->orderBy('waktu_panggil', 'desc') // Yang baru dipanggil paling atas
             ->first();
 
-        // Validasi urutan (Opsional: bisa dimatikan kalau mau panggil acak)
-        if (!$antrianPertama || $antrianPertama->id !== $antrian->id) {
-            return response()->json([
-                'success' => false,
-                'message' => 'Harus memanggil antrian terdepan terlebih dahulu'
-            ], 422);
-        }
-
-        // ✅ PANGGIL ANTRIAN BARU
-        $antrian->update([
-            'status'        => 1,
-            'waktu_panggil' => now()
-        ]);
-
-        // --- [HAPUS BAGIAN BROADCAST INI] ---
-        // $dataLengkap = ...
-        // broadcast(new PanggilanAntrian($dataLengkap));
-        // ------------------------------------
+        // 2. CARI GILIRAN BERIKUTNYA (Status 0, Paling Lama Nunggu)
+        $next = Antrian::where('status', 0)
+            ->hariIni()
+            ->with(['loket', 'skpd'])
+            ->orderBy('waktu_ambil', 'asc')
+            ->orderBy('no_urut', 'asc')
+            ->first();
 
         return response()->json([
-            'success' => true,
-            'message' => 'Antrian berhasil dipanggil'
+            'current' => $current ? [
+                'status'     => 'exist',
+                'no_antrian' => $current->no_antrian,
+                'loket'      => $current->loket->nama_loket ?? '-',
+                'skpd'       => $current->skpd->nama_skpd ?? '-',
+                'waktu'      => $current->waktu_panggil ? \Carbon\Carbon::parse($current->waktu_panggil)->format('H:i') : '-'
+            ] : ['status' => 'empty'],
+
+            'next' => $next ? [
+                'status'     => 'exist',
+                'no_antrian' => $next->no_antrian,
+                'loket'      => $next->loket->nama_loket ?? '-',
+                'skpd'       => $next->skpd->nama_skpd ?? '-',
+                'waktu'      => $next->waktu_ambil ? \Carbon\Carbon::parse($next->waktu_ambil)->format('H:i') : '-'
+            ] : ['status' => 'empty']
         ]);
     }
 }

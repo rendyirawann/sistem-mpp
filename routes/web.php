@@ -34,7 +34,7 @@ use App\Http\Controllers\FrontController;
 use App\Http\Controllers\Backend\Loket\LoketController;
 // SKPD
 use App\Http\Controllers\Backend\Skpd\SkpdController;
-
+use App\Http\Controllers\SkmController;
 
 //Route::get('/', function () {
 //    return redirect()->route('login');
@@ -46,6 +46,14 @@ Route::get('/', function () {
 });
 
 Route::get('/get-last-panggilan', [FrontController::class, 'checkLastPanggilan'])->name('antrian.check');
+
+// --- ROUTES SKM (SURVEY) ---
+Route::get('/skm', [SkmController::class, 'index'])->name('skm.index');
+Route::post('/skm/check', [SkmController::class, 'checkAntrian'])->name('skm.check');
+Route::post('/skm/store', [SkmController::class, 'store'])->name('skm.store');
+// Tambahkan ini di group yang public (sebelum atau sesudah route skm)
+Route::get('/proxy/sukmadeli/{endpoint}', [SkmController::class, 'getReferensiSukma'])
+    ->name('skm.proxy');
 
 Route::post('/login')
     ->middleware('throttle:5,1')
@@ -100,6 +108,14 @@ Route::middleware('auth')->group(function () {
 
     Route::get('/sisa', [AntrianController::class, 'sisa'])
         ->name('antrian.sisa');
+
+    Route::get('/selesai', [AntrianController::class, 'selesai'])
+        ->name('antrian.selesai');
+
+    Route::get('/global-info', [AntrianController::class, 'getGlobalNextInfo'])
+        ->name('antrian.global-info');
+
+    Route::get('/history', [AntrianController::class, 'getHistory'])->name('antrian.history');
 
     /* PANGGIL / UPDATE STATUS */
     Route::post('antrian/panggil', [AntrianController::class, 'panggil'])
