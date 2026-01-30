@@ -24,58 +24,58 @@ class AuthenticatedSessionController extends Controller
 
 
     public function store(LoginRequest $request)
-{
-     try {
-        $request->authenticate();
-    } catch (ValidationException $e) {
+    {
+        try {
+            $request->authenticate();
+        } catch (ValidationException $e) {
+
+            if ($request->expectsJson()) {
+                return response()->json([
+                    'errors' => $e->errors()
+                ], 422);
+            }
+
+            throw $e;
+        }
+
+
+        $request->session()->regenerate();
+
+        auth()->user()->update([
+            'last_ip' => $request->ip(),
+            'last_login' => now(),
+        ]);
+
+        $agent = new Agent;
+        activity()
+            ->useLog('login')
+            ->causedBy(auth()->user())
+            ->withProperties([
+                'ip' => $request->ip(),
+                'agent' => [
+                    'browser' => $agent->browser() . ' ' . $agent->version($agent->browser()),
+                    'os' => $agent->platform() . ' ' . $agent->version($agent->platform()),
+                    'device' => $agent->device(),
+                    'is_mobile' => $agent->isMobile(),
+                    'is_desktop' => $agent->isDesktop(),
+                    'raw' => $request->header('User-Agent'),
+                ],
+                'request' => [
+                    'method' => $request->method(),
+                    'url' => $request->fullUrl(),
+                ],
+            ])
+            ->log('Login berhasil');
 
         if ($request->expectsJson()) {
             return response()->json([
-                'errors' => $e->errors()
-            ], 422);
+                'status' => true,
+                'message' => 'Login berhasil'
+            ]);
         }
 
-        throw $e;
+        return redirect()->intended(route('dashboard'));
     }
-
-
-    $request->session()->regenerate();
-
-    auth()->user()->update([
-        'last_ip' => $request->ip(),
-        'last_login' => now(),
-    ]);
-
-    $agent = new Agent;
-    activity()
-    ->useLog('login')
-    ->causedBy(auth()->user())
-    ->withProperties([
-        'ip' => $request->ip(),
-        'agent' => [
-            'browser' => $agent->browser() . ' ' . $agent->version($agent->browser()),
-            'os' => $agent->platform() . ' ' . $agent->version($agent->platform()),
-            'device' => $agent->device(),
-            'is_mobile' => $agent->isMobile(),
-            'is_desktop' => $agent->isDesktop(),
-            'raw' => $request->header('User-Agent'),
-        ],
-        'request' => [
-            'method' => $request->method(),
-            'url' => $request->fullUrl(),
-        ],
-    ])
-    ->log('Login berhasil');
-
-    if ($request->expectsJson()) {
-        return response()->json([
-            'status' => true,
-            'message' => 'Login berhasil'
-        ]);
-    }
-
-    return redirect()->intended(route('dashboard'));
-}
 
 
     /**
@@ -86,24 +86,24 @@ class AuthenticatedSessionController extends Controller
         $agent = new Agent;
 
         activity()
-        ->useLog('logout')
-        ->causedBy(auth()->user())
-        ->withProperties([
-            'ip' => $request->ip(),
-            'agent' => [
-                'browser' => $agent->browser() . ' ' . $agent->version($agent->browser()),
-                'os' => $agent->platform() . ' ' . $agent->version($agent->platform()),
-                'device' => $agent->device(),
-                'is_mobile' => $agent->isMobile(),
-                'is_desktop' => $agent->isDesktop(),
-                'raw' => $request->header('User-Agent'),
-            ],
-            'request' => [
-                'method' => $request->method(),
-                'url' => $request->fullUrl(),
-            ],
-        ])
-        ->log('Logout berhasil');
+            ->useLog('logout')
+            ->causedBy(auth()->user())
+            ->withProperties([
+                'ip' => $request->ip(),
+                'agent' => [
+                    'browser' => $agent->browser() . ' ' . $agent->version($agent->browser()),
+                    'os' => $agent->platform() . ' ' . $agent->version($agent->platform()),
+                    'device' => $agent->device(),
+                    'is_mobile' => $agent->isMobile(),
+                    'is_desktop' => $agent->isDesktop(),
+                    'raw' => $request->header('User-Agent'),
+                ],
+                'request' => [
+                    'method' => $request->method(),
+                    'url' => $request->fullUrl(),
+                ],
+            ])
+            ->log('Logout berhasil');
 
 
         Auth::guard('web')->logout();
@@ -112,6 +112,6 @@ class AuthenticatedSessionController extends Controller
 
         $request->session()->regenerateToken();
 
-        return redirect('/');
+        return redirect('/login');
     }
 }

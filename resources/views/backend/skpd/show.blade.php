@@ -30,6 +30,16 @@
             <td>{{ $data->nip_kepala ?? '-' }}</td>
         </tr>
         <tr>
+            <th class="fw-bold text-muted">ID Sukma Deli</th>
+            <td>
+                @if ($data->external_id_sukma)
+                    <span class="badge badge-light-info fw-bold">{{ $data->external_id_sukma }}</span>
+                @else
+                    <span class="text-muted">-</span>
+                @endif
+            </td>
+        </tr>
+        <tr>
             <th class="fw-bold text-muted">Status</th>
             <td>
                 @if ($data->isaktif)

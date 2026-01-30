@@ -89,6 +89,8 @@ Route::middleware('auth')->group(function () {
     Route::resource('skpd', SkpdController::class);
     Route::get('get-skpd', [SkpdController::class, 'getSkpd'])->name('get-skpd');
     Route::post('/skpd/mass-delete', [SkpdController::class, 'massDelete'])->name('skpd.mass-delete');
+    Route::post('/skpd/sync-sukma', [SkpdController::class, 'syncSukma'])
+        ->name('skpd.sync-sukma');
 
     Route::resource('antrian', AntrianController::class);
 

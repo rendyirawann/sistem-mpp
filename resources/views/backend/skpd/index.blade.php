@@ -47,8 +47,8 @@
                 <div class="me-3">
                     <!--begin::Menu-->
                     <!-- <a href="#" class="btn btn-sm btn-flex btn-dark fw-bold" data-kt-menu-trigger="click"
-                                data-kt-menu-placement="bottom-end">
-                                <i class="ki-outline ki-filter fs-2  me-1"></i>Filter</a> -->
+                                                                    data-kt-menu-placement="bottom-end">
+                                                                    <i class="ki-outline ki-filter fs-2  me-1"></i>Filter</a> -->
                     <!--begin::Menu 1-->
                     <div class="menu menu-sub menu-sub-dropdown w-250px w-md-300px" data-kt-menu="true"
                         id="kt_menu_66b9aa0df2f28">
@@ -68,7 +68,11 @@
                 </div>
                 <!--end::Wrapper-->
                 <!--begin::Button-->
+
                 @can('skpd.create')
+                    {{-- <button type="button" id="btn_sync_sukma" class="btn btn-sm btn-info me-2">
+                        <i class="ki-outline ki-arrows-circle fs-2"></i> Sync Sukma
+                    </button> --}}
                     <button type="button" id="btn_tambah_data" class="btn btn-sm btn-primary">
                         <i class="ki-outline ki-plus fs-2"></i>Add</button>
                 @endcan
@@ -251,7 +255,7 @@
                                 <!--end::Image input-->
                                 <!--begin::Hint-->
                                 <div class="form-text">Allowed file types: png, jpg, jpeg.</div>
-                                <span class="text-danger error-text avatar_error_add"></span>
+                                <span class="text-danger error-text logo_skpd_error_add"></span>
 
                                 <!--end::Hint-->
                             </div>
@@ -294,6 +298,13 @@
                                 <!--end::Input-->
                             </div>
                             <!--end::Input group-->
+                            <div class="fv-row mb-7">
+                                <label class="fw-semibold fs-6 mb-2">ID Sukma Deli (External ID)</label>
+                                <input type="number" name="external_id_sukma" id="external_id_sukma"
+                                    class="form-control" placeholder="Contoh: 14" />
+                                <div class="form-text">Biarkan kosong jika tidak terintegrasi dengan Sukma Deli.</div>
+                                <span class="text-danger error-text external_id_sukma_error_add"></span>
+                            </div>
                             <!--begin::Input group-->
                             <div class="fv-row mb-7">
                                 <!--begin::Label-->
@@ -308,7 +319,7 @@
                                 </select>
                                 <!--end::Select-->
 
-                                <span class="text-danger error-text is_aktif_error_add"></span>
+                                <span class="text-danger error-text isaktif_error_add"></span>
                             </div>
                             <div class="fv-row mb-7">
                                 <label class="required fw-semibold fs-6 mb-2">Lokasi Stand</label>
@@ -507,8 +518,7 @@
 
                 // Reset the background image for avatar (optional)
                 $('#default-image').css('background-image',
-                    'url({{ URL::to('
-                                                                        assets / media / svg / files / blank - image.svg ') }})'
+                    "url('{{ asset('assets/media/svg/files/blank-image.svg') }}')"
                 );
 
 
@@ -679,6 +689,47 @@
                 });
             });
 
+            // EVENT KLIK TOMBOL SYNC
+            $('#btn_sync_sukma').click(function() {
+                Swal.fire({
+                    title: 'Sinkronisasi Data?',
+                    text: "Data SKPD akan diperbarui sesuai database Sukma Deli.",
+                    icon: 'question',
+                    showCancelButton: true,
+                    confirmButtonText: 'Ya, Sinkronkan!',
+                    cancelButtonText: 'Batal'
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        // Tampilkan Loading
+                        Swal.fire({
+                            title: 'Sedang Memproses...',
+                            text: 'Mohon tunggu sebentar.',
+                            allowOutsideClick: false,
+                            didOpen: () => {
+                                Swal.showLoading();
+                            }
+                        });
+
+                        // Request ke Server
+                        $.ajax({
+                            url: "{{ route('skpd.sync-sukma') }}",
+                            method: "POST",
+                            data: {
+                                _token: "{{ csrf_token() }}"
+                            },
+                            success: function(res) {
+                                Swal.fire("Berhasil", res.message, "success");
+                                $('.chimox').DataTable().ajax.reload(); // Reload tabel otomatis
+                            },
+                            error: function(xhr) {
+                                Swal.fire("Gagal", xhr.responseJSON?.message || "Terjadi kesalahan",
+                                    "error");
+                            }
+                        });
+                    }
+                });
+            });
+
 
             function updateToolbar() {
                 let count = $('#chimox tbody input.form-check-input:checked').length;
@@ -793,7 +844,7 @@
                 // Tampilkan loading di modal body sebelum data masuk
                 $('#ShowRowModalBody').html(
                     '<div class="text-center py-5"><span class="spinner-border text-primary"></span> Memuat data...</div>'
-                    );
+                );
                 $('#Modal_Show_Data').modal('show');
 
                 $.ajax({
@@ -883,17 +934,17 @@
                 $.ajax({
                     url: "{{ route('skpd.destroy', ':id') }}".replace(':id', deleteId),
                     type: 'DELETE',
-                    data: {
-                        _token: $('meta[name="csrf-token"]').attr('content')
+                    headers: {
+                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
                     },
                     success: function(res) {
                         $('#Modal_Hapus_Data').modal('hide');
-                        $('.chimox').DataTable().ajax.reload();
+                        $('.chimox').DataTable().ajax.reload(); // Reload tabel
 
                         Swal.fire('Berhasil', res.success, 'success');
                     },
                     error: function(xhr) {
-                        Swal.fire('Error', xhr.responseText ?? 'Gagal menghapus data', 'error');
+                        Swal.fire('Error', xhr.responseJSON?.message || 'Gagal menghapus data', 'error');
                     }
                 });
             });

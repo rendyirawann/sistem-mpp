@@ -100,36 +100,37 @@
                     </div>
 
                     {{-- KARTU 2: GILIRAN BERIKUTNYA --}}
+                    {{-- KARTU 2: DAFTAR STANDBY BERIKUTNYA (SIMPLE LIST) --}}
                     <div class="col-md-6">
                         <div class="card card-flush shadow-sm h-100 text-white"
                             style="background: linear-gradient(135deg, #1e1e2f 0%, #2b2b40 100%); border: 1px solid #444; min-height: 180px;">
 
                             <div class="card-body d-flex flex-column justify-content-center text-center py-3">
-                                <h3 class="text-white opacity-50 text-uppercase fw-bold ls-1 mb-0 fs-8">
-                                    <i class="ki-outline ki-arrow-right me-1"></i> Giliran Berikutnya
+                                <h3 class="text-white opacity-50 text-uppercase fw-bold ls-1 mb-2 fs-8">
+                                    <i class="ki-outline ki-category me-1"></i> Antrian Berikutnya
                                 </h3>
 
                                 <div id="next-loading" class="my-3"><span
                                         class="spinner-border spinner-border-sm text-white"></span></div>
 
-                                <div id="next-content" style="display:none;">
-                                    <h1 id="next-nomor" class="fw-black text-white mb-0 mt-1 opacity-75"
-                                        style="font-size: 3.5rem; line-height: 1;">---</h1>
+                                {{-- KONTAINER LIST NOMOR --}}
+                                <div id="next-list-container" style="display:none;"
+                                    class="animate__animated animate__fadeIn">
 
-                                    {{-- POSISI BARU: SKPD DI ATAS, LOKET DI BAWAH --}}
-                                    <div class="mt-2 d-flex flex-column align-items-center">
-                                        <span id="next-skpd"
-                                            class="fw-bold fs-6 text-white text-uppercase lh-sm px-2 opacity-90">---</span>
-                                        <div class="border border-secondary rounded px-2 py-0 text-gray-400 fs-8 mt-1">
-                                            <span id="next-loket" class="text-white">---</span>
-                                        </div>
-                                        <span id="next-waktu" class="fs-9 text-gray-500 mt-1">--:--</span>
+                                    {{-- List Nomor Antrian (Dipisah Koma) --}}
+                                    <h1 id="next-nomor-list" class="fw-black text-white mb-0 opacity-90 lh-sm text-break"
+                                        style="font-size: 2.5rem;">
+                                        ---
+                                    </h1>
+
+                                    <div class="mt-2 text-gray-500 fs-9 fst-italic">
+                                        *Menunggu giliran panggil
                                     </div>
                                 </div>
 
                                 <div id="next-empty" style="display:none;" class="py-3 opacity-50">
                                     <i class="ki-outline ki-check-circle fs-1 mb-1"></i><br>
-                                    <span class="fs-8">Antrian Kosong</span>
+                                    <span class="fs-8">Semua Antrian Bersih</span>
                                 </div>
                             </div>
                         </div>
@@ -271,12 +272,66 @@
                 // loadHistoryInModal(); // Tidak perlu diload otomatis biar ringan, user klik dulu baru load
             }
 
+            let nextCandidatesList = [];
+            let currentCarouselIndex = 0;
+            let carouselInterval = null;
+
+            function startCarousel() {
+                if (carouselInterval) clearInterval(carouselInterval);
+                if (nextCandidatesList.length === 0) return;
+
+                // Fungsi ganti slide
+                const showSlide = (index) => {
+                    const item = nextCandidatesList[index];
+                    const display = $('#next-item-display');
+
+                    // Efek Fade Out
+                    display.addClass('animate__fadeOut');
+
+                    setTimeout(() => {
+                        $('#next-nomor').text(item.no_antrian);
+                        $('#next-skpd').text(item.skpd);
+                        $('#next-loket').text(item.loket);
+                        $('#next-waktu').text(item.waktu);
+
+                        // Update Dots
+                        $('#carousel-dots .bullet').removeClass('bg-white opacity-100').addClass(
+                            'bg-secondary opacity-50');
+                        $(`#dot-${index}`).removeClass('bg-secondary opacity-50').addClass(
+                            'bg-white opacity-100');
+
+                        // Efek Fade In
+                        display.removeClass('animate__fadeOut').addClass('animate__fadeIn');
+                    }, 300); // Tunggu setengah detik
+                };
+
+                // Tampilkan slide pertama langsung
+                showSlide(0);
+
+                // Jika lebih dari 1, jalankan loop
+                if (nextCandidatesList.length > 1) {
+                    carouselInterval = setInterval(() => {
+                        currentCarouselIndex = (currentCarouselIndex + 1) % nextCandidatesList.length;
+                        showSlide(currentCarouselIndex);
+                    }, 4000); // Ganti setiap 4 detik
+                }
+            }
+
             function loadHeroCard() {
                 $.ajax({
                     url: "{{ route('antrian.global-info') }}",
                     type: "GET",
                     success: function(res) {
                         $('#current-loading, #next-loading').hide();
+                        // ==========================================
+                        if (res.cooldown_remaining > 0) {
+                            console.log("Server sedang cooldown, sisa:", res.cooldown_remaining);
+
+                            // Hanya jalankan jika timer belum berjalan di browser ini
+                            if (!isGlobalCooldown) {
+                                startCooldownTimer(res.cooldown_remaining);
+                            }
+                        }
 
                         // UPDATE CARD "SEDANG DIPANGGIL"
                         // UPDATE CARD SEDANG DIPANGGIL
@@ -298,17 +353,33 @@
                         }
 
                         // UPDATE CARD BERIKUTNYA
-                        if (res.next.status === 'exist') {
+                        // if (res.next.status === 'exist') {
+                        //     $('#next-empty').hide();
+                        //     $('#next-content').show();
+                        //     $('#next-nomor').text(res.next.no_antrian);
+                        //     $('#next-loket').text(res.next.loket);
+                        //     $('#next-skpd').text(res.next.skpd);
+                        //     $('#next-waktu').text(res.next.waktu);
+                        // } else {
+                        //     $('#next-content').hide();
+                        //     $('#next-empty').show();
+                        // }
+                        if (res.next_list && res.next_list.length > 0) {
                             $('#next-empty').hide();
-                            $('#next-content').show();
-                            $('#next-nomor').text(res.next.no_antrian);
-                            $('#next-loket').text(res.next.loket);
-                            $('#next-skpd').text(res.next.skpd);
-                            $('#next-waktu').text(res.next.waktu);
+                            $('#next-list-container').show();
+
+                            // Ambil hanya No Antrian, lalu gabung dengan koma
+                            // Contoh Hasil: "A-001, B-005, C-003"
+                            let nomorListString = res.next_list.map(item => item.no_antrian).join(', ');
+
+                            // Tampilkan ke HTML
+                            $('#next-nomor-list').text(nomorListString);
+
                         } else {
-                            $('#next-content').hide();
+                            $('#next-list-container').hide();
                             $('#next-empty').show();
                         }
+
                     }
                 });
             }

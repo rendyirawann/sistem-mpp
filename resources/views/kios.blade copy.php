@@ -7,10 +7,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="csrf-token" content="{{ csrf_token() }}">
 
-    {{-- 1. ASSET METRONIC --}}
+    {{-- 1. ASSET METRONIC (Mandatory) --}}
     <link href="{{ asset('assets/plugins/global/plugins.bundle.css') }}" rel="stylesheet" type="text/css" />
     <link href="{{ asset('assets/css/style.bundle.css') }}" rel="stylesheet" type="text/css" />
-    <link rel="shortcut icon" href="{{ asset('assets/media/logos/logo_deliserdang.png') }}" />
 
     {{-- Font Awesome --}}
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" rel="stylesheet">
@@ -19,10 +18,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap"
         rel="stylesheet">
 
-    {{-- 🔥 HAPUS SCRIPT RECTA YANG ERROR --}}
-    {{-- <script src="{{ asset('assets/js/recta.js') }}"></script> --}}
-
-    {{-- Load Vite --}}
+    {{-- 🔥 WAJIB: Load Vite untuk Reverb/WebSocket --}}
     @vite(['resources/css/app.css', 'resources/js/app.js'])
 
     <style>
@@ -82,7 +78,7 @@
             border: 1px solid rgba(255, 255, 255, 0.2);
         }
 
-        /* RESPONSIVE LAYOUT */
+        /* 🔥 SINKRONISASI TINGGI LAYAR AGAR RESPONSIVE */
         @media (min-width: 992px) {
             .h-lg-100vh {
                 height: 100vh !important;
@@ -98,13 +94,16 @@
             }
         }
 
+        /* 🔥 OPTIMASI UNTUK HP LAYAR KECIL / PENDEK */
         @media (max-width: 991px) {
             .sidebar-gradient {
                 border-radius: 0 0 1.5rem 1.5rem;
                 margin-bottom: 1.5rem;
                 padding: 1.25rem !important;
+                /* Padding diperkecil */
             }
 
+            /* Kecilkan teks di mobile agar muat */
             #panggilanNo {
                 font-size: 3rem !important;
             }
@@ -112,51 +111,10 @@
             #nextNo {
                 font-size: 2rem !important;
             }
-        }
 
-        /* =========================================
-           🔥 CSS KHUSUS PRINT (POS 58mm)
-           ========================================= */
-        @media print {
-
-            /* Sembunyikan UI Website */
-            body * {
-                visibility: hidden;
-                height: 0;
-                overflow: hidden;
+            .fs-2hx {
+                font-size: 1.75rem !important;
             }
-
-            /* Setting Halaman Browser ke 80mm */
-            @page {
-                size: 80mm auto;
-                /* Lebar 80mm, Tinggi Auto */
-                margin: 0mm;
-                /* Hilangkan margin browser */
-            }
-
-            /* Tampilkan Area Struk */
-            #area-struk,
-            #area-struk * {
-                visibility: visible;
-                height: auto;
-                overflow: visible;
-            }
-
-            #area-struk {
-                position: absolute;
-                left: 0;
-                top: 0;
-                width: 79mm;
-                /* Gunakan 79mm (Safe Area) agar tidak terpotong */
-                padding: 2mm 0;
-                margin: 0;
-                background-color: white;
-            }
-        }
-
-        /* Geser Modal ke Atas (10% dari atas layar) */
-        .modal-pos-top {
-            margin-top: 10vh !important;
         }
     </style>
 </head>
@@ -195,6 +153,7 @@
 
         {{-- STATUS PANGGILAN --}}
         <div class="d-flex flex-column gap-3 my-4 my-lg-0 position-relative z-index-1">
+
             {{-- CARD 1: SEDANG DIPANGGIL --}}
             <div id="notifikasiPanggilan" class="card border-0 shadow-sm bg-warning position-relative overflow-hidden">
                 <div class="card-body p-4 p-lg-3 text-center d-flex flex-column align-items-center">
@@ -238,6 +197,17 @@
                         <span class="fs-9 fw-bolder text-white">08.00 – 15.00 WIB</span>
                     </div>
                 </div>
+                <div class="d-flex align-items-center d-lg-none d-xl-flex"> {{-- Disembunyikan di sidebar kecil jika layar pas-pasan --}}
+                    <div class="symbol symbol-20px me-2">
+                        <div class="symbol-label bg-white bg-opacity-20 text-white"><i class="fa fa-clock fs-9"></i>
+                        </div>
+                    </div>
+                    <div class="d-flex flex-column">
+                        <span class="fs-10 fw-bold text-white opacity-75 text-uppercase text-nowrap">Hari
+                            Kerja</span>
+                        <span class="fs-9 fw-bolder text-white">Senin – Jumat</span>
+                    </div>
+                </div>
             </div>
             <div class="text-center mt-2">
                 <span class="text-white opacity-50 fs-10">&copy; {{ date('Y') }} MPP DELI SERDANG</span>
@@ -271,25 +241,24 @@
         <div class="p-4 p-lg-6 scroll-smooth overflow-auto flex-grow-1 pb-15">
             <div class="row g-4">
                 @foreach ($skpd as $item)
-                    <div class="col-6 col-sm-6 col-md-4 col-xl-3">
-                        <div class="card card-flush h-100 border-0 shadow-sm card-service"
-                            onclick="openLayanan('{{ $item->id }}')">
+                <div class="col-6 col-sm-6 col-md-4 col-xl-3">
+                    <div class="card card-flush h-100 border-0 shadow-sm card-service"
+                        onclick="openLayanan('{{ $item->id }}')">
+                        <div
+                            class="card-body d-flex flex-column justify-content-center align-items-center text-center p-4">
                             <div
-                                class="card-body d-flex flex-column justify-content-center align-items-center text-center p-4">
-                                <div
-                                    class="icon-wrapper symbol symbol-45px symbol-lg-50px symbol-circle bg-light-primary mb-3 d-flex justify-content-center align-items-center transition-all">
-                                    @if ($item->logo_skpd)
-                                        {{-- Gunakan Icon Static untuk Performa atau Image --}}
-                                        <i class="fa fa-building-columns fs-2 text-primary"></i>
-                                    @else
-                                        <i class="fa fa-building fs-2 text-primary"></i>
-                                    @endif
-                                </div>
-                                <span
-                                    class="text-gray-800 fw-bold fs-7 fs-lg-6 mb-0 lh-sm line-clamp-2">{{ $item->nama_skpd }}</span>
+                                class="icon-wrapper symbol symbol-45px symbol-lg-50px symbol-circle bg-light-primary mb-3 d-flex justify-content-center align-items-center transition-all">
+                                @if ($item->logo_skpd)
+                                <i class="fa fa-building-columns fs-2 text-primary"></i>
+                                @else
+                                <i class="fa fa-building fs-2 text-primary"></i>
+                                @endif
                             </div>
+                            <span
+                                class="text-gray-800 fw-bold fs-7 fs-lg-6 mb-0 lh-sm line-clamp-2">{{ $item->nama_skpd }}</span>
                         </div>
                     </div>
+                </div>
                 @endforeach
             </div>
         </div>
@@ -307,13 +276,14 @@
                         <i class="ki-outline ki-cross fs-2 text-white"></i>
                     </div>
                 </div>
-                <div class="modal-body px-4 py-4" id="daftarLayanan"></div>
+                <div class="modal-body px-4 py-4" id="daftarLayanan">
+                </div>
             </div>
         </div>
     </div>
 
     {{-- 2. Modal Form Input --}}
-    {{-- <div class="modal fade" id="modalForm" tabindex="-1" aria-hidden="true">
+    <div class="modal fade" id="modalForm" tabindex="-1" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content rounded-4">
                 <div class="modal-header bg-primary py-3">
@@ -323,15 +293,15 @@
                     </div>
                 </div>
                 <div class="modal-body px-5 py-5">
-                    <form id="formAmbilAntrian" method="POST">
+                    <form id="formAmbilAntrian" method="POST" action="{{ route('ambil.antrian') }}">
                         @csrf
                         <input type="hidden" name="skpd_id" id="inputSkpd">
                         <input type="hidden" name="loket_id" id="inputLoket">
 
                         <div class="fv-row mb-3">
                             <label class="required form-label fw-bold fs-7">NIK (Sesuai KTP)</label>
-                            <input type="number" maxlength="16" name="nik" required
-                                class="form-control form-control-solid" placeholder="16 digit NIK" />
+                            <input type="number" name="nik" required class="form-control form-control-solid"
+                                placeholder="16 digit NIK" />
                         </div>
 
                         <div class="fv-row mb-3">
@@ -342,70 +312,15 @@
 
                         <div class="fv-row mb-5">
                             <label class="required form-label fw-bold fs-7">No. HP / WhatsApp</label>
-                            <input type="number" maxlength="12" name="no_hp" required
-                                class="form-control form-control-solid" placeholder="0812..." />
+                            <input type="number" name="no_hp" required class="form-control form-control-solid"
+                                placeholder="0812..." />
                         </div>
 
                         <button type="submit" id="btnCetak" class="btn btn-primary w-100">
                             <span id="btnText"><i class="fa fa-print me-2"></i> CETAK TIKET</span>
                             <span id="btnLoading" class="d-none">
-                                <span class="spinner-border spinner-border-sm align-middle me-2"></span> Memproses...
-                            </span>
-                        </button>
-                    </form>
-                </div>
-            </div>
-        </div>
-    </div> --}}
-    {{-- 2. Modal Form Input (Updated) --}}
-    <div class="modal fade" id="modalForm" tabindex="-1" data-bs-backdrop="static" data-bs-keyboard="false"
-        aria-hidden="true">
-        {{-- Hapus 'modal-dialog-centered', ganti dengan 'modal-pos-top' --}}
-        <div class="modal-dialog modal-pos-top">
-            <div class="modal-content rounded-4 shadow-lg">
-                <div class="modal-header bg-primary py-3">
-                    <h3 class="modal-title fw-bolder text-white fs-5" id="judulLayanan">Isi Data Diri</h3>
-                    <div class="btn btn-icon btn-sm btn-active-light-primary ms-2" onclick="backToLayanan()">
-                        <i class="fa fa-arrow-left fs-2 text-white"></i>
-                    </div>
-                </div>
-                <div class="modal-body px-5 py-5">
-                    <form id="formAmbilAntrian" method="POST" autocomplete="off">
-                        @csrf
-                        <input type="hidden" name="skpd_id" id="inputSkpd">
-                        <input type="hidden" name="loket_id" id="inputLoket">
-
-                        <div class="fv-row mb-4">
-                            <label class="required form-label fw-bold fs-7">NIK (Sesuai KTP)</label>
-                            <input type="text" name="nik" id="inputNik"
-                                class="form-control form-control-solid fw-bolder text-dark"
-                                placeholder="16 Digit Angka" maxlength="16" inputmode="numeric"
-                                oninput="this.value = this.value.replace(/[^0-9]/g, '')" />
-                            {{-- Tempat Pesan Error --}}
-                            <div class="invalid-feedback fw-bold fs-7" id="error-nik"></div>
-                        </div>
-
-                        <div class="fv-row mb-4">
-                            <label class="required form-label fw-bold fs-7">Nama Lengkap</label>
-                            <input type="text" name="nama" id="inputNama"
-                                class="form-control form-control-solid fw-bold text-uppercase"
-                                placeholder="NAMA LENGKAP" />
-                            <div class="invalid-feedback fw-bold fs-7" id="error-nama"></div>
-                        </div>
-
-                        <div class="fv-row mb-5">
-                            <label class="required form-label fw-bold fs-7">No. HP / WhatsApp</label>
-                            <input type="text" name="no_hp" id="inputHp"
-                                class="form-control form-control-solid fw-bolder" placeholder="0812..."
-                                maxlength="14" inputmode="numeric"
-                                oninput="this.value = this.value.replace(/[^0-9]/g, '')" />
-                            <div class="invalid-feedback fw-bold fs-7" id="error-no_hp"></div>
-                        </div>
-
-                        <button type="submit" id="btnCetak" class="btn btn-primary w-100 py-3 fs-4 fw-bold">
-                            <span id="btnText"><i class="fa fa-print me-2"></i> CETAK TIKET</span>
-                            <span id="btnLoading" class="d-none">
-                                <span class="spinner-border spinner-border-sm align-middle me-2"></span> Memproses...
+                                <span class="spinner-border spinner-border-sm align-middle me-2"></span>
+                                Memproses...
                             </span>
                         </button>
                     </form>
@@ -427,30 +342,30 @@
                 <div class="modal-body px-4 py-4 bg-light">
                     <div class="row g-3">
                         @forelse ($skpd as $item)
-                            @if (!empty($item->lokasi))
-                                <div class="col-12 col-md-6">
-                                    <div class="card border border-gray-300 shadow-sm h-100">
-                                        <div class="card-body d-flex align-items-center p-3">
-                                            <div class="symbol symbol-35px me-3">
-                                                <span class="symbol-label bg-light-primary text-primary">
-                                                    <i class="fa fa-building-user"></i>
-                                                </span>
-                                            </div>
-                                            <div class="d-flex flex-column">
-                                                <span
-                                                    class="text-gray-800 fw-bold fs-7 mb-1">{{ $item->nama_skpd }}</span>
-                                                <span class="text-muted fw-semibold fs-9">
-                                                    <i class="fa fa-map-pin text-danger me-1"></i> {{ $item->lokasi }}
-                                                </span>
-                                            </div>
-                                        </div>
+                        @if (!empty($item->lokasi))
+                        <div class="col-12 col-md-6">
+                            <div class="card border border-gray-300 shadow-sm h-100">
+                                <div class="card-body d-flex align-items-center p-3">
+                                    <div class="symbol symbol-35px me-3">
+                                        <span class="symbol-label bg-light-primary text-primary">
+                                            <i class="fa fa-building-user"></i>
+                                        </span>
+                                    </div>
+                                    <div class="d-flex flex-column">
+                                        <span
+                                            class="text-gray-800 fw-bold fs-7 mb-1">{{ $item->nama_skpd }}</span>
+                                        <span class="text-muted fw-semibold fs-9">
+                                            <i class="fa fa-map-pin text-danger me-1"></i> {{ $item->lokasi }}
+                                        </span>
                                     </div>
                                 </div>
-                            @endif
-                        @empty
-                            <div class="col-12 text-center py-5">
-                                <div class="text-gray-500 fw-bold fs-7">Lokasi belum tersedia.</div>
                             </div>
+                        </div>
+                        @endif
+                        @empty
+                        <div class="col-12 text-center py-5">
+                            <div class="text-gray-500 fw-bold fs-7">Lokasi belum tersedia.</div>
+                        </div>
                         @endforelse
                     </div>
                 </div>
@@ -464,7 +379,9 @@
         <div class="modal-dialog modal-dialog-centered modal-sm">
             <div class="modal-content rounded-4 shadow-lg border-0">
                 <div class="modal-body text-center p-8">
-                    <div class="mb-4"><i class="ki-outline ki-check-circle fs-4x text-success"></i></div>
+                    <div class="mb-4">
+                        <i class="ki-outline ki-check-circle fs-4x text-success"></i>
+                    </div>
                     <h1 class="fw-black text-primary fs-2x mb-2 border border-dashed border-primary rounded p-2 bg-light-primary"
                         id="tiketBerhasil">---</h1>
                     <div class="fw-bold text-gray-600 fs-7 mb-5">Silakan menunggu nomor antrian Anda dipanggil petugas.
@@ -472,40 +389,6 @@
                     <button type="button" class="btn btn-primary w-100" data-bs-dismiss="modal">SELESAI</button>
                 </div>
             </div>
-        </div>
-    </div>
-
-    {{-- =========================================
-         🔥 AREA PRINT STRUK (HIDDEN)
-         ========================================= --}}
-    {{-- =========================================
-         🔥 AREA PRINT STRUK (80mm)
-         ========================================= --}}
-    <div id="area-struk" style="display: none;">
-        {{-- Font size dinaikkan sedikit (14px -> 16px) karena kertas lebih lebar --}}
-        <div
-            style="width: 100%; font-family: 'Courier New', monospace; text-align: center; font-size: 16px; font-weight: bold; line-height: 1.2;">
-
-            <div style="font-size: 18px;">MPP</div>
-            <div style="font-size: 16px;">KABUPATEN DELI SERDANG</div>
-            <div style="border-bottom: 2px dashed black; margin: 10px 0;"></div>
-
-            <div style="margin-top: 10px; font-size: 14px;">NOMOR ANTRIAN</div>
-            {{-- Font Nomor Antrian diperbesar --}}
-            <div id="struk-nomor" style="font-size: 64px; font-weight: 800; margin: 5px 0; line-height: 1;">---</div>
-
-            <div style="margin-top: 10px; font-size: 14px;">LOKET</div>
-            <div id="struk-layanan" style="font-size: 18px; text-transform: uppercase; padding: 0 5px;">---</div>
-
-            <div style="border-bottom: 2px dashed black; margin: 10px 0;"></div>
-            <div id="struk-waktu" style="font-size: 14px;">---</div>
-            <div style="border-bottom: 2px dashed black; margin: 10px 0;"></div>
-
-            <div style="margin-top: 15px; font-style: italic; font-size: 12px; font-weight: normal;">
-                Silakan menunggu dipanggil<br>
-                Terima Kasih
-            </div>
-            <br><br>.
         </div>
     </div>
 
@@ -520,32 +403,6 @@
         const bell = document.getElementById('tingtung');
         let speechQueue = [];
 
-        // ==========================================
-        // FUNGSI CETAK STRUK (WINDOW.PRINT)
-        // ==========================================
-        window.cetakStruk = function(data) {
-            // 1. Isi data ke HTML Struk
-            document.getElementById('struk-nomor').innerText = data.tiket;
-            document.getElementById('struk-layanan').innerText = data.layanan.toUpperCase();
-            document.getElementById('struk-waktu').innerText = 'Tgl : ' + data.tgl;
-
-            // 2. Tampilkan area struk (tapi CSS @media print yang akan handle sisanya)
-            const areaStruk = document.getElementById('area-struk');
-            areaStruk.style.display = 'block';
-
-            // 3. Eksekusi Print Browser
-            window.print();
-
-            // 4. Sembunyikan lagi setelah print dialog tertutup/selesai
-            // Delay 1 detik agar proses spooling masuk
-            setTimeout(() => {
-                areaStruk.style.display = 'none';
-            }, 1000);
-        }
-
-        // ==========================================
-        // LOGIKA JAM & WEBSOCKET
-        // ==========================================
         function updateClock() {
             const now = new Date();
             const days = ['Minggu', 'Senin', 'Selasa', 'Rabu', 'Kamis', 'Jumat', 'Sabtu'];
@@ -560,7 +417,6 @@
         setInterval(updateClock, 1000);
         updateClock();
 
-        // WebSocket Listener
         setTimeout(() => {
             if (window.Echo) {
                 window.Echo.channel('antrian-channel')
@@ -664,18 +520,10 @@
             new bootstrap.Modal(document.getElementById('modalLayanan')).show();
         }
 
-        // ==========================================
-        // SUBMIT FORM (AJAX)
-        // ==========================================
         const form = document.getElementById('formAmbilAntrian');
         form.addEventListener('submit', async function(e) {
             e.preventDefault();
             const btn = document.getElementById('btnCetak');
-
-            document.querySelectorAll('.is-invalid').forEach(el => el.classList.remove('is-invalid'));
-            document.querySelectorAll('.invalid-feedback').forEach(el => el.innerText = '');
-
-            // Loading State
             btn.disabled = true;
             document.getElementById('btnText').classList.add('d-none');
             document.getElementById('btnLoading').classList.remove('d-none');
@@ -690,44 +538,17 @@
                     body: new FormData(form)
                 });
                 const result = await response.json();
-
                 if (response.ok && result.success) {
-                    // 1. Tutup Modal Form
                     bootstrap.Modal.getInstance(document.getElementById('modalForm'))?.hide();
-
-                    // 2. Tampilkan Modal Sukses
                     document.getElementById('tiketBerhasil').innerText = result.tiket;
                     new bootstrap.Modal(document.getElementById('modalSukses')).show();
-
-                    // 3. Reset Form
                     form.reset();
-
-                    // 4. 🔥 EKSEKUSI CETAK WINDOW.PRINT 🔥
-                    window.cetakStruk(result);
-
                 } else {
-                    // GAGAL VALIDASI
-                    if (result.errors) {
-                        // Loop error dari Controller dan tempel ke field masing-masing
-                        for (const [field, messages] of Object.entries(result.errors)) {
-                            const inputField = document.querySelector(`[name="${field}"]`);
-                            const errorDiv = document.getElementById(`error-${field}`);
-
-                            if (inputField && errorDiv) {
-                                inputField.classList.add('is-invalid'); // Tambah border merah
-                                errorDiv.innerText = messages[0]; // Tampilkan pesan error pertama
-                            }
-                        }
-                    } else {
-                        // Error umum lain (misal server error)
-                        Swal.fire("Gagal", result.message || "Terjadi kesalahan", "error");
-                    }
+                    Swal.fire("Gagal", result.message || "Periksa data Anda", "error");
                 }
             } catch (error) {
-                console.error(error);
                 Swal.fire("Error", "Gagal menghubungi server", "error");
             } finally {
-                // Reset Button State
                 btn.disabled = false;
                 document.getElementById('btnText').classList.remove('d-none');
                 document.getElementById('btnLoading').classList.add('d-none');

@@ -17,6 +17,7 @@ class Skpd extends Model
         'isaktif',
         'logo_skpd',
         'no_antrian',
+        'external_id_sukma', // <--- TAMBAHKAN INI
     ];
 
     public $incrementing = false;

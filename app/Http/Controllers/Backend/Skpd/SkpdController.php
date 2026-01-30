@@ -177,7 +177,8 @@ class SkpdController extends Controller
             'kepala_skpd' => 'nullable|string|max:255',
             'nip_kepala'  => 'nullable|string|max:25',
             'isaktif'    => 'required|in:0,1',
-            'logo_skpd' => 'required|mimes:jpg,png,svg|max:2048',
+            'logo_skpd' => 'nullable|mimes:jpg,png,svg|max:2048',
+            'external_id_sukma' => 'nullable|numeric',
         ], [
 
             //  'kode_skpd.required' => 'Kode SKPD wajib diisi',
@@ -192,12 +193,12 @@ class SkpdController extends Controller
             'kepala_skpd.max'    => 'Nama Kepala SKPD maksimal 255 karakter',
             'nip_kepala.max'     => 'NIP Kepala maksimal 25 karakter',
 
-            'logo_skpd.required' => 'Logo_skpd wajib diisi',
             'logo_skpd.mimes' => 'Logo_skpd harus format .jpg .png .svg',
             'logo_skpd.max' => 'Ukuran file Logo_skpd maksimal 2 MB',
 
             'isaktif.required'  => 'Status wajib dipilih',
             'isaktif.in'        => 'Status tidak valid',
+            'external_id_sukma.numeric' => 'ID Sukma harus berupa angka',
         ]);
 
         if ($validator->fails()) {
@@ -229,6 +230,7 @@ class SkpdController extends Controller
             $data->kepala_skpd = $request->kepala_skpd;
             $data->nip_kepala  = $request->nip_kepala;
             $data->isaktif    = $request->isaktif;
+            $data->external_id_sukma = $request->external_id_sukma;
             $data->save();
 
             // ===============================
@@ -499,8 +501,9 @@ class SkpdController extends Controller
             'lokasi'       => 'required|string|max:255',
             'kepala_skpd'  => 'nullable|string|max:255',
             'nip_kepala'   => 'nullable|string|max:25',
-            'logo_skpd' => 'mimes:jpg,png,svg|max:2048',
+            'logo_skpd' => 'nullable|mimes:jpg,png,svg|max:2048',
             'isaktif'      => 'required|in:0,1',
+            'external_id_sukma' => 'nullable|numeric',
         ], [
             'nama_skpd.required' => 'Nama SKPD wajib diisi',
             'nama_skpd.max'      => 'Nama SKPD maksimal 255 karakter',
@@ -555,6 +558,7 @@ class SkpdController extends Controller
             $data->kepala_skpd = $request->kepala_skpd;
             $data->nip_kepala  = $request->nip_kepala;
             $data->isaktif     = $request->isaktif;
+            $data->external_id_sukma = $request->external_id_sukma;
             $data->save();
 
             // ===============================
@@ -805,5 +809,56 @@ class SkpdController extends Controller
             ->log('Mengaktifkan kembali user: ' . $user->name);
 
         return response()->json(['success' => 'User berhasil diaktifkan kembali']);
+    }
+
+    public function syncSukma()
+    {
+        try {
+            // 1. Tembak API Sukma Deli (Bypass SSL verify jika perlu)
+            $response = \Illuminate\Support\Facades\Http::withoutVerifying()
+                ->get('https://sukmadeli.deliserdangkab.go.id/api/v1/opd');
+
+            if ($response->failed()) {
+                return response()->json(['error' => 'Gagal menghubungi server Sukma Deli'], 500);
+            }
+
+            $dataApi = $response->json();
+            $listOpd = $dataApi['opd_list'] ?? [];
+            $count   = 0;
+
+            \DB::beginTransaction();
+
+            foreach ($listOpd as $item) {
+                // LOGIKA UTAMA: UPDATE OR CREATE
+                // Sistem akan mencari SKPD berdasarkan 'external_id_sukma'.
+                // - Jika KETEMU: Update nama_skpd-nya (biar sinkron kalau ada perubahan nama).
+                // - Jika TIDAK KETEMU: Buat data baru (UUID otomatis ter-generate oleh Model).
+
+                Skpd::updateOrCreate(
+                    [
+                        'external_id_sukma' => $item['id'] // Kunci Pencarian (ID Sukma)
+                    ],
+                    [
+                        'nama_skpd' => $item['opd'],       // Data yang diupdate/disimpan
+                        'isaktif'   => 1,                  // Default aktif jika baru dibuat
+                        // Field lain biarkan default/null
+                    ]
+                );
+                $count++;
+            }
+
+            \DB::commit();
+
+            return response()->json([
+                'success' => 'Sinkronisasi Berhasil!',
+                'message' => "Berhasil memproses {$count} data OPD dari Sukma Deli."
+            ]);
+        } catch (\Exception $e) {
+            \DB::rollBack();
+            return response()->json([
+                'error' => 'Terjadi kesalahan sistem',
+                'message' => $e->getMessage()
+            ], 500);
+        }
     }
 }

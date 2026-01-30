@@ -49,7 +49,7 @@
     <!--end::Image input-->
     <!--begin::Hint-->
     <div class="form-text">Allowed file types: png, jpg, jpeg.</div>
-    <span class="text-danger error-text logo_error_edit"></span> <!--end::Hint-->
+    <span class="text-danger error-text logo_skpd_error_edit"></span>
 </div>
 <!-- Nama SKPD -->
 <div class="fv-row mb-7">
@@ -68,6 +68,13 @@
 <div class="fv-row mb-7">
     <label class="fw-semibold fs-6 mb-2">NIP Kepala</label>
     <input type="text" name="nip_kepala" class="form-control form-control-solid" value="{{ $user->nip_kepala }}">
+</div>
+
+<div class="fv-row mb-7">
+    <label class="fw-semibold fs-6 mb-2">ID Sukma Deli (External)</label>
+    <input type="number" name="external_id_sukma" class="form-control form-control-solid"
+        value="{{ $user->external_id_sukma }}" placeholder="ID dari API Sukma">
+    <span class="text-danger error-text external_id_sukma_error_edit"></span>
 </div>
 
 <!-- Status -->

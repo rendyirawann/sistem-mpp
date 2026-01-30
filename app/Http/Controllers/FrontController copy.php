@@ -26,22 +26,14 @@ class FrontController extends Controller
     /**
      * HALAMAN KIOS
      */
-    /**
-     * HALAMAN KIOS
-     */
     public function index()
     {
+
         // Ambil SKPD aktif + loket aktif
         $skpd = Skpd::with(['lokets' => function ($q) {
             $q->where('isaktif', 1);
         }])
             ->where('isAktif', true)
-            // GANTI whereHas DENGAN whereRaw UNTUK MENGATASI ERROR COLLATION
-            ->whereRaw("EXISTS (
-                SELECT * FROM lokets 
-                WHERE skpd.id COLLATE utf8mb4_unicode_ci = lokets.skpd_id COLLATE utf8mb4_unicode_ci 
-                AND isaktif = 1
-            )")
             ->get();
 
         return view('kios', compact('skpd'));
@@ -59,14 +51,15 @@ class FrontController extends Controller
             'loket_id' => 'required|exists:lokets,id',
             'nik'      => 'required|numeric|digits:16',
             'nama'     => 'required|string|max:100',
-            'no_hp'    => 'required|numeric|digits_between:10,14',
+            'no_hp'    => 'required|numeric',
         ], [
             // === MESSAGES (Kata-kata Errornya) ===
-            'nik.required' => 'NIK wajib diisi',
-            'nik.digits'   => 'NIK harus 16 digit',
-            'nama.required' => 'Nama wajib diisi',
-            'no_hp.required' => 'Nomor HP wajib diisi',
-            'no_hp.digits_between' => 'Nomor HP minimal 10 dan maksimal 14 digit',
+            'required' => 'Kolom :attribute wajib diisi.',
+            'numeric'  => 'Kolom :attribute harus berupa angka.',
+            'digits'   => 'Kolom :attribute harus berisi :digits digit.',
+            'exists'   => 'Data :attribute tidak ditemukan di sistem.',
+            'max'      => 'Kolom :attribute maksimal :max karakter.',
+            'string'   => 'Kolom :attribute harus berupa teks.',
         ], [
             // === ATTRIBUTES (Alias Nama Kolom Biar Cakep) ===
             // Biar errornya "NIK harus angka", bukan "nik harus angka" (huruf kecil)
@@ -82,7 +75,7 @@ class FrontController extends Controller
             if ($request->expectsJson() || $request->ajax()) {
                 return response()->json([
                     'success' => false,
-                    'message' => 'Silakan perbaiki data form',
+                    'message' => 'Validasi gagal',
                     'errors'  => $validator->errors()
                 ], 422);
             }
@@ -125,25 +118,36 @@ class FrontController extends Controller
             'waktu_ambil'   => now(),
         ]);
 
-        // 5. BROADCAST WEBSOCKET (REVERB)
+        // ================= EKSEKUSI CETAK (BAGIAN PENTING) =================
+        // ================= EKSEKUSI CETAK =================
+        try {
+            $namaPrinter = "smb://localhost/printer_kios";
+            // AMBIL NAMA TENANT (SKPD) DARI RELASI
+            // Pastikan $loket->skpd ada isinya (biasanya otomatis terambil karena relasi belongsTo)
+            $namaTenant = $loket->skpd->nama_skpd;
+            // $this->printTiket($kodeTiket, $loket->nama_loket, $namaPrinter);
+            $this->printTiket($kodeTiket, $namaTenant, $namaPrinter);
+        } catch (\Exception $e) {
+            Log::error("Gagal Cetak Tiket: " . $e->getMessage());
+        }
+
+        // Wrap Event di Try-Catch agar jika Reverb error, aplikasi tidak crash
         try {
             AntrianBaru::dispatch();
         } catch (\Exception $e) {
             Log::error("Gagal Broadcast WebSocket: " . $e->getMessage());
         }
 
-        // 6. RESPON KE BROWSER (PENTING!)
-        // Kita kirim Data Tiket agar Browser yang mencetak via Recta
+        // 🔥 UBAH BAGIAN RETURN INI
+        // Jika request dari AJAX (Javascript), kembalikan JSON
         if ($request->expectsJson() || $request->ajax()) {
             return response()->json([
-                'success'    => true,
-                'tiket'      => $kodeTiket,
-                'layanan'    => $loket->skpd->nama_skpd, // Nama Dinas
-                'loket'      => $loket->nama_loket,      // Nama Loket
-                'tgl'        => now()->format('d-m-Y H:i'),
-                'message'    => 'Berhasil mengambil antrian'
+                'success' => true,
+                'tiket'   => $kodeTiket,
+                'message' => 'Berhasil mengambil antrian'
             ]);
         }
+
         // Fallback untuk request biasa
         return redirect()->back()->with('tiket', $kodeTiket);
     }
@@ -265,8 +269,7 @@ class FrontController extends Controller
         // Angka 30 adalah batas aman karakter per baris untuk kertas 58mm (biasanya max 32)
         // Parameter "\n" memaksa pindah baris
         // Parameter false artinya jangan potong kata di tengah jalan (tunggu spasi)
-        // Angka 45-48 adalah batas aman karakter per baris untuk kertas 80mm
-        $namaSkpdWrapped = wordwrap($namaSkpdUpper, 45, "\n", false);
+        $namaSkpdWrapped = wordwrap($namaSkpdUpper, 30, "\n", false);
 
         $printer->text($namaSkpdWrapped . "\n");
         // Waktu

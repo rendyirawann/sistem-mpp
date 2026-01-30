@@ -84,7 +84,7 @@
                             <div class="input-group input-group-lg input-group-solid mb-5">
                                 <input type="text" id="no_antrian"
                                     class="form-control form-control-solid text-center fs-2 fw-bolder text-uppercase"
-                                    placeholder="A-001" maxlength="7" autocomplete="off" />
+                                    placeholder="A-001" maxlength="25" autocomplete="off" />
 
                                 <button type="button" onclick="cekAntrian()" class="btn btn-primary" id="btn-cek">
                                     <i class="ki-outline ki-magnifier fs-2"></i> Cari
@@ -198,12 +198,9 @@
                                         class="form-select form-select-solid save-local" data-control="select2"
                                         data-placeholder="Pilih Jenis Layanan" required>
                                         <option></option>
-                                        @foreach ($pelayanan as $item)
-                                            <option value="{{ $item['id'] }}">
-                                                {{ $item['name'] ?? $item['nama_layanan'] }}</option>
-                                        @endforeach
+                                        {{-- OPTION AKAN DIISI OTOMATIS OLEH JAVASCRIPT --}}
                                     </select>
-                                    <div class="form-text text-muted">*Layanan otomatis dari sistem (Default OPD)</div>
+                                    <div class="form-text text-muted" id="loading-layanan"></div>
                                 </div>
                             </div>
 
@@ -395,6 +392,7 @@
         }
 
         // 3. CEK ANTRIAN
+        // 3. CEK ANTRIAN
         function cekAntrian() {
             let no = $('#no_antrian').val();
             let btn = $('#btn-cek');
@@ -421,9 +419,15 @@
                     if (res.status === 'success') {
                         localStorage.setItem('skm_session', JSON.stringify({
                             no_antrian: no,
-                            data: res.data
+                            data: res.data,
+                            services: res.services // Simpan layanan di localstorage juga
                         }));
+
                         applyData(res.data, no);
+
+                        // 🔥 POPULASI DROPDOWN LAYANAN DARI API
+                        populateServices(res.services);
+
                         goToStep(2);
                     } else {
                         $('#text-error').text(res.message);
@@ -437,6 +441,55 @@
                     $('#error-msg').removeClass('d-none');
                 }
             });
+        }
+
+        // FUNGSI BARU: Render Option Layanan
+        // FUNGSI BARU: Render Option Layanan (Versi Auto-Detect)
+        function populateServices(services) {
+            let select = $('#id_pelayanan');
+            select.empty();
+            select.append('<option></option>');
+
+            console.log("🔥 DEBUG DATA API:", services); // Cek ini di Console Browser
+
+            if (Array.isArray(services) && services.length > 0) {
+                services.forEach(function(item) {
+
+                    // 1. Coba tebak nama field yang umum digunakan
+                    let text = item.nama_layanan ||
+                        item.jenis_layanan ||
+                        item.layanan ||
+                        item.opd ||
+                        item.nama;
+
+                    // 2. JIKA MASIH KOSONG, Kita cari manual field yang isinya huruf (String)
+                    if (!text) {
+                        // Ambil semua key (misal: ['id', 'nm_pelayanan'])
+                        let keys = Object.keys(item);
+                        // Cari key yang BUKAN 'id' dan isinya adalah TEXT
+                        let foundKey = keys.find(k => k !== 'id' && typeof item[k] === 'string');
+                        if (foundKey) {
+                            text = item[foundKey];
+                        }
+                    }
+
+                    // 3. Fallback terakhir jika benar-benar tidak ketemu
+                    text = text || "Layanan Tidak Bernama (Cek Console)";
+
+                    select.append(new Option(text, item.id));
+                });
+
+                $('#loading-layanan').html(
+                    '<span class="text-success"><i class="ki-outline ki-check-circle fs-7"></i> Data layanan berhasil ditarik (' +
+                    services.length + ' item).</span>'
+                );
+            } else {
+                $('#loading-layanan').html(
+                    '<span class="text-danger fw-bold"><i class="ki-outline ki-cross-circle fs-7"></i> Data layanan kosong atau ID Sukma salah.</span>'
+                );
+            }
+
+            select.trigger('change');
         }
 
         // Helper Apply Data
@@ -465,13 +518,19 @@
             }
         });
 
-        // 5. RESTORE SESSION
+        // UPDATE FUNGSI RESTORE SESSION
         function restoreSession() {
             let session = localStorage.getItem('skm_session');
             if (session) {
                 let sessData = JSON.parse(session);
                 $('#no_antrian').val(sessData.no_antrian);
                 applyData(sessData.data, sessData.no_antrian);
+
+                // Restore Layanan Dulu sebelum restore value yang dipilih
+                if (sessData.services) {
+                    populateServices(sessData.services);
+                }
+
                 goToStep(2);
 
                 $('.save-local').each(function() {
@@ -485,7 +544,6 @@
                             }
                         } else {
                             $(this).val(storedVal);
-                            // 🔥 PENTING: Trigger change agar Select2 update tampilan
                             if ($(this).is('select')) {
                                 $(this).trigger('change.select2');
                             }
