@@ -50,35 +50,128 @@ class FrontController extends Controller
     /**
      * AMBIL ANTRIAN
      */
+    // public function ambilAntrian(Request $request)
+    // {
+
+    //     $validator = Validator::make($request->all(), [
+    //         // === RULES (Aturannya) ===
+    //         'skpd_id'  => 'required|exists:skpd,id',
+    //         'loket_id' => 'required|exists:lokets,id',
+    //         'nik'      => 'required|numeric|digits:16',
+    //         'nama'     => 'required|string|max:100',
+    //         'no_hp'    => 'required|numeric|digits_between:10,14',
+    //     ], [
+    //         // === MESSAGES (Kata-kata Errornya) ===
+    //         'nik.required' => 'NIK wajib diisi',
+    //         'nik.digits'   => 'NIK harus 16 digit',
+    //         'nama.required' => 'Nama wajib diisi',
+    //         'no_hp.required' => 'Nomor HP wajib diisi',
+    //         'no_hp.digits_between' => 'Nomor HP minimal 10 dan maksimal 14 digit',
+    //     ], [
+    //         // === ATTRIBUTES (Alias Nama Kolom Biar Cakep) ===
+    //         // Biar errornya "NIK harus angka", bukan "nik harus angka" (huruf kecil)
+    //         'skpd_id'  => 'SKPD',
+    //         'loket_id' => 'Loket',
+    //         'nik'      => 'NIK',
+    //         'nama'     => 'Nama Lengkap',
+    //         'no_hp'    => 'Nomor HP',
+    //     ]);
+    //     // 2. Cek Jika Gagal
+    //     if ($validator->fails()) {
+    //         // Kalau Request datang dari AJAX, balikin JSON
+    //         if ($request->expectsJson() || $request->ajax()) {
+    //             return response()->json([
+    //                 'success' => false,
+    //                 'message' => 'Silakan perbaiki data form',
+    //                 'errors'  => $validator->errors()
+    //             ], 422);
+    //         }
+
+    //         // Kalau Request biasa, balikin redirect kayak biasa
+    //         return redirect()->back()->withErrors($validator)->withInput();
+    //     }
+
+    //     // CUSTOMER
+    //     $customer = Customer::firstOrCreate(
+    //         ['nik' => $request->nik],
+    //         [
+    //             'nama'  => $request->nama,
+    //             'no_hp' => $request->no_hp,
+    //         ]
+    //     );
+
+    //     // NOMOR URUT HARI INI PER LOKET
+    //     $tanggal = Carbon::today();
+
+    //     $lastUrut = Antrian::where('loket_id', $request->loket_id)
+    //         ->whereDate('tanggal', $tanggal)
+    //         ->max('no_urut');
+
+    //     $nomorUrut = $lastUrut ? $lastUrut + 1 : 1;
+
+    //     // PREFIX DARI DB (prefix_tenant)
+    //     $loket = Loket::findOrFail($request->loket_id);
+    //     $kodeTiket = $loket->prefix_tenant . '-' . str_pad($nomorUrut, 3, '0', STR_PAD_LEFT);
+
+    //     // SIMPAN ANTRIAN
+    //     Antrian::create([
+    //         'skpd_id'       => $request->skpd_id,
+    //         'loket_id'      => $request->loket_id,
+    //         'customer_id'   => $customer->id,
+    //         'no_urut'    => $nomorUrut,
+    //         'no_antrian' => $kodeTiket,
+    //         'tanggal'       => $tanggal,
+    //         'status'        => 0,
+    //         'waktu_ambil'   => now(),
+    //     ]);
+
+    //     // 5. BROADCAST WEBSOCKET (REVERB)
+    //     try {
+    //         AntrianBaru::dispatch();
+    //     } catch (\Exception $e) {
+    //         Log::error("Gagal Broadcast WebSocket: " . $e->getMessage());
+    //     }
+
+    //     // 6. RESPON KE BROWSER (PENTING!)
+    //     // Kita kirim Data Tiket agar Browser yang mencetak via Recta
+    //     if ($request->expectsJson() || $request->ajax()) {
+    //         return response()->json([
+    //             'success'    => true,
+    //             'tiket'      => $kodeTiket,
+    //             'layanan'    => $loket->skpd->nama_skpd, // Nama Dinas
+    //             'loket'      => $loket->nama_loket,      // Nama Loket
+    //             'tgl'        => now()->format('d-m-Y H:i'),
+    //             'message'    => 'Berhasil mengambil antrian'
+    //         ]);
+    //     }
+    //     // Fallback untuk request biasa
+    //     return redirect()->back()->with('tiket', $kodeTiket);
+    // }
+
     public function ambilAntrian(Request $request)
     {
-
+        // 1. VALIDASI
         $validator = Validator::make($request->all(), [
-            // === RULES (Aturannya) ===
             'skpd_id'  => 'required|exists:skpd,id',
             'loket_id' => 'required|exists:lokets,id',
             'nik'      => 'required|numeric|digits:16',
             'nama'     => 'required|string|max:100',
             'no_hp'    => 'required|numeric|digits_between:10,14',
         ], [
-            // === MESSAGES (Kata-kata Errornya) ===
             'nik.required' => 'NIK wajib diisi',
             'nik.digits'   => 'NIK harus 16 digit',
             'nama.required' => 'Nama wajib diisi',
             'no_hp.required' => 'Nomor HP wajib diisi',
             'no_hp.digits_between' => 'Nomor HP minimal 10 dan maksimal 14 digit',
         ], [
-            // === ATTRIBUTES (Alias Nama Kolom Biar Cakep) ===
-            // Biar errornya "NIK harus angka", bukan "nik harus angka" (huruf kecil)
             'skpd_id'  => 'SKPD',
             'loket_id' => 'Loket',
             'nik'      => 'NIK',
             'nama'     => 'Nama Lengkap',
             'no_hp'    => 'Nomor HP',
         ]);
-        // 2. Cek Jika Gagal
+
         if ($validator->fails()) {
-            // Kalau Request datang dari AJAX, balikin JSON
             if ($request->expectsJson() || $request->ajax()) {
                 return response()->json([
                     'success' => false,
@@ -86,66 +179,79 @@ class FrontController extends Controller
                     'errors'  => $validator->errors()
                 ], 422);
             }
-
-            // Kalau Request biasa, balikin redirect kayak biasa
             return redirect()->back()->withErrors($validator)->withInput();
         }
 
-        // CUSTOMER
-        $customer = Customer::firstOrCreate(
-            ['nik' => $request->nik],
-            [
-                'nama'  => $request->nama,
-                'no_hp' => $request->no_hp,
-            ]
-        );
-
-        // NOMOR URUT HARI INI PER LOKET
-        $tanggal = Carbon::today();
-
-        $lastUrut = Antrian::where('loket_id', $request->loket_id)
-            ->whereDate('tanggal', $tanggal)
-            ->max('no_urut');
-
-        $nomorUrut = $lastUrut ? $lastUrut + 1 : 1;
-
-        // PREFIX DARI DB (prefix_tenant)
-        $loket = Loket::findOrFail($request->loket_id);
-        $kodeTiket = $loket->prefix_tenant . '-' . str_pad($nomorUrut, 3, '0', STR_PAD_LEFT);
-
-        // SIMPAN ANTRIAN
-        Antrian::create([
-            'skpd_id'       => $request->skpd_id,
-            'loket_id'      => $request->loket_id,
-            'customer_id'   => $customer->id,
-            'no_urut'    => $nomorUrut,
-            'no_antrian' => $kodeTiket,
-            'tanggal'       => $tanggal,
-            'status'        => 0,
-            'waktu_ambil'   => now(),
-        ]);
-
-        // 5. BROADCAST WEBSOCKET (REVERB)
+        DB::beginTransaction(); // Tambahkan Transaction biar aman
         try {
-            AntrianBaru::dispatch();
-        } catch (\Exception $e) {
-            Log::error("Gagal Broadcast WebSocket: " . $e->getMessage());
-        }
+            // 2. SIMPAN / UPDATE CUSTOMER
+            $customer = Customer::firstOrCreate(
+                ['nik' => $request->nik],
+                [
+                    'nama'  => $request->nama,
+                    'no_hp' => $request->no_hp,
+                ]
+            );
 
-        // 6. RESPON KE BROWSER (PENTING!)
-        // Kita kirim Data Tiket agar Browser yang mencetak via Recta
-        if ($request->expectsJson() || $request->ajax()) {
-            return response()->json([
-                'success'    => true,
-                'tiket'      => $kodeTiket,
-                'layanan'    => $loket->skpd->nama_skpd, // Nama Dinas
-                'loket'      => $loket->nama_loket,      // Nama Loket
-                'tgl'        => now()->format('d-m-Y H:i'),
-                'message'    => 'Berhasil mengambil antrian'
+            // 3. AMBIL DATA LOKET DULU (Untuk Cek Prefix)
+            $loket = Loket::findOrFail($request->loket_id); //
+            $prefixSama = $loket->prefix_tenant;
+            $tanggal = Carbon::today();
+
+            // 4. 🔥 LOGIKA NOMOR URUT BARU (OPSI B) 🔥
+            // Cari max nomor urut dari SEMUA loket yang punya prefix sama hari ini
+            $lastUrut = Antrian::whereDate('tanggal', $tanggal)
+                ->whereHas('loket', function ($q) use ($prefixSama) {
+                    $q->where('prefix_tenant', $prefixSama);
+                })
+                ->max('no_urut'); // Gunakan max() biar urutan tidak reset jika ada data dihapus
+
+            $nomorUrut = $lastUrut ? $lastUrut + 1 : 1;
+
+            // 5. GENERATE KODE TIKET (Contoh: BS-005)
+            $kodeTiket = $loket->prefix_tenant . '-' . str_pad($nomorUrut, 3, '0', STR_PAD_LEFT);
+
+            // 6. SIMPAN ANTRIAN
+            Antrian::create([
+                'skpd_id'     => $request->skpd_id,
+                'loket_id'    => $request->loket_id,
+                'customer_id' => $customer->id,
+                'no_urut'     => $nomorUrut, // Angka murni (misal: 5)
+                'no_antrian'  => $kodeTiket, // String tiket (misal: BS-005)
+                'tanggal'     => $tanggal,
+                'status'      => 0,
+                'waktu_ambil' => now(),
             ]);
+
+            DB::commit();
+
+            // 7. BROADCAST WEBSOCKET
+            try {
+                AntrianBaru::dispatch();
+            } catch (\Exception $e) {
+                Log::error("Gagal Broadcast WebSocket: " . $e->getMessage());
+            }
+
+            // 8. RESPON JSON
+            if ($request->expectsJson() || $request->ajax()) {
+                return response()->json([
+                    'success'    => true,
+                    'tiket'      => $kodeTiket,
+                    'layanan'    => $loket->skpd->nama_skpd,
+                    'loket'      => $loket->nama_loket,
+                    'tgl'        => now()->format('d-m-Y H:i'),
+                    'message'    => 'Berhasil mengambil antrian'
+                ]);
+            }
+
+            return redirect()->back()->with('tiket', $kodeTiket);
+        } catch (\Exception $e) {
+            DB::rollBack();
+            if ($request->expectsJson() || $request->ajax()) {
+                return response()->json(['success' => false, 'message' => $e->getMessage()], 500);
+            }
+            return redirect()->back()->with('error', 'Terjadi kesalahan sistem');
         }
-        // Fallback untuk request biasa
-        return redirect()->back()->with('tiket', $kodeTiket);
     }
 
     // public function checkLastPanggilan()

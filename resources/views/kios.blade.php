@@ -250,6 +250,12 @@
 
         {{-- Header Kanan --}}
         <div class="d-flex flex-stack px-6 py-4 bg-white shadow-sm z-index-1">
+            <button type="button"
+                class="btn btn-icon btn-light-info btn-sm w-35px h-35px rounded-circle"
+                onclick="window.location.reload();"
+                title="Refresh">
+                <i class="fa fa-rotate-right fs-4"></i>
+            </button>
             <div class="d-flex flex-column">
                 <h1 class="text-dark fw-bolder fs-3 mb-0">Daftar Layanan</h1>
                 <span class="text-muted fw-bold fs-8">Pilih instansi tujuan Anda</span>

@@ -292,7 +292,14 @@ class AntrianController extends Controller
         // === SKENARIO A: RECALL (PANGGIL ULANG) ===
         // Recall boleh dilakukan kapan saja asalkan audio lock sedang kosong
         if ($antrian->status == 1) {
-            $this->eksekusiPanggil($antrian); // Refactor ke fungsi bawah biar rapi
+            // 🔥 PERBAIKAN UTAMA DISINI 🔥
+            // Kita harus update waktu_panggil agar antrian ini dianggap "Terbaru" lagi oleh sistem
+            $antrian->update([
+                'waktu_panggil' => now()
+            ]);
+
+            $this->eksekusiPanggil($antrian);
+
             return response()->json(['success' => true, 'message' => 'Antrian dipanggil ulang']);
         }
 
