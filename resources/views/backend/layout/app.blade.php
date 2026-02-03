@@ -183,6 +183,37 @@ License: For each use you must have a valid license purchased only from above li
     <!--begin::Global Javascript Bundle(mandatory for all pages)-->
     <script src="{{ asset('assets/plugins/global/plugins.bundle.js') }}"></script>
     <script src="{{ asset('assets/js/scripts.bundle.js') }}"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Pastikan User sudah login & Echo sudah jalan
+            @auth
+            const userId = "{{ auth()->id() }}";
+
+            // Listen ke Private Channel User
+            // Pastikan Anda sudah setup Laravel Echo & Reverb/Pusher di bootstrap.js
+            window.Echo.private(`App.Models.User.${userId}`)
+                .listen('ForceLogoutNotification', (e) => {
+
+                    // Tampilkan Pop Up Peringatan
+                    Swal.fire({
+                        title: 'Keamanan Akun',
+                        text: e.message,
+                        icon: 'warning',
+                        allowOutsideClick: false, // User GABISA klik di luar
+                        allowEscapeKey: false, // User GABISA tekan Esc
+                        confirmButtonText: 'OK, Logout',
+                        confirmButtonColor: '#d33'
+                    }).then((result) => {
+                        // Ketika klik OK, paksa reload halaman
+                        // Karena di server session sudah mati (logoutOtherDevices),
+                        // reload ini akan otomatis melempar user ke halaman Login.
+                        window.location.href = "{{ route('login') }}";
+                    });
+
+                });
+        @endauth
+        });
+    </script>
     <!--end::Global Javascript Bundle-->
     @stack('scripts')
     <!--end::Javascript-->

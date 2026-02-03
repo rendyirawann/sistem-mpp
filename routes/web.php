@@ -64,6 +64,8 @@ Route::get('/dashboard/detail', [DashboardController::class, 'detail'])->middlew
 
 Route::middleware('auth')->group(function () {
 
+    Route::get('/dashboard/export', [DashboardController::class, 'exportLaporan'])->name('dashboard.export');
+
     Route::get('/my-account', [AccountController::class, 'index'])->name('account.index');
     Route::get('my-account/{id}/avatar', [AccountController::class, 'editAvatar'])->name('avatar-edit');
     Route::post('my-account/{id}/update-avatar', [AccountController::class, 'updateAvatar'])->name('avatar-update');

@@ -163,140 +163,176 @@
 
 <body class="bg-body d-flex flex-column flex-lg-row h-lg-100vh overflow-lg-hidden">
 
-    {{-- ================= KIRI: SIDEBAR INFORMASI ================= --}}
-    <div
-        class="d-flex flex-column justify-content-between w-100 w-lg-compact sidebar-gradient text-white p-6 p-lg-4 shadow-lg z-index-2 position-relative overflow-hidden">
+    {{-- ================= WRAPPER UTAMA ================= --}}
+    <div class="d-flex flex-column flex-lg-row vh-100 overflow-hidden bg-light">
 
-        <div class="position-absolute top-0 end-0 p-5 opacity-10">
-            <i class="ki-outline ki-abstract-26 fs-5x text-white"></i>
-        </div>
+        {{-- ================= KIRI: SIDEBAR INFORMASI (RESPONSIVE) ================= --}}
+        <div class="sidebar-gradient text-white shadow-lg d-flex flex-column z-index-2"
+            style="width: 100%; max-height: 100vh; flex: 0 0 auto;">
 
-        {{-- HEADER --}}
-        <div class="text-center mb-2 position-relative z-index-1">
-            <div class="symbol symbol-40px symbol-lg-50px mb-2">
-                <img src="{{ asset('images/logo_pemda.png') }}" alt="Logo" class="img-fluid"
-                    style="filter: drop-shadow(0 4px 6px rgba(0,0,0,0.3));">
-            </div>
-            <h1 class="fw-bolder text-white fs-4 fs-lg-5 mb-0 text-uppercase">Mall Pelayanan Publik</h1>
-            <span class="text-white opacity-75 fs-9 fw-bold ls-2">DELI SERDANG</span>
+            <style>
+                @media (min-width: 992px) {
+                    .sidebar-gradient {
+                        width: 350px !important;
+                    }
+                }
 
-            {{-- JAM DIGITAL --}}
-            <div class="glass-card rounded-3 p-2 mt-3 text-center">
-                <div class="d-flex justify-content-center align-items-baseline gap-1">
-                    <h1 class="fs-1 fs-lg-1 fw-bolder text-white mb-0" id="jam-jam">00</h1>
-                    <span class="fs-2 fw-bold text-white blink">:</span>
-                    <h1 class="fs-1 fs-lg-1 fw-bolder text-white mb-0" id="jam-menit">00</h1>
-                    <span class="fs-5 fw-bold text-warning ms-1" id="jam-detik">00</span>
-                </div>
-                <div class="separator separator-dashed separator-content border-white opacity-25 my-1"></div>
-                <span id="jam-tanggal" class="fw-semibold fs-9 text-white opacity-90">-</span>
-            </div>
-        </div>
+                .glass-card {
+                    background: rgba(255, 255, 255, 0.1);
+                    backdrop-filter: blur(10px);
+                    border: 1px solid rgba(255, 255, 255, 0.2);
+                }
+            </style>
 
-        {{-- STATUS PANGGILAN --}}
-        <div class="d-flex flex-column gap-3 my-4 my-lg-0 position-relative z-index-1">
-            {{-- CARD 1: SEDANG DIPANGGIL --}}
-            <div id="notifikasiPanggilan" class="card border-0 shadow-sm bg-warning position-relative overflow-hidden">
-                <div class="card-body p-4 p-lg-3 text-center d-flex flex-column align-items-center">
-                    <span class="badge badge-white text-white fw-bolder fs-9 px-2 py-1 mb-1 shadow-sm">
-                        <i class="fa fa-volume-high text-white me-1 animate-pulse"></i>SEDANG MEMANGGIL ANTRIAN
-                    </span>
-                    <h1 id="panggilanNo" class="fs-3hx fw-black text-white mb-0 lh-1">---</h1>
-                    <div class="fw-bold text-white fs-7 text-uppercase mb-1 text-truncate w-100 px-1"
-                        id="panggilanSkpd">---</div>
-                    <div class="bg-white bg-opacity-20 rounded-pill px-3 py-1 w-100">
-                        <span id="panggilanLoket"
-                            class="fw-bold text-white fs-8 text-uppercase d-block text-truncate">Menunggu...</span>
+            <div class="p-6 p-lg-8 d-flex flex-column justify-content-between h-100 overflow-y-auto">
+
+                {{-- HEADER: LOGO DI ATAS TENGAH (SESUAI FIGMA) --}}
+                <div class="text-center mb-8">
+                    <div class="symbol symbol-50px symbol-lg-70px mb-4">
+                        <img src="{{ asset('images/logo_pemda.png') }}" alt="Logo"
+                            style="filter: drop-shadow(0 4px 6px rgba(0,0,0,0.3));">
                     </div>
-                </div>
-            </div>
-
-            {{-- CARD 2: GILIRAN BERIKUTNYA --}}
-            <div class="card border-0 shadow-sm bg-dark position-relative overflow-hidden">
-                <div class="card-body p-3 p-lg-3 text-center d-flex flex-column align-items-center">
-                    <span class="text-gray-500 fw-bold fs-9 text-uppercase ls-1">ANTRIAN BERIKUTNYA</span>
-                    <h1 id="nextNo" class="fs-2 fw-black text-white mb-0">---</h1>
-                    <div class="fw-semibold text-gray-400 fs-9 text-uppercase w-100 text-truncate" id="nextSkpd">---
+                    <div class="mb-2">
+                        <h1 class="fw-bolder text-white fs-4 fs-lg-3 mb-0 text-uppercase lh-sm">Mall Pelayanan Publik
+                        </h1>
+                        <span class="text-white opacity-75 fs-9 fw-bold ls-3 text-uppercase">Kabupaten Deli
+                            Serdang</span>
                     </div>
-                    <div class="separator border-gray-700 w-100 my-1"></div>
-                    <span id="nextLoket" class="text-gray-500 fs-9 fw-bold">Belum ada antrian</span>
-                </div>
-            </div>
-        </div>
 
-        {{-- FOOTER INFO --}}
-        <div class="mt-2 position-relative z-index-1">
-            <div class="glass-card rounded-3 p-2 d-flex flex-column gap-1">
-                <div class="d-flex align-items-center">
-                    <div class="symbol symbol-20px me-2">
-                        <div class="symbol-label bg-white bg-opacity-20 text-white"><i class="fa fa-clock fs-9"></i>
+                    {{-- JAM DIGITAL --}}
+                    <div class="glass-card rounded-4 p-4 mt-5">
+                        <div class="d-flex justify-content-center align-items-center gap-2">
+                            <h1 class="fs-2hx fs-lg-3hx fw-bolder text-white mb-0" id="jam-jam">00</h1>
+                            <span class="fs-1 fw-bold text-white blink">:</span>
+                            <h1 class="fs-2hx fs-lg-3hx fw-bolder text-white mb-0" id="jam-menit">00</h1>
+                            <div class="d-flex flex-column align-items-start">
+                                <span class="fs-3 fw-bold text-warning lh-1" id="jam-detik">00</span>
+                            </div>
                         </div>
-                    </div>
-                    <div class="d-flex flex-column">
-                        <span class="fs-10 fw-bold text-white opacity-75 text-uppercase text-nowrap">Jam
-                            Operasional</span>
-                        <span class="fs-9 fw-bolder text-white">08.00 – 15.00 WIB</span>
+                        <div class="separator border-white opacity-20 my-2 w-50 mx-auto"></div>
+                        <span id="jam-tanggal" class="fw-semibold fs-7 text-white opacity-90">Memuat Tanggal...</span>
                     </div>
                 </div>
-            </div>
-            <div class="text-center mt-2">
-                <span class="text-white opacity-50 fs-10">&copy; {{ date('Y') }} MPP DELI SERDANG</span>
-            </div>
-        </div>
-    </div>
 
-    {{-- ================= KANAN: MENU UTAMA ================= --}}
-    <div class="d-flex flex-column flex-lg-row-fluid bg-light overflow-hidden">
-
-        {{-- Header Kanan --}}
-        <div class="d-flex flex-stack px-6 py-4 bg-white shadow-sm z-index-1">
-            <button type="button"
-                class="btn btn-icon btn-light-info btn-sm w-35px h-35px rounded-circle"
-                onclick="window.location.reload();"
-                title="Refresh">
-                <i class="fa fa-rotate-right fs-4"></i>
-            </button>
-            <div class="d-flex flex-column">
-                <h1 class="text-dark fw-bolder fs-3 mb-0">Daftar Layanan</h1>
-                <span class="text-muted fw-bold fs-8">Pilih instansi tujuan Anda</span>
-            </div>
-            <div class="d-flex align-items-center gap-2">
-                <button type="button" class="btn btn-icon btn-light-primary btn-sm w-35px h-35px rounded-circle"
-                    data-bs-toggle="modal" data-bs-target="#modalLokasi">
-                    <i class="fa fa-map-location-dot fs-4"></i>
-                </button>
-                <div
-                    class="d-flex align-items-center bg-light-success rounded-pill px-3 py-1 border border-success border-dashed">
-                    <span class="bullet bullet-dot bg-success h-6px w-6px me-2 animation-blink"></span>
-                    <span class="text-success fw-bold fs-9 text-nowrap">Online</span>
-                </div>
-            </div>
-        </div>
-
-        {{-- Grid SKPD --}}
-        <div class="p-4 p-lg-6 scroll-smooth overflow-auto flex-grow-1 pb-15">
-            <div class="row g-4">
-                @foreach ($skpd as $item)
-                    <div class="col-6 col-sm-6 col-md-4 col-xl-3">
-                        <div class="card card-flush h-100 border-0 shadow-sm card-service"
-                            onclick="openLayanan('{{ $item->id }}')">
-                            <div
-                                class="card-body d-flex flex-column justify-content-center align-items-center text-center p-4">
-                                <div
-                                    class="icon-wrapper symbol symbol-45px symbol-lg-50px symbol-circle bg-light-primary mb-3 d-flex justify-content-center align-items-center transition-all">
-                                    @if ($item->logo_skpd)
-                                        {{-- Gunakan Icon Static untuk Performa atau Image --}}
-                                        <i class="fa fa-building-columns fs-2 text-primary"></i>
-                                    @else
-                                        <i class="fa fa-building fs-2 text-primary"></i>
-                                    @endif
-                                </div>
-                                <span
-                                    class="text-gray-800 fw-bold fs-7 fs-lg-6 mb-0 lh-sm line-clamp-2">{{ $item->nama_skpd }}</span>
+                {{-- STATUS PANGGILAN --}}
+                <div class="d-flex flex-column gap-4 mb-8">
+                    {{-- CARD 1: SEDANG DIPANGGIL --}}
+                    <div id="notifikasiPanggilan"
+                        class="card border-0 shadow-sm bg-warning position-relative overflow-hidden">
+                        <div class="card-body p-5 text-center">
+                            <span
+                                class="badge badge-white text-white fw-bolder fs-9 px-3 py-2 mb-3 shadow-sm rounded-pill">
+                                <i class="fa fa-volume-high text-white me-1 animate-pulse"></i> SEDANG MEMANGGIL
+                            </span>
+                            <h1 id="panggilanNo" class="fs-4hx fw-black text-white mb-0 lh-1">---</h1>
+                            <div class="fw-bold text-white fs-6 text-uppercase my-2 text-truncate px-2"
+                                id="panggilanSkpd">Menunggu...</div>
+                            <div class="bg-dark bg-opacity-10 rounded-pill px-4 py-2 mt-2">
+                                <span id="panggilanLoket" class="fw-bolder text-white fs-8 text-uppercase">ANTRIAN
+                                    KOSONG</span>
                             </div>
                         </div>
                     </div>
-                @endforeach
+
+                    {{-- CARD 2: GILIRAN BERIKUTNYA --}}
+                    <div class="card border-0 shadow-sm bg-dark position-relative overflow-hidden">
+                        <div class="card-body p-4 text-center">
+                            <span class="text-gray-500 fw-bold fs-9 text-uppercase ls-2">BERIKUTNYA</span>
+                            <h1 id="nextNo" class="fs-1 fw-black text-white mb-1">---</h1>
+                            <div class="fw-semibold text-gray-500 fs-9 text-uppercase text-truncate" id="nextSkpd">
+                                TIDAK ADA ANTRIAN</div>
+                        </div>
+                    </div>
+                </div>
+
+                {{-- FOOTER INFO: HARI & JAM OPERASIONAL --}}
+                <div class="mt-auto">
+                    <div class="glass-card rounded-3 p-4 mb-4">
+                        <div class="d-flex align-items-start gap-3">
+                            <div class="symbol symbol-30px">
+                                <div class="symbol-label bg-white bg-opacity-20 text-white">
+                                    <i class="fa fa-clock fs-6"></i>
+                                </div>
+                            </div>
+                            <div class="d-flex flex-column">
+                                <span class="fs-10 fw-bold text-white opacity-75 text-uppercase mb-1">Jam
+                                    Operasional</span>
+                                <div class="d-flex flex-column gap-1">
+                                    <div class="d-flex justify-content-between align-items-center gap-4">
+                                        <span class="fs-8 fw-bold text-white">Senin - Kamis</span>
+                                        <span class="fs-8 fw-bolder text-white">08.00 - 15.00</span>
+                                    </div>
+                                    <div class="d-flex justify-content-between align-items-center gap-4">
+                                        <span class="fs-8 fw-bold text-white">Jumat</span>
+                                        <span class="fs-8 fw-bolder text-white">08.00 - 15.30</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="text-center">
+                        <span class="text-white opacity-50 fs-10">&copy; {{ date('Y') }} MPP DELI SERDANG</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        {{-- ================= KANAN: MENU UTAMA (FLEX GROW) ================= --}}
+        <div class="d-flex flex-column flex-row-fluid overflow-hidden">
+
+            {{-- Header Kanan --}}
+            <div class="d-flex flex-stack px-8 py-6 bg-white shadow-sm z-index-1">
+                <div class="d-flex align-items-center gap-4">
+                    {{-- Tombol Refresh Rendy --}}
+                    <button type="button" class="btn btn-icon btn-light-info btn-md rounded-circle shadow-sm"
+                        onclick="window.location.reload();" title="Refresh">
+                        <i class="fa fa-rotate-right fs-4"></i>
+                    </button>
+                    <div class="d-flex flex-column">
+                        <h1 class="text-dark fw-bolder fs-2 mb-0">Daftar Layanan MPP</h1>
+                        <span class="text-muted fw-bold fs-7">Silakan pilih Instansi tujuan Anda</span>
+                    </div>
+                </div>
+
+                <div class="d-flex align-items-center gap-3">
+                    <button type="button" class="btn btn-flex btn-light-primary px-5 rounded-pill"
+                        data-bs-toggle="modal" data-bs-target="#modalLokasi">
+                        <i class="fa fa-map-location-dot me-2"></i>
+                        <span class="fw-bold fs-8">Peta Lokasi</span>
+                    </button>
+                    <div
+                        class="d-flex align-items-center bg-light-success rounded-pill px-4 py-2 border border-success border-dashed">
+                        <span class="bullet bullet-dot bg-success h-8px w-8px me-2 animation-blink"></span>
+                        <span class="text-success fw-bold fs-8">Sistem Online</span>
+                    </div>
+                </div>
+            </div>
+
+            {{-- Grid SKPD --}}
+            <div class="p-6 p-lg-10 scroll-smooth overflow-auto flex-grow-1 bg-gray-100">
+                <div class="row g-6">
+                    @foreach ($skpd as $item)
+                        <div class="col-6 col-md-4 col-xl-3">
+                            <div class="card card-flush h-100 border-0 shadow-sm card-service cursor-pointer"
+                                onclick="openLayanan('{{ $item->id }}')">
+                                <div
+                                    class="card-body d-flex flex-column justify-content-center align-items-center text-center p-6">
+                                    <div
+                                        class="symbol symbol-60px symbol-circle bg-light-primary mb-5 d-flex justify-content-center align-items-center transition-all">
+                                        <div class="symbol-label fs-2hx fw-bold text-primary bg-light-primary">
+                                            <i
+                                                class="fa {{ $item->logo_skpd ? 'fa-building-columns' : 'fa-building' }} fs-1 text-primary"></i>
+                                        </div>
+                                    </div>
+                                    <h3 class="text-gray-800 fw-bolder fs-6 mb-0 lh-sm line-clamp-2 px-2">
+                                        {{ $item->nama_skpd }}</h3>
+                                </div>
+                            </div>
+                        </div>
+                    @endforeach
+                </div>
+                {{-- Spacer Bawah agar tidak mepet --}}
+                <div class="h-50px"></div>
             </div>
         </div>
     </div>
