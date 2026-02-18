@@ -80,11 +80,11 @@
                             </div>
                         </div>
 
-                        <div class="mw-400px mx-auto">
+                        <div class="mw-600px mx-auto">
                             <div class="input-group input-group-lg input-group-solid mb-5">
                                 <input type="text" id="no_antrian"
-                                    class="form-control form-control-solid text-center fs-2 fw-bolder text-uppercase"
-                                    placeholder="A-001" maxlength="25" autocomplete="off" />
+                                    class="form-control form-control-solid text-center fs-3 fw-bolder text-uppercase"
+                                    placeholder="A-001 (Silahkan Input Tanda '-')" maxlength="25" autocomplete="off" />
 
                                 <button type="button" onclick="cekAntrian()" class="btn btn-primary" id="btn-cek">
                                     <i class="ki-outline ki-magnifier fs-2"></i> Cari
@@ -335,21 +335,26 @@
             restoreSession();
         });
 
-        // 1. INPUT MASKING (A-001)
+        // 1. INPUT MASKING (MODIFIED)
+        // Mengizinkan Huruf + Angka di depan, dan user mengetik strip (-) manual
         $('#no_antrian').on('input', function() {
-            let val = $(this).val().toUpperCase().replace(/[^A-Z0-9]/g, '');
-            let match = val.match(/^([A-Z]+)(\d*)$/);
-            if (match) {
-                let prefix = match[1];
-                let number = match[2];
-                if (number.length > 0) {
-                    $(this).val(prefix + '-' + number);
-                } else {
-                    $(this).val(prefix);
-                }
-            } else {
-                $(this).val(val);
+            // Ambil value dan jadikan uppercase
+            let val = $(this).val().toUpperCase();
+
+            // Hanya izinkan: Huruf (A-Z), Angka (0-9), dan Tanda Strip (-)
+            // Hapus karakter lain (spasi, simbol lain, dll)
+            val = val.replace(/[^A-Z0-9-]/g, '');
+
+            // (Opsional) Mencegah strip ganda (misal: A--01 jadi A-01)
+            val = val.replace(/-+/g, '-');
+
+            // (Opsional) Mencegah strip di karakter pertama
+            if (val.startsWith('-')) {
+                val = val.substring(1);
             }
+
+            // Update value input
+            $(this).val(val);
         });
 
         // 2. NAVIGASI STEP

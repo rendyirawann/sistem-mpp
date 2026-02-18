@@ -9,6 +9,7 @@ use App\Models\Loket;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use Barryvdh\DomPDF\Facade\Pdf;
 // 🔥 TAMBAHKAN 2 BARIS INI
 use App\Exports\LaporanExport;
 use Maatwebsite\Excel\Facades\Excel;
@@ -21,15 +22,28 @@ class DashboardController extends Controller
 
         // 1. QUERY KARTU STATISTIK (LOGIKA LAMA - TETAP ADA)
         $antrianQuery = Antrian::query();
+        $loketQuery = Loket::query();
         if (!$user->hasRole('Superadmin')) {
             $antrianQuery->where('skpd_id', $user->skpd_id);
+            $loketQuery->where('skpd_id', $user->skpd_id);
         }
 
         $data = [
-            'total_antrian'     => (clone $antrianQuery)->count(),
+            // Antrian
+            'total_antrian'     => (clone $antrianQuery)->count(), // Total seumur hidup
             'antrian_hari_ini'  => (clone $antrianQuery)->hariIni()->count(),
             'antrian_menunggu'  => (clone $antrianQuery)->where('status', 0)->hariIni()->count(),
             'antrian_dipanggil' => (clone $antrianQuery)->where('status', 1)->hariIni()->count(),
+            // 🔥 PERBAIKAN: Tambahkan perhitungan Antrian Selesai (Status 2)
+            'antrian_selesai'   => (clone $antrianQuery)->where('status', 2)->hariIni()->count(),
+
+            // 🔥 PERBAIKAN: Tambahkan perhitungan Layanan/Loket
+            'total_loket'       => (clone $loketQuery)->count(),
+            'loket_aktif'       => (clone $loketQuery)->where('isaktif', 1)->count(),
+            'loket_nonaktif'    => (clone $loketQuery)->where('isaktif', 0)->count(),
+
+            // 🔥 PERBAIKAN: Tambahkan Total SKPD (Instansi)
+            'total_skpd'        => Skpd::count(),
         ];
 
         // ==========================================
@@ -41,8 +55,10 @@ class DashboardController extends Controller
         // A. Filter SKPD (Role Based)
         if ($user->hasRole('Superadmin')) {
             // Jika Superadmin memilih SKPD tertentu
-            if ($request->filled('skpd_id')) {
-                $rekapQuery->where('skpd_id', $request->skpd_id);
+            if ($request->filled('skpd_id') && $request->skpd_id != 'all') {
+                $rekapQuery->whereHas('loket', function ($q) use ($request) {
+                    $q->where('skpd_id', $request->skpd_id);
+                });
             }
         } else {
             // Tenant terkunci ke datanya sendiri
@@ -71,16 +87,20 @@ class DashboardController extends Controller
                 break;
         }
 
-        // C. Grouping Data (Rekap Layanan)
-        // Kita hitung jumlah antrian per Loket (Layanan)
+        $status = $request->status ?? 'all';
+
+        if ($status !== 'all') {
+            $rekapQuery->where('status', $status);
+        }
+
+        // D. Grouping Data (Rekap Layanan) - Kode Lama tapi variable status ikut dipassing
         $rekapLayanan = (clone $rekapQuery)
             ->select('loket_id', DB::raw('count(*) as total'))
             ->groupBy('loket_id')
-            ->with(['loket', 'loket.skpd']) // Load relasi biar nama muncul
+            ->with(['loket', 'loket.skpd'])
             ->orderBy(DB::raw('count(*)'), 'desc')
             ->get();
 
-        // Total dari hasil filter
         $totalRekap = $rekapQuery->count();
 
         // List SKPD untuk Dropdown Filter (Superadmin Only)
@@ -97,165 +117,323 @@ class DashboardController extends Controller
             'filterType',
             'startDate',
             'endDate',
-            'bulan'
+            'bulan',
+            'status'
         ));
+    }
+
+    // Method untuk mengambil detail list antrian via AJAX (Modal)
+    public function getDetailRekap(Request $request)
+    {
+        $query = Antrian::query()
+            ->with(['loket', 'skpd'])
+            ->where('loket_id', $request->loket_id); // Filter berdasarkan loket yg diklik
+
+        // Copy paste logic filter tanggal dari index agar datanya sinkron
+        $filterType = $request->filter_type ?? 'hari_ini';
+        $startDate  = $request->start_date ?? date('Y-m-d');
+        $endDate    = $request->end_date ?? date('Y-m-d');
+        $bulan      = $request->bulan ?? date('Y-m');
+
+        switch ($filterType) {
+            case 'hari_ini':
+                $query->whereDate('tanggal', date('Y-m-d'));
+                break;
+            case 'per_tanggal':
+                $query->whereDate('tanggal', $startDate);
+                break;
+            case 'per_bulan':
+                $query->where('tanggal', 'like', "$bulan%");
+                break;
+            case 'range':
+                $query->whereBetween('tanggal', [$startDate, $endDate]);
+                break;
+        }
+
+        // Filter Status (jika ada)
+        if ($request->filled('status') && $request->status !== 'all') {
+            $query->where('status', $request->status);
+        }
+
+        $antrian = $query->orderBy('no_urut', 'asc')->get();
+
+        // Return berupa partial view atau HTML table sederhana
+        $html = view('backend.dashboard.partial_detail_table', compact('antrian'))->render();
+
+        return response()->json(['html' => $html]);
     }
 
     /**
      * EXPORT PDF / EXCEL
      */
+    // public function exportLaporan(Request $request)
+    // {
+    //     // 1. QUERY DASAR (Copy logic filter dari index, atau buat private function biar clean)
+    //     $query = Antrian::query()->with(['loket', 'loket.skpd', 'customer']); // Pastikan load relasi
+
+    //     // A. Filter Role SKPD
+    //     if (!Auth::user()->hasRole('Superadmin')) {
+    //         // Jika User Dinas Login: Paksa ambil antrian berdasarkan Loket milik Dinas tersebut
+    //         $query->whereHas('loket', function ($q) {
+    //             $q->where('skpd_id', Auth::user()->skpd_id);
+    //         });
+    //     } elseif ($request->filled('skpd_id') && $request->skpd_id != 'all') {
+    //         $query->whereHas('loket', function ($q) use ($request) {
+    //             $q->where('skpd_id', $request->skpd_id);
+    //         });
+    //     }
+
+    //     // B. Filter Status
+    //     if ($request->filled('status') && $request->status !== 'all') {
+    //         $query->where('status', $request->status);
+    //     }
+
+    //     // C. Filter Tanggal
+    //     $filterType = $request->filter_type ?? 'hari_ini';
+    //     $startDate  = $request->start_date ?? date('Y-m-d');
+    //     $endDate    = $request->end_date ?? date('Y-m-d');
+    //     $bulan      = $request->bulan ?? date('Y-m');
+
+    //     switch ($filterType) {
+    //         case 'hari_ini':
+    //             $query->whereDate('tanggal', date('Y-m-d'));
+    //             break;
+    //         case 'per_tanggal':
+    //             $query->whereDate('tanggal', $startDate);
+    //             break;
+    //         case 'per_bulan':
+    //             $query->where('tanggal', 'like', "$bulan%");
+    //             break;
+    //         case 'range':
+    //             $query->whereBetween('tanggal', [$startDate, $endDate]);
+    //             break;
+    //     }
+
+    //     // 2. EKSEKUSI QUERY & GROUPING
+    //     // Kita ambil data mentah dulu, urutkan biar rapi
+    //     $rawData = $query->orderBy('skpd_id')->orderBy('loket_id')->orderBy('created_at')->get();
+    //     $total = $rawData->count();
+    //     $labelPeriode = $filterType === 'hari_ini' ? date('d-m-Y') : "$startDate s/d $endDate";
+
+    //     $type = $request->input('type', 'pdf');
+
+    //     if ($type == 'excel') {
+    //         // 🔥 JIKA EXCEL: Kirim $rawData (Flat) ke LaporanExport (yang pakai export_excel.blade.php)
+    //         return Excel::download(new LaporanExport($rawData, $total, $labelPeriode), 'laporan_antrian.xlsx');
+    //     } else {
+    //         // 🔥 JIKA PDF: Lakukan Grouping Data
+    //         $groupedData = $rawData->groupBy([
+    //             function ($item) {
+    //                 return $item->loket->skpd->nama_skpd ?? 'Tanpa Instansi';
+    //             },
+    //             function ($item) {
+    //                 return $item->loket->nama_loket ?? 'Tanpa Loket';
+    //             }
+    //         ]);
+
+    //         // Gunakan View PDF yang lama (export.blade.php)
+    //         $pdf = Pdf::loadView('backend.dashboard.export', [
+    //             'data' => $groupedData,
+    //             'total' => $total,
+    //             'labelPeriode' => $labelPeriode,
+    //             'type' => 'pdf'
+    //         ]);
+    //         $pdf->setPaper('a4', 'landscape');
+    //         return $pdf->stream('laporan_antrian.pdf');
+    //     }
+    // }
+
     public function exportLaporan(Request $request)
     {
-        $user = Auth::user();
-        $type = $request->export_type; // 'pdf' atau 'excel'
+        // ==========================================================
+        // 1. BUILD QUERY DASAR (Shared untuk semua jenis laporan)
+        // ==========================================================
+        $query = Antrian::query();
 
-        // ==========================================
-        // 1. LOGIC QUERY (SAMA PERSIS DENGAN INDEX)
-        // ==========================================
-        $rekapQuery = \App\Models\Antrian::query();
-
-        // A. Filter SKPD
-        if ($user->hasRole('Superadmin')) {
-            if ($request->filled('skpd_id')) $rekapQuery->where('skpd_id', $request->skpd_id);
-        } else {
-            $rekapQuery->where('skpd_id', $user->skpd_id);
+        // A. FILTER INSTANSI (Gunakan whereHas agar akurat sesuai pemilik loket)
+        if (!Auth::user()->hasRole('Superadmin')) {
+            $query->whereHas('loket', function ($q) {
+                $q->where('skpd_id', Auth::user()->skpd_id);
+            });
+        } elseif ($request->filled('skpd_id') && $request->skpd_id != 'all') {
+            $query->whereHas('loket', function ($q) use ($request) {
+                $q->where('skpd_id', $request->skpd_id);
+            });
         }
 
-        // B. Filter Tanggal
+        // B. FILTER TANGGAL
         $filterType = $request->filter_type ?? 'hari_ini';
         $startDate  = $request->start_date ?? date('Y-m-d');
         $endDate    = $request->end_date ?? date('Y-m-d');
         $bulan      = $request->bulan ?? date('Y-m');
-        $labelPeriode = "";
 
         switch ($filterType) {
             case 'hari_ini':
-                $rekapQuery->whereDate('tanggal', date('Y-m-d'));
-                $labelPeriode = "Hari Ini (" . date('d-m-Y') . ")";
+                $query->whereDate('tanggal', date('Y-m-d'));
                 break;
             case 'per_tanggal':
-                $rekapQuery->whereDate('tanggal', $startDate);
-                $labelPeriode = "Tanggal " . date('d-m-Y', strtotime($startDate));
+                $query->whereDate('tanggal', $startDate);
                 break;
             case 'per_bulan':
-                $rekapQuery->where('tanggal', 'like', "$bulan%");
-                $labelPeriode = "Bulan " . date('F Y', strtotime($bulan));
+                $query->where('tanggal', 'like', "$bulan%");
                 break;
             case 'range':
-                $rekapQuery->whereBetween('tanggal', [$startDate, $endDate]);
-                $labelPeriode = date('d-m-Y', strtotime($startDate)) . " s/d " . date('d-m-Y', strtotime($endDate));
+                $query->whereBetween('tanggal', [$startDate, $endDate]);
                 break;
         }
 
-        // C. Ambil Data
-        $data = (clone $rekapQuery)
-            ->select('loket_id', DB::raw('count(*) as total'))
-            ->groupBy('loket_id')
-            ->with(['loket', 'loket.skpd'])
-            ->orderBy(DB::raw('count(*)'), 'desc')
-            ->get();
+        // Label Periode untuk Judul Laporan
+        $labelPeriode = $filterType === 'hari_ini' ? date('d-m-Y') : "$startDate s/d $endDate";
 
-        $total = $rekapQuery->count();
+        // Tangkap Jenis Laporan (Detail atau Rekap) & Tipe File (PDF/Excel)
+        $formatLaporan = $request->format_laporan ?? 'detail';
+        $type = $request->input('type', 'pdf');
 
-
-        // ==========================================
-        // 2. EKSEKUSI EXPORT / PDF
-        // ==========================================
-
-        // JIKA PILIH EXCEL (.xlsx)
+        // ==========================================================
+        // 2. JIKA EXCEL (Selalu Detail / Raw Data)
+        // ==========================================================
         if ($type == 'excel') {
-            $fileName = "Laporan_Antrian_" . date('d-m-Y_His') . ".xlsx";
+            // Excel biasanya butuh data lengkap, jadi kita masukkan filter status juga
+            if ($request->filled('status') && $request->status !== 'all') {
+                $query->where('status', $request->status);
+            }
 
-            // 🔥 Panggil Class Export yang baru kita buat
-            return Excel::download(new LaporanExport($data, $total, $labelPeriode), $fileName);
+            // Load relasi lengkap
+            $rawData = $query->with(['loket', 'loket.skpd', 'customer'])
+                ->orderBy('created_at')
+                ->get();
+            $total = $rawData->count();
+
+            return Excel::download(new LaporanExport($rawData, $total, $labelPeriode), 'laporan_antrian.xlsx');
         }
 
-        // JIKA PILIH PDF (Tetap pakai Window Print)
-        return view('backend.dashboard.export', compact('data', 'total', 'labelPeriode', 'type'));
+        // ==========================================================
+        // 3. JIKA PDF: MODE REKAPITULASI (GENERAL)
+        // ==========================================================
+        if ($formatLaporan == 'rekap') {
+            // Di mode rekap, kita TIDAK memfilter status (menghitung semua yang masuk)
+            // Group by Loket ID dan hitung totalnya
+            $dataRekap = $query->select('loket_id', DB::raw('count(*) as total'))
+                ->with(['loket', 'loket.skpd'])
+                ->groupBy('loket_id')
+                ->get()
+                ->sortBy(function ($row) {
+                    // Urutkan berdasarkan Nama SKPD biar rapi
+                    return $row->loket->skpd->nama_skpd ?? 'ZZZ';
+                });
+
+            $pdf = Pdf::loadView('backend.dashboard.export_rekap', [
+                'data' => $dataRekap,
+                'labelPeriode' => $labelPeriode
+            ]);
+            $pdf->setPaper('a4', 'portrait');
+            return $pdf->stream('laporan_rekapitulasi.pdf');
+        }
+
+        // ==========================================================
+        // 4. JIKA PDF: MODE DETAIL (DEFAULT)
+        // ==========================================================
+
+        // Filter Status (Hanya berlaku di mode Detail)
+        if ($request->filled('status') && $request->status !== 'all') {
+            $query->where('status', $request->status);
+        }
+
+        // Load Relasi
+        $query->with(['loket', 'loket.skpd', 'customer']);
+
+        // Ambil Data & Urutkan
+        $rawData = $query->orderBy('skpd_id')->orderBy('loket_id')->orderBy('created_at')->get();
+        $total = $rawData->count();
+
+        // Grouping Data: Instansi -> Loket -> Antrian
+        $groupedData = $rawData->groupBy([
+            function ($item) {
+                return $item->loket->skpd->nama_skpd ?? 'Tanpa Instansi';
+            },
+            function ($item) {
+                return $item->loket->nama_loket ?? 'Tanpa Loket';
+            }
+        ]);
+
+        $pdf = Pdf::loadView('backend.dashboard.export', [
+            'data' => $groupedData,
+            'total' => $total,
+            'labelPeriode' => $labelPeriode,
+            'type' => 'pdf'
+        ]);
+        $pdf->setPaper('a4', 'landscape');
+        return $pdf->stream('laporan_antrian_detail.pdf');
     }
 
-    public function detail(Request $request)
+    public function getDetailCard(Request $request)
     {
         $type = $request->type;
+        $user = Auth::user();
 
-        // ===============================
-        // BASE QUERY
-        // ===============================
-        $antrianQuery = Antrian::query();
-        $loketQuery   = Loket::query();
+        // Siapkan Query Dasar dengan Eager Loading agar Tabel tidak kosong
+        $antrianQuery = Antrian::with(['loket', 'loket.skpd', 'customer'])->whereDate('created_at', date('Y-m-d'));
+        $loketQuery   = Loket::with(['skpd']);
+        $skpdQuery    = Skpd::query();
 
-        // 🔐 FILTER SKPD (KECUALI SUPERADMIN)
-        if (!auth()->user()->hasRole('Superadmin')) {
-            $antrianQuery->where('skpd_id', auth()->user()->skpd_id);
-            $loketQuery->where('skpd_id', auth()->user()->skpd_id);
+        if (!$user->hasRole('Superadmin')) {
+            $antrianQuery->where('skpd_id', $user->skpd_id);
+            $loketQuery->where('skpd_id', $user->skpd_id);
         }
 
         switch ($type) {
-
-            // ===============================
-            // ANTRIAN
-            // ===============================
-            case 'antrian_all':
-                $data = (clone $antrianQuery)
-                    ->orderBy('no_urut')
-                    ->get();
+            // --- ANTRIAN ---
+            case 'antrian_total': // Total Antrian (Biasanya hari ini)
+                $data = (clone $antrianQuery)->orderBy('no_urut', 'desc')->get();
                 $view = 'backend.dashboard.detail.antrian';
                 break;
-
-            case 'antrian_today':
-                $data = (clone $antrianQuery)
-                    ->hariIni()
-                    ->orderBy('no_urut')
-                    ->get();
+            case 'antrian_hari_ini':
+                $data = (clone $antrianQuery)->orderBy('no_urut', 'desc')->get();
                 $view = 'backend.dashboard.detail.antrian';
                 break;
-
             case 'antrian_menunggu':
-                $data = (clone $antrianQuery)
-                    ->where('status', 0)
-                    ->orderBy('no_urut')
-                    ->get();
+                $data = (clone $antrianQuery)->where('status', 0)->orderBy('no_urut')->get();
                 $view = 'backend.dashboard.detail.antrian';
                 break;
-
             case 'antrian_dipanggil':
-                $data = (clone $antrianQuery)
-                    ->where('status', 1)
-                    ->orderBy('no_urut')
-                    ->get();
+                $data = (clone $antrianQuery)->where('status', 1)->orderBy('no_urut')->get();
+                $view = 'backend.dashboard.detail.antrian';
+                break;
+            case 'antrian_selesai': // 🔥 CASE BARU
+                $data = (clone $antrianQuery)->where('status', 2)->orderBy('updated_at', 'desc')->get();
                 $view = 'backend.dashboard.detail.antrian';
                 break;
 
-            // ===============================
-            // LOKET
-            // ===============================
+            // --- LOKET ---
             case 'loket_all':
-                $data = (clone $loketQuery)
-                    ->orderBy('nama_loket')
-                    ->get();
+                $data = (clone $loketQuery)->orderBy('nama_loket')->get();
                 $view = 'backend.dashboard.detail.loket';
                 break;
-
             case 'loket_aktif':
-                $data = (clone $loketQuery)
-                    ->where('isaktif', 1)
-                    ->orderBy('nama_loket')
-                    ->get();
+                $data = (clone $loketQuery)->where('isaktif', 1)->orderBy('nama_loket')->get();
+                $view = 'backend.dashboard.detail.loket';
+                break;
+            case 'loket_nonaktif':
+                $data = (clone $loketQuery)->where('isaktif', 0)->orderBy('nama_loket')->get();
                 $view = 'backend.dashboard.detail.loket';
                 break;
 
-            case 'loket_nonaktif':
-                $data = (clone $loketQuery)
-                    ->where('isaktif', 0)
-                    ->orderBy('nama_loket')
-                    ->get();
+            // --- SKPD ---
+            case 'total_skpd': // 🔥 CASE BARU
+                $data = (clone $skpdQuery)->orderBy('nama_skpd')->get();
+                $view = 'backend.dashboard.detail.skpd'; // Kita pakai view loket saja atau buat baru, tapi sementara pakai loket logic
+                // Atau return json simpel jika belum ada view khusus
+                // Untuk sekarang kita asumsikan pakai view loket tapi kolomnya disesuaikan nanti
                 $view = 'backend.dashboard.detail.loket';
                 break;
 
             default:
-                abort(404);
+                return response()->json(['html' => '<div class="alert alert-danger">Tipe tidak ditemukan</div>']);
         }
 
-        return view($view, compact('data'));
+        // Render View ke HTML string
+        $html = view($view, compact('data', 'type'))->render();
+
+        return response()->json(['html' => $html]);
     }
 }

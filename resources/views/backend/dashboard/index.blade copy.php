@@ -174,27 +174,17 @@
                         {{-- FORM FILTER --}}
                         <form action="{{ route('dashboard') }}" method="GET" class="row g-3 mb-10 align-items-end">
 
-                            {{-- 1. JENIS LAPORAN (BARU) --}}
-                            <div class="col-md-2">
-                                <label class="form-label fw-bold">Jenis Laporan</label>
-                                {{-- ID ini penting untuk Javascript Toggle --}}
-                                <select name="format_laporan" id="format_laporan" class="form-select form-select-solid"
-                                    data-control="select2" data-hide-search="true">
-                                    <option value="detail" {{ request('format_laporan') == 'detail' ? 'selected' : '' }}>
-                                        Detail Pelayanan</option>
-                                    <option value="rekap" {{ request('format_laporan') == 'rekap' ? 'selected' : '' }}>
-                                        Rekapitulasi (General)</option>
-                                </select>
-                            </div>
-
-                            {{-- 2. Filter SKPD (Hanya Superadmin) --}}
+                            {{-- 1. Filter SKPD (Hanya Superadmin) --}}
                             @role('Superadmin')
                                 <div class="col-md-3">
                                     <label class="form-label fw-bold">Pilih Instansi</label>
                                     <select name="skpd_id" class="form-select form-select-solid" data-control="select2"
                                         data-placeholder="Semua Instansi">
+
+                                        {{-- 🔥 UBAH VALUE JADI 'all' --}}
                                         <option value="all" {{ request('skpd_id') == 'all' ? 'selected' : '' }}>Semua
                                             Instansi</option>
+
                                         @foreach ($listSkpd as $skpd)
                                             <option value="{{ $skpd->id }}"
                                                 {{ request('skpd_id') == $skpd->id ? 'selected' : '' }}>
@@ -205,41 +195,22 @@
                                 </div>
                             @endrole
 
-                            {{-- 3. Status (Diberi ID filter_status_container agar bisa di-hide via JS) --}}
-                            <div class="col-md-2" id="filter_status_container">
-                                <label class="form-label fw-bold">Status</label>
-                                <select name="status" class="form-select form-select-solid" data-control="select2"
-                                    data-hide-search="true">
-                                    <option value="all" {{ request('status') == 'all' ? 'selected' : '' }}>Semua Status
-                                    </option>
-                                    <option value="0" {{ request('status') == '0' ? 'selected' : '' }}>Menunggu (0)
-                                    </option>
-                                    <option value="1" {{ request('status') == '1' ? 'selected' : '' }}>Dipanggil (1)
-                                    </option>
-                                    <option value="2" {{ request('status') == '2' ? 'selected' : '' }}>Selesai (2)
-                                    </option>
-                                    <option value="3" {{ request('status') == '3' ? 'selected' : '' }}>Batal (3)
-                                    </option>
-                                </select>
-                            </div>
-
-                            {{-- 4. Periode Filter --}}
-                            <div class="col-md-2">
+                            {{-- 2. Jenis Filter --}}
+                            <div class="col-md-3">
                                 <label class="form-label fw-bold">Periode Filter</label>
-                                <select name="filter_type" id="filter_type" class="form-select form-select-solid"
-                                    data-hide-search="true">
+                                <select name="filter_type" id="filter_type" class="form-select form-select-solid">
                                     <option value="hari_ini" {{ $filterType == 'hari_ini' ? 'selected' : '' }}>Hari Ini
                                     </option>
                                     <option value="per_tanggal" {{ $filterType == 'per_tanggal' ? 'selected' : '' }}>Per
                                         Tanggal</option>
                                     <option value="per_bulan" {{ $filterType == 'per_bulan' ? 'selected' : '' }}>Per Bulan
                                     </option>
-                                    <option value="range" {{ $filterType == 'range' ? 'selected' : '' }}>Range Tanggal
-                                    </option>
+                                    <option value="range" {{ $filterType == 'range' ? 'selected' : '' }}>Range / Per
+                                        Minggu</option>
                                 </select>
                             </div>
 
-                            {{-- 5. Input Dinamis --}}
+                            {{-- 3. Input Dinamis --}}
                             <div class="col-md-3">
                                 {{-- Input Per Tanggal --}}
                                 <div id="input_per_tanggal" class="d-none">
@@ -268,7 +239,9 @@
                                 </div>
                             </div>
 
-                            {{-- 6. Tombol Action --}}
+
+
+                            {{-- 4. Tombol Action --}}
                             <div class="col-md-auto ms-auto">
                                 <div class="d-flex align-items-center gap-2">
                                     <button type="submit" class="btn btn-sm btn-primary fw-bold">
@@ -292,6 +265,16 @@
                                         <i class="fa fa-file-pdf me-1"></i> PDF
                                     </button>
                                 </div>
+                            </div>
+
+                            <div class="col-md-3">
+                                <label class="form-label fw-bold">Status</label>
+                                <select name="status" class="form-select form-select-solid" data-control="select2">
+                                    <option value="all" {{ $status == 'all' ? 'selected' : '' }}>Semua Status</option>
+                                    <option value="0" {{ $status == '0' ? 'selected' : '' }}>Menunggu (0)</option>
+                                    <option value="1" {{ $status == '1' ? 'selected' : '' }}>Dipanggil (1)</option>
+                                    <option value="2" {{ $status == '2' ? 'selected' : '' }}>Selesai (2)</option>
+                                </select>
                             </div>
                         </form>
 
@@ -407,8 +390,8 @@
                 }
             };
 
-            // 2. FUNGSI UNTUK KLIK CARD DATA UTAMA (ATAS)
             window.openDetail = function(type) {
+                // 1. Mapping Judul Modal berdasarkan Type
                 let title = '';
                 switch (type) {
                     case 'antrian_total':
@@ -444,13 +427,15 @@
                         title = 'Detail Data';
                 }
 
-                // Buka Modal
+                // 2. Set Judul & Buka Modal (Kita Reuse Modal yang sudah ada)
                 $('#modalLoketName').text(title);
                 $('#modalDetailRekap').modal('show');
+
+                // 3. Reset Konten & Tampilkan Loading
                 $('#loadingModal').removeClass('d-none');
                 $('#contentModal').html('');
 
-                // AJAX Request
+                // 4. Panggil Controller via AJAX
                 $.ajax({
                     url: "{{ route('dashboard.detail') }}",
                     type: "GET",
@@ -461,23 +446,25 @@
                         $('#loadingModal').addClass('d-none');
                         $('#contentModal').html(response.html);
 
-                        // Init DataTable
+                        // INISIALISASI DATATABLES (PAKAI CONFIG LOCAL)
                         $('#contentModal table').DataTable({
-                            "language": dtLanguageConfig,
+                            "language": dtLanguageConfig, // <--- PANGGIL VARIABLE DI ATAS
                             "info": true,
                             "ordering": true,
                             "paging": true,
-                            "pageLength": 5,
+                            "pageLength": 5, // Default tampil 5 baris biar modal gak kepanjangan
                             "lengthMenu": [
                                 [5, 10, 25, 50, -1],
                                 [5, 10, 25, 50, "Semua"]
                             ],
+                            // Layout Bootstrap 5 yang rapi
                             "dom": "<'row mb-2'<'col-sm-6 d-flex align-items-center justify-content-start dt-toolbar'l><'col-sm-6 d-flex align-items-center justify-content-end dt-toolbar'f>>" +
                                 "<'table-responsive'tr>" +
                                 "<'row'<'col-sm-12 col-md-5 d-flex align-items-center justify-content-center justify-content-md-start'i><'col-sm-12 col-md-7 d-flex align-items-center justify-content-center justify-content-md-end'p>>"
                         });
                     },
                     error: function(xhr) {
+                        console.error(xhr);
                         $('#loadingModal').addClass('d-none');
                         $('#contentModal').html(
                             '<div class="alert alert-danger text-center">Gagal memuat data detail.</div>');
@@ -487,14 +474,18 @@
         </script>
 
         <script>
+            // Script Sederhana untuk Show/Hide Input Tanggal
             $(document).ready(function() {
-                // 3. LOGIC SHOW/HIDE FILTER TANGGAL
                 const toggleInputs = () => {
                     const type = $('#filter_type').val();
+
+                    // Sembunyikan semua
                     $('#input_per_tanggal, #input_per_bulan, #input_range').addClass('d-none');
+                    // Disable input agar tidak terkirim di URL yang tidak perlu
                     $('#input_per_tanggal input, #input_per_bulan input, #input_range input').prop('disabled',
                         true);
 
+                    // Tampilkan yang sesuai
                     if (type === 'per_tanggal') {
                         $('#input_per_tanggal').removeClass('d-none');
                         $('#input_per_tanggal input').prop('disabled', false);
@@ -506,16 +497,25 @@
                         $('#input_range input').prop('disabled', false);
                     }
                 };
-                $('#filter_type').change(toggleInputs);
-                toggleInputs();
 
-                // 4. LOGIC KLIK TOMBOL MATA (DETAIL TABEL REKAP)
+                $('#filter_type').change(toggleInputs);
+                toggleInputs(); // Jalankan saat load
+            });
+        </script>
+
+        <script>
+            $(document).ready(function() {
+                // Event Klik Tombol Mata
+                // Event Klik Tombol Mata (Detail Rekap)
                 $('.btn-detail-rekap').click(function() {
                     let loketId = $(this).data('loket-id');
                     let namaLoket = $(this).data('nama-loket');
 
+                    // Set Judul Modal
                     $('#modalLoketName').text(namaLoket);
                     $('#modalDetailRekap').modal('show');
+
+                    // Tampilkan Loading
                     $('#loadingModal').removeClass('d-none');
                     $('#contentModal').html('');
 
@@ -537,9 +537,9 @@
                             $('#loadingModal').addClass('d-none');
                             $('#contentModal').html(response.html);
 
-                            // Init DataTable
+                            // 🔥 TAMBAHAN: INISIALISASI DATATABLES DISINI (PAKAI CONFIG LOCAL)
                             $('#contentModal table').DataTable({
-                                "language": dtLanguageConfig,
+                                "language": dtLanguageConfig, // <--- PANGGIL VARIABLE DI ATAS
                                 "info": true,
                                 "ordering": true,
                                 "paging": true,
@@ -560,19 +560,6 @@
                         }
                     });
                 });
-
-                // 5. 🔥 LOGIC BARU: HIDE/SHOW STATUS BERDASARKAN JENIS LAPORAN
-                // Jika pilih Rekap, sembunyikan dropdown Status
-                $('#format_laporan').change(function() {
-                    let val = $(this).val();
-                    if (val === 'rekap') {
-                        $('#filter_status_container').addClass('d-none');
-                    } else {
-                        $('#filter_status_container').removeClass('d-none');
-                    }
-                });
-                // Jalankan saat load halaman
-                $('#format_laporan').trigger('change');
             });
         </script>
 

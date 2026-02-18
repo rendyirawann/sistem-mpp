@@ -59,12 +59,15 @@ Route::post('/login')
     ->middleware('throttle:5,1')
     ->name('login');
 
-Route::get('/dashboard', [DashboardController::class, 'index'])->middleware(['auth'])->name('dashboard');
-Route::get('/dashboard/detail', [DashboardController::class, 'detail'])->middleware(['auth'])->name('dashboard.detail');
-
 Route::middleware('auth')->group(function () {
 
+    Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
+    Route::get('/dashboard/detail', [DashboardController::class, 'getDetailCard'])->name('dashboard.detail');
+
     Route::get('/dashboard/export', [DashboardController::class, 'exportLaporan'])->name('dashboard.export');
+    // Route untuk mengambil detail antrian di dashboard (AJAX)
+    // Tambahkan route ini di dalam group dashboard
+    Route::get('/dashboard/detail-rekap', [DashboardController::class, 'getDetailRekap'])->name('dashboard.detail_rekap');
 
     Route::get('/my-account', [AccountController::class, 'index'])->name('account.index');
     Route::get('my-account/{id}/avatar', [AccountController::class, 'editAvatar'])->name('avatar-edit');
