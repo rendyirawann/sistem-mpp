@@ -1,0 +1,377 @@
+@extends('backend.layout.app')
+@section('title', 'Panggilan Antrian')
+@section('content')
+
+    <!--begin::Toolbar-->
+    <div id="kt_app_toolbar" class="app-toolbar d-flex flex-stack py-4 py-lg-8">
+        <div class="d-flex flex-grow-1 flex-stack flex-wrap gap-2">
+            <!--begin::Page title-->
+            <div class="page-title d-flex flex-column justify-content-center me-3">
+                <h1 class="page-heading fw-bold fs-3 my-0">Panggilan Antrian</h1>
+                <ul class="breadcrumb breadcrumb-separatorless fw-semibold fs-7 my-0 pt-1">
+                    <li class="breadcrumb-item text-muted">Home</li>
+                    <li class="breadcrumb-item">
+                        <span class="bullet bg-gray-500 w-5px h-2px"></span>
+                    </li>
+                    <li class="breadcrumb-item text-muted">Antrian</li>
+                    <li class="breadcrumb-item">
+                        <span class="bullet bg-gray-500 w-5px h-2px"></span>
+                    </li>
+                    <li class="breadcrumb-item text-gray-900">Panggilan</li>
+                </ul>
+            </div>
+            <!--end::Page title-->
+        </div>
+    </div>
+    <!--end::Toolbar-->
+
+    <!--begin::Content-->
+    <div id="kt_app_content" class="app-content flex-column-fluid">
+
+        <!--begin::Info Cards-->
+        <div class="row g-5 mb-7">
+            @php
+                $cards = [
+                    [
+                        'id' => 'jumlah-antrian',
+                        'label' => 'Jumlah Antrian',
+                        'icon' => 'ki-user-tick',
+                        'color' => 'warning',
+                    ],
+                    [
+                        'id' => 'antrian-sekarang',
+                        'label' => 'Antrian Sekarang',
+                        'icon' => 'ki-profile-circle',
+                        'color' => 'success',
+                    ],
+                    [
+                        'id' => 'antrian-selanjutnya',
+                        'label' => 'Antrian Selanjutnya',
+                        'icon' => 'ki-people',
+                        'color' => 'info',
+                    ],
+                    ['id' => 'sisa-antrian', 'label' => 'Sisa Antrian', 'icon' => 'ki-user', 'color' => 'danger'],
+                ];
+            @endphp
+
+            @foreach ($cards as $c)
+                <div class="col-xl-3 col-md-6">
+                    <div class="card card-flush shadow-sm">
+                        <div class="card-body d-flex align-items-center">
+                            <div class="symbol symbol-45px me-4">
+                                <span class="symbol-label bg-light-{{ $c['color'] }}">
+                                    <i class="ki-outline {{ $c['icon'] }} fs-2 text-{{ $c['color'] }}"></i>
+                                </span>
+                            </div>
+                            <div>
+                                <div id="{{ $c['id'] }}" class="fs-2 fw-bold text-{{ $c['color'] }}">-</div>
+                                <div class="fw-semibold text-gray-500">{{ $c['label'] }}</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            @endforeach
+        </div>
+        <!--end::Info Cards-->
+
+        <!--begin::Table Card-->
+        <div class="card border border-gray-300 shadow-sm">
+            <!--begin::Card header-->
+            <div class="card-header border-bottom border-gray-300">
+                <div class="card-title">
+                    <h3 class="fw-bold m-0">Daftar Antrian</h3>
+                </div>
+                <div class="card-toolbar">
+                    <button type="button" class="btn btn-sm btn-primary" id="refresh-table-btn">
+                        <span class="indicator-label">
+                            <i class="ki-outline ki-arrows-loop me-2"></i> Refresh
+                        </span>
+                        <span class="indicator-progress" style="display:none">
+                            Please wait...
+                            <span class="spinner-border spinner-border-sm ms-2"></span>
+                        </span>
+                    </button>
+                </div>
+            </div>
+            <!--end::Card header-->
+
+            <!--begin::Card body-->
+            <div class="card-body py-4 position-relative">
+                <div id="loket-loading"
+                    class="position-absolute top-50 start-50 translate-middle d-none text-center z-index-3">
+                    <span class="spinner-border text-primary mb-2"></span>
+                    <div class="fw-semibold text-gray-600">Loading...</div>
+                </div>
+                <table id="tabel-antrian" class="table align-middle table-row-dashed fs-6 gy-5">
+                    <thead>
+                        <tr class="text-muted fw-bold fs-7 text-uppercase">
+                            <th class="text-center">Nomor Antrian</th>
+                            <th class="text-center">Status</th>
+                            <th class="text-center">Layanan</th>
+                            <th class="text-center">Panggil</th>
+                        </tr>
+                    </thead>
+                    <tbody class="fw-semibold text-gray-600"></tbody>
+                </table>
+            </div>
+            <!--end::Card body-->
+        </div>
+        <!--end::Table Card-->
+
+    </div>
+    <!--end::Content-->
+
+@endsection
+
+<audio id="tingtung" src="{{ asset('assets/audio/tingtung.mp3') }}"></audio>
+@push('scripts')
+    <script src="{{ asset('assets/plugins/custom/datatables/datatables.bundle.js') }}"></script>
+    <script src="https://code.responsivevoice.org/responsivevoice.js?key=jQZ2zcdq"></script>
+    <script>
+        let table;
+        let speechQueue = [];
+        let isSpeaking = false;
+
+        $(document).ready(function() {
+
+            function loadInfo() {
+                $('#jumlah-antrian').load("{{ route('antrian.jumlah') }}");
+                $('#antrian-sekarang').load("{{ route('antrian.sekarang') }}");
+                $('#antrian-selanjutnya').load("{{ route('antrian.selanjutnya') }}");
+                $('#sisa-antrian').load("{{ route('antrian.sisa') }}");
+            }
+
+            loadInfo();
+
+            table = $('#tabel-antrian').DataTable({
+                processing: true,
+                serverSide: true,
+                searching: false,
+                ordering: false,
+                ajax: "{{ route('antrian.get') }}",
+                columns: [{
+                        data: 'no_antrian',
+                        className: 'text-center'
+                    },
+                    {
+                        data: 'status_label',
+                        className: 'text-center'
+                    },
+                    {
+                        data: 'nama_loket',
+                        className: 'text-center'
+                    },
+                    {
+                        data: null,
+                        className: 'text-center',
+                        render: function(d) {
+                            if (d.status == 1) {
+                                return `
+                            <button class="btn btn-secondary btn-sm btn-call">
+                                <i class="ki-outline ki-notification fs-4"></i>
+                            </button>`;
+                            }
+                            if (d.status == 0 && !d.is_first) {
+                                return `
+                            <button class="btn btn-light btn-sm" disabled>
+                                <i class="ki-outline ki-lock fs-4"></i>
+                            </button>`;
+                            }
+                            return `
+                        <button class="btn btn-success btn-sm btn-call">
+                            <i class="ki-outline ki-notification-on"></i>
+                        </button>`;
+                        }
+                    }
+                ],
+
+                // 🔥 INI KUNCI HIGHLIGHT
+                rowCallback: function(row, data) {
+
+                    $(row).removeClass('antrian-active antrian-first');
+
+                    if (data.is_active) {
+                        $(row).addClass('antrian-active');
+                    } else if (data.is_first) {
+                        $(row).addClass('antrian-first');
+                    }
+                }
+            });
+
+            function buildFormalText(data) {
+                return [
+                    `Perhatian.`,
+                    `Panggilan Untuk Nomor antrian ${data.no_antrian}`,
+                    `Silakan Menuju Loket.`
+                ];
+            }
+
+            function speakIndonesiaQueuedPro(sentences, onDone = null) {
+
+                sentences.forEach((text, index) => {
+                    speechQueue.push({
+                        text,
+                        delay: index === 0 ? 0 : 600 // jeda antar kalimat
+                    });
+                });
+
+                // ulangi 1x lagi (opsional PRO)
+                sentences.forEach((text, index) => {
+                    speechQueue.push({
+                        text,
+                        delay: 500
+                    });
+                });
+
+                speechQueue.push({
+                    text: null,
+                    onDone
+                });
+
+                if (!isSpeaking) {
+                    processSpeechQueuePro();
+                }
+            }
+
+            function processSpeechQueuePro() {
+
+                if (speechQueue.length === 0) {
+                    isSpeaking = false;
+                    return;
+                }
+
+                isSpeaking = true;
+                let item = speechQueue.shift();
+
+                if (item.text === null) {
+                    if (typeof item.onDone === 'function') item.onDone();
+                    processSpeechQueuePro();
+                    return;
+                }
+
+                let utterance = new SpeechSynthesisUtterance(item.text);
+                utterance.lang = 'id-ID';
+                utterance.rate = 0.9; // 🔥 pelan
+                utterance.pitch = 0.9; // 🔥 formal
+                utterance.volume = 1;
+
+                let voices = speechSynthesis.getVoices();
+                let indoVoice = voices.find(v => v.lang === 'id-ID');
+                if (indoVoice) utterance.voice = indoVoice;
+
+                utterance.onend = () => {
+                    setTimeout(processSpeechQueuePro, item.delay || 500);
+                };
+
+                utterance.onerror = () => {
+                    processSpeechQueuePro();
+                };
+
+                speechSynthesis.speak(utterance);
+            }
+
+
+
+            // $('#tabel-antrian').on('click', '.btn-call', function () {
+
+            // let btn  = $(this);
+            // let data = table.row(btn.closest('tr')).data();
+            // let bell = document.getElementById('tingtung');
+
+            // if (!data) return;
+
+            // // 🔒 kunci tombol
+            // btn.prop('disabled', true).addClass('disabled');
+
+            // // 🔔 bell
+            // bell.pause();
+            // bell.currentTime = 0;
+            // bell.play().catch(()=>{});
+
+            // let sentences = buildFormalText(data);
+
+            // // ⏱️ jeda bell → suara
+            // setTimeout(() => {
+
+            //     speakIndonesiaQueuedPro(sentences, function () {
+            //         // 🔓 buka tombol SETELAH SEMUA selesai
+            //         btn.prop('disabled', false).removeClass('disabled');
+            //     });
+
+            // }, 1200);
+            // // 🔄 update status ke server
+            // $.ajax({
+            //     url: "{{ route('antrian.panggil') }}",
+            //     type: "POST",
+            //     data: {
+            //         _token: "{{ csrf_token() }}",
+            //         id: data.id
+            //     },
+            //     success: function (res) {
+            //         loadInfo();
+            //         table.ajax.reload(null, false);
+            //     },
+            //     error: function () {
+            //         alert('Gagal memanggil antrian');
+            //         btn.prop('disabled', false).removeClass('disabled');
+            //     }
+            // });
+
+            // });
+
+            $('#tabel-antrian').on('click', '.btn-call', function() {
+                let btn = $(this);
+                let data = table.row(btn.closest('tr')).data();
+
+                if (!data) return;
+
+                // 1. Kunci tombol biar gak dipencet berkali-kali
+                btn.prop('disabled', true).addClass('disabled');
+
+                // 2. Langsung Request ke Server (Tanpa Play Audio disini)
+                $.ajax({
+                    url: "{{ route('antrian.panggil') }}",
+                    type: "POST",
+                    data: {
+                        _token: "{{ csrf_token() }}",
+                        id: data.id
+                    },
+                    success: function(res) {
+                        // Reload tabel untuk update status
+                        loadInfo();
+                        table.ajax.reload(null, false);
+
+                        // Buka kunci tombol lagi (opsional, atau biarkan disabled kalau sudah dipanggil)
+                        setTimeout(() => {
+                            btn.prop('disabled', false).removeClass('disabled');
+                        }, 1000);
+                    },
+                    error: function() {
+                        alert('Gagal memanggil antrian');
+                        btn.prop('disabled', false).removeClass('disabled');
+                    }
+                });
+            });
+
+
+            // 🔄 Tombol refresh manual
+            $('#refresh-table-btn').on('click', function() {
+
+                const btn = $(this);
+                btn.find('.indicator-label').hide();
+                btn.find('.indicator-progress').show();
+
+                loadInfo();
+                table.ajax.reload(null, false);
+
+                setTimeout(() => {
+                    btn.find('.indicator-progress').hide();
+                    btn.find('.indicator-label').show();
+                }, 500);
+
+            });
+
+
+        });
+    </script>
+@endpush

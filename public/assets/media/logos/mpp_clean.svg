@@ -1,0 +1,34 @@
+<svg width="520" height="220" viewBox="0 0 520 220" xmlns="http://www.w3.org/2000/svg">
+
+    <!-- Gradient warna Pemkab Deli Serdang -->
+    <defs>
+        <linearGradient id="mppGradient" x1="0" y1="0" x2="1" y2="1">
+            <stop offset="0%" stop-color="#0B5ED7"></stop>
+            <stop offset="100%" stop-color="#198754"></stop>
+        </linearGradient>
+    </defs>
+
+    <!-- ===== ICON (SAMA PERSIS DARI mpp-clean.svg) ===== -->
+    <g transform="translate(20,20) scale(0.8)">
+        <!-- Gedung kiri -->
+        <path d="M40 40 L100 10 L100 200 L40 200 Z" stroke="url(#mppGradient)" stroke-width="6" fill="none" stroke-linejoin="round"></path>
+
+        <!-- Gedung kanan -->
+        <path d="M100 10 L160 40 L160 200 L100 200 Z" stroke="url(#mppGradient)" stroke-width="6" fill="none" stroke-linejoin="round"></path>
+
+        <!-- Jendela -->
+        <rect x="65" y="70" width="15" height="20" rx="2" fill="url(#mppGradient)"></rect>
+        <rect x="65" y="105" width="15" height="20" rx="2" fill="url(#mppGradient)"></rect>
+        <rect x="120" y="70" width="15" height="20" rx="2" fill="url(#mppGradient)"></rect>
+        <rect x="120" y="105" width="15" height="20" rx="2" fill="url(#mppGradient)"></rect>
+
+        <!-- Orbit bawah -->
+        <ellipse cx="100" cy="215" rx="85" ry="14" stroke="url(#mppGradient)" stroke-width="4" fill="none"></ellipse>
+    </g>
+
+    <!-- ===== TEXT MPP (PINDAH KE SAMPING) ===== -->
+    <text x="260" y="145" font-size="96" font-weight="700" font-family="Inter, Arial, Helvetica, sans-serif" fill="url(#mppGradient)">
+        MPP
+    </text>
+
+</svg>
