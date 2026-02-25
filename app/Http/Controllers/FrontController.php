@@ -16,7 +16,7 @@ use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Cache;
 use App\Events\AntrianBaru; // <--- 1. TAMBAHKAN INI DI ATAS
-
+use App\Events\StatusTenantUpdated;
 // ESC/POS (DISIAPKAN, BELUM DIPAKAI)
 use Mike42\Escpos\Printer;
 use Mike42\Escpos\PrintConnectors\WindowsPrintConnector;
@@ -29,14 +29,31 @@ class FrontController extends Controller
     /**
      * HALAMAN KIOS
      */
-    public function index()
+    // public function index()
+    // {
+    //     // Ambil SKPD aktif + loket aktif
+    //     $skpd = Skpd::with(['lokets' => function ($q) {
+    //         $q->where('isaktif', 1);
+    //     }])
+    //         ->where('isAktif', true)
+    //         // GANTI whereHas DENGAN whereRaw UNTUK MENGATASI ERROR COLLATION
+    //         ->whereRaw("EXISTS (
+    //             SELECT * FROM lokets 
+    //             WHERE skpd.id COLLATE utf8mb4_unicode_ci = lokets.skpd_id COLLATE utf8mb4_unicode_ci 
+    //             AND isaktif = 1
+    //         )")
+    //         ->get();
+
+    //     return view('kios', compact('skpd'));
+    // }
+
+    // A. BUAT FUNGSI PRIVATE UNTUK MENGAMBIL DATA STATUS SKPD (Mencegah kode berulang)
+    private function getSkpdWithStatus()
     {
-        // Ambil SKPD aktif + loket aktif
         $skpd = Skpd::with(['lokets' => function ($q) {
             $q->where('isaktif', 1);
         }])
             ->where('isAktif', true)
-            // GANTI whereHas DENGAN whereRaw UNTUK MENGATASI ERROR COLLATION
             ->whereRaw("EXISTS (
                 SELECT * FROM lokets 
                 WHERE skpd.id COLLATE utf8mb4_unicode_ci = lokets.skpd_id COLLATE utf8mb4_unicode_ci 
@@ -44,7 +61,58 @@ class FrontController extends Controller
             )")
             ->get();
 
+        $now = Carbon::now();
+        $hariIni = $now->dayOfWeekIso;
+        $waktuSekarang = $now->format('H:i:s');
+        $tanggalSekarang = $now->toDateString();
+
+        foreach ($skpd as $item) {
+            $item->is_layanan_buka = true;
+            $item->pesan_tutup = '';
+
+            if ($item->is_force_close) {
+                $item->is_layanan_buka = false;
+                $item->pesan_tutup = 'SEDANG DITUTUP';
+            } else {
+                if (in_array($hariIni, [1, 2, 3, 4])) {
+                    if ($waktuSekarang < $item->buka_senin_kamis || $waktuSekarang > $item->tutup_senin_kamis) {
+                        $item->is_layanan_buka = false;
+                        $item->pesan_tutup = 'JAM TUTUP';
+                    }
+                } elseif ($hariIni == 5) {
+                    if ($waktuSekarang < $item->buka_jumat || $waktuSekarang > $item->tutup_jumat) {
+                        $item->is_layanan_buka = false;
+                        $item->pesan_tutup = 'JAM TUTUP';
+                    }
+                } else {
+                    $item->is_layanan_buka = false;
+                    $item->pesan_tutup = 'LIBUR';
+                }
+
+                if ($item->is_layanan_buka && $item->kuota_harian > 0) {
+                    $jumlahAntrianHariIni = Antrian::where('skpd_id', $item->id)->whereDate('tanggal', $tanggalSekarang)->count();
+                    if ($jumlahAntrianHariIni >= $item->kuota_harian) {
+                        $item->is_layanan_buka = false;
+                        $item->pesan_tutup = 'KUOTA PENUH';
+                    }
+                }
+            }
+        }
+        return $skpd;
+    }
+
+    // B. UBAH FUNGSI INDEX MENJADI SANGAT RINGKAS
+    public function index()
+    {
+        $skpd = $this->getSkpdWithStatus();
         return view('kios', compact('skpd'));
+    }
+
+    // C. TAMBAHKAN FUNGSI BARU UNTUK RENDER GRID HTML SAJA
+    public function getGridSkpd()
+    {
+        $skpd = $this->getSkpdWithStatus();
+        return view('kios_grid', compact('skpd'))->render();
     }
 
     /**

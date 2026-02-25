@@ -310,8 +310,8 @@
 
             {{-- Grid SKPD --}}
             <div class="p-6 p-lg-10 scroll-smooth overflow-auto flex-grow-1 bg-gray-100">
-                <div class="row g-6">
-                    @foreach ($skpd as $item)
+                <div class="row g-6" id="gridSkpdContainer">
+                    {{-- @foreach ($skpd as $item)
                         <div class="col-6 col-md-4 col-xl-3">
                             <div class="card card-flush h-100 border-0 shadow-sm card-service cursor-pointer"
                                 onclick="openLayanan('{{ $item->id }}')">
@@ -329,7 +329,9 @@
                                 </div>
                             </div>
                         </div>
-                    @endforeach
+                    @endforeach --}}
+
+                    @include('kios_grid')
                 </div>
                 {{-- Spacer Bawah agar tidak mepet --}}
                 <div class="h-50px"></div>
@@ -586,7 +588,19 @@
         }
 
         // ==========================================
-        // LOGIKA JAM & WEBSOCKET
+        // FUNGSI REFRESH GRID SKPD TANPA RELOAD PAGE
+        // ==========================================
+        function refreshGridSkpd() {
+            fetch("{{ route('kios.grid') }}")
+                .then(res => res.text())
+                .then(html => {
+                    document.getElementById('gridSkpdContainer').innerHTML = html;
+                })
+                .catch(e => console.error("Gagal refresh grid", e));
+        }
+
+        // ==========================================
+        // LOGIKA JAM & PENGECEKAN WAKTU OTOMATIS
         // ==========================================
         function updateClock() {
             const now = new Date();
@@ -598,11 +612,19 @@
             document.getElementById('jam-detik').innerText = String(now.getSeconds()).padStart(2, '0');
             document.getElementById('jam-tanggal').innerText =
                 `${days[now.getDay()]}, ${now.getDate()} ${months[now.getMonth()]} ${now.getFullYear()}`;
+
+            // PENTING: Refresh grid SKPD otomatis setiap pergantian menit (detik == 0)
+            // Ini menangani jam tutup layanan tanpa harus di-trigger dari server.
+            if (now.getSeconds() === 0) {
+                refreshGridSkpd();
+            }
         }
         setInterval(updateClock, 1000);
         updateClock();
 
-        // WebSocket Listener
+        // ==========================================
+        // WEBSOCKET LISTENER (REVERB)
+        // ==========================================
         setTimeout(() => {
             if (window.Echo) {
                 window.Echo.channel('antrian-channel')
@@ -614,6 +636,10 @@
                     })
                     .listen('.antrian-baru', (e) => {
                         fetchAntrianData();
+                        refreshGridSkpd(); // Refresh grid karena kuota mungkin sudah habis
+                    })
+                    .listen('.status-tenant-updated', (e) => {
+                        refreshGridSkpd(); // Refresh grid karena Admin mengubah settingan
                     });
             }
         }, 1000);
@@ -628,7 +654,7 @@
                     if (data.next) {
                         document.getElementById('nextNo').innerText = data.next.no_antrian;
                         document.getElementById('nextSkpd').innerText = data.next.nama_skpd;
-                        document.getElementById('nextLoket').innerText = data.next.nama_loket;
+                        // document.getElementById('nextLoket').innerText = data.next.nama_loket;
                     }
                 })
                 .catch(e => console.log("Fetch error", e));

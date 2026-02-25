@@ -47,8 +47,8 @@
                 <div class="me-3">
                     <!--begin::Menu-->
                     <!-- <a href="#" class="btn btn-sm btn-flex btn-dark fw-bold" data-kt-menu-trigger="click"
-                                                                    data-kt-menu-placement="bottom-end">
-                                                                    <i class="ki-outline ki-filter fs-2  me-1"></i>Filter</a> -->
+                                                                                data-kt-menu-placement="bottom-end">
+                                                                                <i class="ki-outline ki-filter fs-2  me-1"></i>Filter</a> -->
                     <!--begin::Menu 1-->
                     <div class="menu menu-sub menu-sub-dropdown w-250px w-md-300px" data-kt-menu="true"
                         id="kt_menu_66b9aa0df2f28">
@@ -68,6 +68,12 @@
                 </div>
                 <!--end::Wrapper-->
                 <!--begin::Button-->
+
+                @can('skpd.edit')
+                    <button type="button" id="btn_batch_jam" class="btn btn-sm btn-warning me-2">
+                        <i class="ki-outline ki-time fs-2"></i> Set Jam Masal
+                    </button>
+                @endcan
 
                 @can('skpd.create')
                     {{-- <button type="button" id="btn_sync_sukma" class="btn btn-sm btn-info me-2">
@@ -326,6 +332,43 @@
                                 <input type="text" name="lokasi" id="lokasi" class="form-control"
                                     placeholder="Contoh: Gedung A, Lantai 1, Sebelah Kiri" />
                                 <span class="text-danger error-text lokasi_error_add"></span>
+                            </div>
+
+                            <div class="row mb-5">
+                                <div class="col-md-6">
+                                    <label class="required fw-semibold fs-6 mb-2">Buka (Senin-Kamis)</label>
+                                    <input type="time" name="buka_senin_kamis" class="form-control" value="08:00"
+                                        required>
+                                </div>
+                                <div class="col-md-6">
+                                    <label class="required fw-semibold fs-6 mb-2">Tutup (Senin-Kamis)</label>
+                                    <input type="time" name="tutup_senin_kamis" class="form-control" value="15:00"
+                                        required>
+                                </div>
+                            </div>
+                            <div class="row mb-5">
+                                <div class="col-md-6">
+                                    <label class="required fw-semibold fs-6 mb-2">Buka (Jumat)</label>
+                                    <input type="time" name="buka_jumat" class="form-control" value="08:00"
+                                        required>
+                                </div>
+                                <div class="col-md-6">
+                                    <label class="required fw-semibold fs-6 mb-2">Tutup (Jumat)</label>
+                                    <input type="time" name="tutup_jumat" class="form-control" value="15:30"
+                                        required>
+                                </div>
+                            </div>
+                            <div class="fv-row mb-7">
+                                <label class="required fw-semibold fs-6 mb-2">Kuota Antrian Harian</label>
+                                <input type="number" name="kuota_harian" class="form-control" value="0" required>
+                                <div class="form-text">Isi 0 jika tidak ada batasan kuota.</div>
+                            </div>
+                            <div class="form-check form-switch form-check-custom form-check-solid mb-7">
+                                <input class="form-check-input" type="checkbox" name="is_force_close" value="1"
+                                    id="forceCloseAdd" />
+                                <label class="form-check-label text-danger fw-bold" for="forceCloseAdd">
+                                    Tutup Paksa Layanan Ini Sekarang (Force Close)
+                                </label>
                             </div>
 
                             <!--end::Input group-->
@@ -729,6 +772,59 @@
                     }
                 });
             });
+
+            $('#btn_batch_jam').click(function() {
+                Swal.fire({
+                    title: 'Ubah Jam Operasional Masal',
+                    text: "Pilih mode jam operasional untuk SELURUH instansi:",
+                    icon: 'question',
+                    showDenyButton: true,
+                    showCancelButton: true,
+                    confirmButtonText: '<i class="fa fa-sun text-white"></i> Mode Normal',
+                    confirmButtonColor: '#009ef7', // Warna Biru Metronic
+                    denyButtonText: '<i class="fa fa-moon text-white"></i> Mode Ramadhan',
+                    denyButtonColor: '#ffc700', // Warna Kuning/Warning
+                    cancelButtonText: 'Batal',
+                    customClass: {
+                        confirmButton: 'btn btn-primary btn-sm me-2',
+                        denyButton: 'btn btn-warning btn-sm me-2',
+                        cancelButton: 'btn btn-secondary btn-sm'
+                    }
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        sendBatchJam('normal');
+                    } else if (result.isDenied) {
+                        sendBatchJam('ramadan');
+                    }
+                });
+            });
+
+            function sendBatchJam(mode) {
+                Swal.fire({
+                    title: 'Memproses...',
+                    text: 'Sedang mengatur jam untuk seluruh tenant.',
+                    allowOutsideClick: false,
+                    didOpen: () => {
+                        Swal.showLoading();
+                    }
+                });
+
+                $.ajax({
+                    url: "{{ route('skpd.batch-jam') }}",
+                    method: "POST",
+                    data: {
+                        _token: $('meta[name="csrf-token"]').attr('content'),
+                        mode: mode
+                    },
+                    success: function(res) {
+                        Swal.fire("Berhasil", res.success, "success");
+                        $('.chimox').DataTable().ajax.reload(null, false);
+                    },
+                    error: function(xhr) {
+                        Swal.fire("Gagal", xhr.responseJSON?.error || "Terjadi kesalahan sistem", "error");
+                    }
+                });
+            }
 
 
             function updateToolbar() {
