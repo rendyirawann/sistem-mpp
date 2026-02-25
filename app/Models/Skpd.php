@@ -18,6 +18,12 @@ class Skpd extends Model
         'logo_skpd',
         'no_antrian',
         'external_id_sukma', // <--- TAMBAHKAN INI
+        'buka_senin_kamis',
+        'tutup_senin_kamis',
+        'buka_jumat',
+        'tutup_jumat',
+        'kuota_harian',
+        'is_force_close',
     ];
 
     public $incrementing = false;

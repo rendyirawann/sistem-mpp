@@ -18,6 +18,7 @@ use Jenssegers\Agent\Agent;
 use Illuminate\View\View;
 use Yajra\DataTables\Facades\DataTables;
 use Spatie\Activitylog\Models\Activity;
+use App\Events\StatusTenantUpdated;
 
 
 class SkpdController extends Controller
@@ -30,7 +31,7 @@ class SkpdController extends Controller
         $this->middleware('permission:skpd.list', ['only' => ['index', 'getSkpd']]);
         $this->middleware('permission:skpd.show', ['only' => ['show']]);
         $this->middleware('permission:skpd.create', ['only' => ['store']]);
-        $this->middleware('permission:skpd.edit', ['only' => ['edit', 'update']]);
+        $this->middleware('permission:skpd.edit', ['only' => ['edit', 'update', 'batchJamOperasional']]);
         $this->middleware('permission:skpd.delete', ['only' => ['destroy']]);
         $this->middleware('permission:skpd.massdelete', ['only' => ['massDelete']]);
     }
@@ -179,6 +180,11 @@ class SkpdController extends Controller
             'isaktif'    => 'required|in:0,1',
             'logo_skpd' => 'nullable|mimes:jpg,png,svg|max:2048',
             'external_id_sukma' => 'nullable|numeric',
+            'buka_senin_kamis' => 'required',
+            'tutup_senin_kamis' => 'required',
+            'buka_jumat' => 'required',
+            'tutup_jumat' => 'required',
+            'kuota_harian' => 'required|numeric',
         ], [
 
             //  'kode_skpd.required' => 'Kode SKPD wajib diisi',
@@ -199,6 +205,11 @@ class SkpdController extends Controller
             'isaktif.required'  => 'Status wajib dipilih',
             'isaktif.in'        => 'Status tidak valid',
             'external_id_sukma.numeric' => 'ID Sukma harus berupa angka',
+
+            'buka_senin_kamis.required' => 'Jam Buka Pelayanan Untuk Hari Senin - Kamis Wajib Diisi',
+            'tutup_senin_kamis.required' => 'Jam Tutup Pelayanan Untuk Hari Senin - Kamis Wajib Diisi',
+            'buka_jumat.required' => 'Jam Buka Pelayanan Untuk Hari Jumat Wajib Diisi',
+            'tutup_jumat.required' => 'Jam Tutup Pelayanan Untuk Hari Jumat Wajib Diisi',
         ]);
 
         if ($validator->fails()) {
@@ -231,6 +242,12 @@ class SkpdController extends Controller
             $data->nip_kepala  = $request->nip_kepala;
             $data->isaktif    = $request->isaktif;
             $data->external_id_sukma = $request->external_id_sukma;
+            $data->buka_senin_kamis = $request->buka_senin_kamis;
+            $data->tutup_senin_kamis = $request->tutup_senin_kamis;
+            $data->buka_jumat = $request->buka_jumat;
+            $data->tutup_jumat = $request->tutup_jumat;
+            $data->kuota_harian = $request->kuota_harian;
+            $data->is_force_close = $request->has('is_force_close') ? 1 : 0;
             $data->save();
 
             // ===============================
@@ -386,6 +403,62 @@ class SkpdController extends Controller
             ->make(true);
     }
 
+    public function batchJamOperasional(Request $request)
+    {
+        $mode = $request->mode;
+
+        // Tentukan Jam Sesuai Mode
+        if ($mode === 'ramadan') {
+            $buka_sk = '08:00:00';
+            $tutup_sk = '15:00:00';
+            $buka_jumat = '08:00:00';
+            $tutup_jumat = '15:30:00';
+        } else {
+            // Mode Normal (Standar Jam Kerja ASN)
+            // Silakan sesuaikan jika jam tutup normalnya berbeda
+            $buka_sk = '08:00:00';
+            $tutup_sk = '16:00:00';
+            $buka_jumat = '08:00:00';
+            $tutup_jumat = '16:30:00';
+        }
+
+        try {
+            \DB::beginTransaction();
+
+            // Ubah seluruh jam operasional di tabel SKPD
+            Skpd::query()->update([
+                'buka_senin_kamis' => $buka_sk,
+                'tutup_senin_kamis' => $tutup_sk,
+                'buka_jumat' => $buka_jumat,
+                'tutup_jumat' => $tutup_jumat,
+            ]);
+
+            // Log Activity
+            activity()
+                ->useLog('Ubah Masal Jam Layanan')
+                ->causedBy(Auth::user())
+                ->log("Mengubah jam pelayanan seluruh tenant ke Mode " . ucfirst($mode));
+
+            \DB::commit();
+
+            // Panggil Event WebSocket agar layar kios langsung refresh
+            try {
+                event(new StatusTenantUpdated());
+            } catch (\Exception $e) {
+            }
+
+            return response()->json([
+                'success' => 'Jam operasional seluruh tenant berhasil diubah ke Mode ' . ucfirst($mode) . '!'
+            ]);
+        } catch (\Exception $e) {
+            \DB::rollBack();
+            return response()->json([
+                'error' => 'Gagal mengubah jam operasional',
+                'message' => $e->getMessage()
+            ], 500);
+        }
+    }
+
     public function getActivity(Request $request, $id)
     {
 
@@ -504,6 +577,11 @@ class SkpdController extends Controller
             'logo_skpd' => 'nullable|mimes:jpg,png,svg|max:2048',
             'isaktif'      => 'required|in:0,1',
             'external_id_sukma' => 'nullable|numeric',
+            'buka_senin_kamis' => 'required',
+            'tutup_senin_kamis' => 'required',
+            'buka_jumat' => 'required',
+            'tutup_jumat' => 'required',
+            'kuota_harian' => 'required|numeric',
         ], [
             'nama_skpd.required' => 'Nama SKPD wajib diisi',
             'nama_skpd.max'      => 'Nama SKPD maksimal 255 karakter',
@@ -516,6 +594,10 @@ class SkpdController extends Controller
             'logo_skpd.max' => 'Ukuran file Logo_skpd maksimal 2 MB',
             'isaktif.required'   => 'Status wajib dipilih',
             'isaktif.in'         => 'Status tidak valid',
+            'buka_senin_kamis.required' => 'Jam Buka Pelayanan Untuk Hari Senin - Kamis Wajib Diisi',
+            'tutup_senin_kamis.required' => 'Jam Tutup Pelayanan Untuk Hari Senin - Kamis Wajib Diisi',
+            'buka_jumat.required' => 'Jam Buka Pelayanan Untuk Hari Jumat Wajib Diisi',
+            'tutup_jumat.required' => 'Jam Tutup Pelayanan Untuk Hari Jumat Wajib Diisi',
         ]);
 
         if ($validator->fails()) {
@@ -559,6 +641,14 @@ class SkpdController extends Controller
             $data->nip_kepala  = $request->nip_kepala;
             $data->isaktif     = $request->isaktif;
             $data->external_id_sukma = $request->external_id_sukma;
+
+            // Kolom baru yang tertinggal sebelumnya:
+            $data->buka_senin_kamis = $request->buka_senin_kamis;
+            $data->tutup_senin_kamis = $request->tutup_senin_kamis;
+            $data->buka_jumat = $request->buka_jumat;
+            $data->tutup_jumat = $request->tutup_jumat;
+            $data->kuota_harian = $request->kuota_harian;
+            $data->is_force_close = $request->has('is_force_close') ? 1 : 0;
             $data->save();
 
             // ===============================
@@ -595,6 +685,16 @@ class SkpdController extends Controller
                 ->log('Mengubah data SKPD ' . $data->nama_skpd);
 
             \DB::commit();
+
+            // ==========================================
+            // TAMBAHKAN TRIGGER EVENT WEBSOCKET DI SINI
+            // ==========================================
+            try {
+                event(new StatusTenantUpdated());
+            } catch (\Exception $e) {
+                // Biarkan kosong agar jika websocket mati, fungsi edit tetap jalan
+            }
+            // ==========================================
 
             return response()->json([
                 'success' => 'Data SKPD berhasil diperbaharui.',

@@ -97,6 +97,8 @@ Route::middleware('auth')->group(function () {
     Route::post('/skpd/sync-sukma', [SkpdController::class, 'syncSukma'])
         ->name('skpd.sync-sukma');
 
+    Route::post('/skpd/batch-jam-operasional', [SkpdController::class, 'batchJamOperasional'])->name('skpd.batch-jam');
+
     Route::resource('antrian', AntrianController::class);
 
     /* DATATABLE */
@@ -214,5 +216,7 @@ Route::get('/', [FrontController::class, 'index'])->name('home');
 
 // 2. Proses Ambil Antrian (Saat tombol Input ditekan)
 Route::post('/ambil-antrian', [FrontController::class, 'ambilAntrian'])->name('ambil.antrian');
+
+Route::get('/kios/grid-skpd', [FrontController::class, 'getGridSkpd'])->name('kios.grid');
 
 // -------------------------------------------------------------
