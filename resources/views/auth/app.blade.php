@@ -15,18 +15,17 @@ License: For each use you must have a valid license purchased only from above li
 
 <head>
 
-    <title>@yield('title')</title>
+<title>@yield('title', 'Aplikasi Antrian MPP - Kabupaten Deli Serdang | Deli Serdang Sehat')</title>
     <meta charset="utf-8" />
-    <meta name="description" content="Base Aplikasi Terbaik" />
-    <meta name="keywords" content="chimo, rizky, rizkychimo, bootstrap, bootstrap 5, Symfony & Laravel starter kits." />
+    <meta name="description" content="Aplikasi Antrian MPP - Kabupaten Deli Serdang | Deli Serdang Sehat" />
+    <meta name="keywords" content="mpp deli serdang, mall pelayanan publik, antrian online, deli serdang sehat, pemkab deli serdang" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <meta property="og:locale" content="en_US" />
-    <meta property="og:type" content="article" />
-    <meta property="og:title"
-        content="Metronic - The World's #1 Selling Tailwind CSS & Bootstrap Admin Template by KeenThemes" />
-    <meta property="og:url" content="https://keenthemes.com/metronic" />
-    <meta property="og:site_name" content="Metronic by Keenthemes" />
-    <link rel="canonical" href="http://preview.keenthemes.comauthentication/layouts/overlay/sign-in.html" />
+    <meta property="og:locale" content="id_ID" />
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="Aplikasi Antrian MPP - Kabupaten Deli Serdang | Deli Serdang Sehat" />
+    <meta property="og:url" content="{{ url('/') }}" />
+    <meta property="og:site_name" content="MPP Deli Serdang" />
+    <link rel="canonical" href="{{ url('/') }}" />
     <link rel="shortcut icon" href="{{ asset('assets/media/logos/logo_deliserdang.png') }}" />
     <!--begin::Fonts(mandatory for all pages)-->
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Inter:300,400,500,600,700" />

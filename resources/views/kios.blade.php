@@ -3,7 +3,8 @@
 
 <head>
     <meta charset="UTF-8">
-    <title>MPP - Antrian & Monitor</title>
+    <title>Aplikasi Antrian MPP - Kabupaten Deli Serdang | Deli Serdang Sehat</title>
+    <meta name="description" content="Aplikasi Antrian MPP - Kabupaten Deli Serdang | Deli Serdang Sehat">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="csrf-token" content="{{ csrf_token() }}">
 

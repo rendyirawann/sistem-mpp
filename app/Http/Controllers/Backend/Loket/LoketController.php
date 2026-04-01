@@ -112,7 +112,7 @@ class LoketController extends Controller
         $validator = \Validator::make($request->all(), [
             'nama_loket'    => 'required|string|max:255',
             'kode_tenant'   => 'required|string|max:50',
-            'prefix_tenant' => 'required|string|max:5',
+            'prefix_tenant' => 'required|string|max:10',
             'isaktif'       => 'required|in:0,1',
         ]);
 
