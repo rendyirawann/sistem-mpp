@@ -22,6 +22,11 @@ class Skpd extends Model
         'tutup_senin_kamis',
         'buka_jumat',
         'tutup_jumat',
+        // --- TAMBAHAN SABTU ---
+        'is_sabtu_buka',
+        'buka_sabtu',
+        'tutup_sabtu',
+        // ----------------------
         'kuota_harian',
         'is_force_close',
     ];

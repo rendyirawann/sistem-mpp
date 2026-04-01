@@ -77,16 +77,28 @@ class FrontController extends Controller
                 if (in_array($hariIni, [1, 2, 3, 4])) {
                     if ($waktuSekarang < $item->buka_senin_kamis || $waktuSekarang > $item->tutup_senin_kamis) {
                         $item->is_layanan_buka = false;
-                        $item->pesan_tutup = 'JAM TUTUP';
+                        $item->pesan_tutup = 'JAM PELAYANAN TUTUP';
                     }
                 } elseif ($hariIni == 5) {
                     if ($waktuSekarang < $item->buka_jumat || $waktuSekarang > $item->tutup_jumat) {
                         $item->is_layanan_buka = false;
-                        $item->pesan_tutup = 'JAM TUTUP';
+                        $item->pesan_tutup = 'JAM PELAYANAN TUTUP';
+                    }
+                } elseif ($hariIni == 6) {
+                    // SABTU (Cek apakah instansi ini mengizinkan buka Sabtu)
+                    if ($item->is_sabtu_buka) {
+                        if ($waktuSekarang < $item->buka_sabtu || $waktuSekarang > $item->tutup_sabtu) {
+                            $item->is_layanan_buka = false;
+                            $item->pesan_tutup = 'JAM PELAYANAN TUTUP';
+                        }
+                    } else {
+                        // Jika tidak diizinkan, maka otomatis libur
+                        $item->is_layanan_buka = false;
+                        $item->pesan_tutup = 'PELAYANAN LIBUR';
                     }
                 } else {
                     $item->is_layanan_buka = false;
-                    $item->pesan_tutup = 'LIBUR';
+                    $item->pesan_tutup = 'PELAYANAN LIBUR';
                 }
 
                 if ($item->is_layanan_buka && $item->kuota_harian > 0) {

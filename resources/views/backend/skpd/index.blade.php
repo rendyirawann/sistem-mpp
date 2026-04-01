@@ -47,8 +47,8 @@
                 <div class="me-3">
                     <!--begin::Menu-->
                     <!-- <a href="#" class="btn btn-sm btn-flex btn-dark fw-bold" data-kt-menu-trigger="click"
-                                                                                data-kt-menu-placement="bottom-end">
-                                                                                <i class="ki-outline ki-filter fs-2  me-1"></i>Filter</a> -->
+                                                                                    data-kt-menu-placement="bottom-end">
+                                                                                    <i class="ki-outline ki-filter fs-2  me-1"></i>Filter</a> -->
                     <!--begin::Menu 1-->
                     <div class="menu menu-sub menu-sub-dropdown w-250px w-md-300px" data-kt-menu="true"
                         id="kt_menu_66b9aa0df2f28">
@@ -334,28 +334,69 @@
                                 <span class="text-danger error-text lokasi_error_add"></span>
                             </div>
 
-                            <div class="row mb-5">
-                                <div class="col-md-6">
-                                    <label class="required fw-semibold fs-6 mb-2">Buka (Senin-Kamis)</label>
-                                    <input type="time" name="buka_senin_kamis" class="form-control" value="08:00"
-                                        required>
-                                </div>
-                                <div class="col-md-6">
-                                    <label class="required fw-semibold fs-6 mb-2">Tutup (Senin-Kamis)</label>
-                                    <input type="time" name="tutup_senin_kamis" class="form-control" value="15:00"
-                                        required>
-                                </div>
+                            <div class="separator border-primary opacity-25 my-8"></div>
+                            <div class="mb-5">
+                                <h3 class="fw-bold text-primary m-0"><i class="fa fa-clock text-primary me-2"></i>
+                                    Pengaturan Waktu & Antrian</h3>
+                                <span class="text-muted fs-7">Atur jam operasional dan kuota spesifik untuk tenant
+                                    ini.</span>
                             </div>
-                            <div class="row mb-5">
-                                <div class="col-md-6">
-                                    <label class="required fw-semibold fs-6 mb-2">Buka (Jumat)</label>
-                                    <input type="time" name="buka_jumat" class="form-control" value="08:00"
-                                        required>
+
+                            <div class="row g-5 mb-7">
+                                <div class="col-md-4">
+                                    <div class="border border-gray-300 rounded p-4 h-100 bg-light-primary">
+                                        <h5 class="fw-bolder text-gray-800 mb-4 border-bottom pb-2">Senin - Kamis</h5>
+                                        <div class="fv-row mb-4">
+                                            <label class="required fw-semibold fs-7 mb-2">Jam Buka</label>
+                                            <input type="time" name="buka_senin_kamis"
+                                                class="form-control form-control-solid" value="08:00" required>
+                                        </div>
+                                        <div class="fv-row">
+                                            <label class="required fw-semibold fs-7 mb-2">Jam Tutup</label>
+                                            <input type="time" name="tutup_senin_kamis"
+                                                class="form-control form-control-solid" value="15:00" required>
+                                        </div>
+                                    </div>
                                 </div>
-                                <div class="col-md-6">
-                                    <label class="required fw-semibold fs-6 mb-2">Tutup (Jumat)</label>
-                                    <input type="time" name="tutup_jumat" class="form-control" value="15:30"
-                                        required>
+
+                                <div class="col-md-4">
+                                    <div class="border border-gray-300 rounded p-4 h-100 bg-light-success">
+                                        <h5 class="fw-bolder text-gray-800 mb-4 border-bottom pb-2">Jumat</h5>
+                                        <div class="fv-row mb-4">
+                                            <label class="required fw-semibold fs-7 mb-2">Jam Buka</label>
+                                            <input type="time" name="buka_jumat"
+                                                class="form-control form-control-solid" value="08:00" required>
+                                        </div>
+                                        <div class="fv-row">
+                                            <label class="required fw-semibold fs-7 mb-2">Jam Tutup</label>
+                                            <input type="time" name="tutup_jumat"
+                                                class="form-control form-control-solid" value="15:30" required>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="col-md-4">
+                                    <div class="border border-gray-300 rounded p-4 h-100 bg-light-warning">
+                                        <div
+                                            class="d-flex justify-content-between align-items-center border-bottom pb-2 mb-4">
+                                            <h5 class="fw-bolder text-gray-800 mb-0">Sabtu</h5>
+                                            <div class="form-check form-switch form-check-custom form-check-solid form-check-success"
+                                                data-bs-toggle="tooltip" title="Aktifkan jika melayani di hari Sabtu">
+                                                <input class="form-check-input h-20px w-30px" type="checkbox"
+                                                    name="is_sabtu_buka" value="1" id="sabtuBukaAdd" />
+                                            </div>
+                                        </div>
+                                        <div class="fv-row mb-4">
+                                            <label class="required fw-semibold fs-7 mb-2">Jam Buka</label>
+                                            <input type="time" name="buka_sabtu"
+                                                class="form-control form-control-solid" value="08:00" required>
+                                        </div>
+                                        <div class="fv-row">
+                                            <label class="required fw-semibold fs-7 mb-2">Jam Tutup</label>
+                                            <input type="time" name="tutup_sabtu"
+                                                class="form-control form-control-solid" value="15:00" required>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
                             <div class="fv-row mb-7">

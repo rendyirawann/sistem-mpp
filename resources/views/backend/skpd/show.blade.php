@@ -70,6 +70,20 @@
             </td>
         </tr>
         <tr>
+            <th class="fw-bold text-muted">Jam Operasional <br><small class="fw-normal">(Sabtu)</small></th>
+            <td>
+                @if ($data->is_sabtu_buka)
+                    <span class="fw-bold text-gray-800">
+                        {{ substr($data->buka_sabtu, 0, 5) }} WIB <span class="text-muted mx-2">s/d</span>
+                        {{ substr($data->tutup_sabtu, 0, 5) }} WIB
+                    </span>
+                    <span class="badge badge-light-success ms-2">BUKA</span>
+                @else
+                    <span class="badge badge-light-danger fw-bold">LIBUR / TUTUP</span>
+                @endif
+            </td>
+        </tr>
+        <tr>
             <th class="fw-bold text-muted">Batas Kuota Harian</th>
             <td>
                 @if ($data->kuota_harian > 0)

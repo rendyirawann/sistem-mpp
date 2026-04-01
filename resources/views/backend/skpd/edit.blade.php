@@ -77,34 +77,57 @@
 </div>
 
 <div class="row g-5 mb-7">
-    <div class="col-md-6">
+    <div class="col-md-4">
         <div class="border border-gray-300 rounded p-4 h-100 bg-light-primary">
             <h5 class="fw-bolder text-gray-800 mb-4 border-bottom pb-2">Senin - Kamis</h5>
             <div class="fv-row mb-4">
                 <label class="required fw-semibold fs-7 mb-2">Jam Buka</label>
                 <input type="text" name="buka_senin_kamis" class="form-control form-control-solid kt_time_picker"
-                    value="{{ substr($user->buka_senin_kamis, 0, 5) }}" placeholder="Pilih Jam" required>
+                    value="{{ substr($user->buka_senin_kamis, 0, 5) }}" required>
             </div>
             <div class="fv-row">
                 <label class="required fw-semibold fs-7 mb-2">Jam Tutup</label>
                 <input type="text" name="tutup_senin_kamis" class="form-control form-control-solid kt_time_picker"
-                    value="{{ substr($user->tutup_senin_kamis, 0, 5) }}" placeholder="Pilih Jam" required>
+                    value="{{ substr($user->tutup_senin_kamis, 0, 5) }}" required>
             </div>
         </div>
     </div>
 
-    <div class="col-md-6">
+    <div class="col-md-4">
         <div class="border border-gray-300 rounded p-4 h-100 bg-light-success">
             <h5 class="fw-bolder text-gray-800 mb-4 border-bottom pb-2">Jumat</h5>
             <div class="fv-row mb-4">
                 <label class="required fw-semibold fs-7 mb-2">Jam Buka</label>
                 <input type="text" name="buka_jumat" class="form-control form-control-solid kt_time_picker"
-                    value="{{ substr($user->buka_jumat, 0, 5) }}" placeholder="Pilih Jam" required>
+                    value="{{ substr($user->buka_jumat, 0, 5) }}" required>
             </div>
             <div class="fv-row">
                 <label class="required fw-semibold fs-7 mb-2">Jam Tutup</label>
                 <input type="text" name="tutup_jumat" class="form-control form-control-solid kt_time_picker"
-                    value="{{ substr($user->tutup_jumat, 0, 5) }}" placeholder="Pilih Jam" required>
+                    value="{{ substr($user->tutup_jumat, 0, 5) }}" required>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-4">
+        <div class="border border-gray-300 rounded p-4 h-100 bg-light-warning">
+            <div class="d-flex justify-content-between align-items-center border-bottom pb-2 mb-4">
+                <h5 class="fw-bolder text-gray-800 mb-0">Sabtu</h5>
+                <div class="form-check form-switch form-check-custom form-check-solid form-check-success"
+                    data-bs-toggle="tooltip" title="Aktifkan jika melayani di hari Sabtu">
+                    <input class="form-check-input h-20px w-30px" type="checkbox" name="is_sabtu_buka"
+                        value="1" id="sabtuBukaEdit" {{ $user->is_sabtu_buka ? 'checked' : '' }} />
+                </div>
+            </div>
+            <div class="fv-row mb-4">
+                <label class="required fw-semibold fs-7 mb-2">Jam Buka</label>
+                <input type="text" name="buka_sabtu" class="form-control form-control-solid kt_time_picker"
+                    value="{{ substr($user->buka_sabtu, 0, 5) }}" required>
+            </div>
+            <div class="fv-row">
+                <label class="required fw-semibold fs-7 mb-2">Jam Tutup</label>
+                <input type="text" name="tutup_sabtu" class="form-control form-control-solid kt_time_picker"
+                    value="{{ substr($user->tutup_sabtu, 0, 5) }}" required>
             </div>
         </div>
     </div>

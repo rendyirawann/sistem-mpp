@@ -184,6 +184,8 @@ class SkpdController extends Controller
             'tutup_senin_kamis' => 'required',
             'buka_jumat' => 'required',
             'tutup_jumat' => 'required',
+            'buka_sabtu' => 'required',
+            'tutup_sabtu' => 'required',
             'kuota_harian' => 'required|numeric',
         ], [
 
@@ -248,6 +250,9 @@ class SkpdController extends Controller
             $data->tutup_jumat = $request->tutup_jumat;
             $data->kuota_harian = $request->kuota_harian;
             $data->is_force_close = $request->has('is_force_close') ? 1 : 0;
+            $data->is_sabtu_buka = $request->has('is_sabtu_buka') ? 1 : 0;
+            $data->buka_sabtu = $request->buka_sabtu;
+            $data->tutup_sabtu = $request->tutup_sabtu;
             $data->save();
 
             // ===============================
@@ -413,6 +418,8 @@ class SkpdController extends Controller
             $tutup_sk = '15:00:00';
             $buka_jumat = '08:00:00';
             $tutup_jumat = '15:30:00';
+            $buka_sabtu = '08:00:00';
+            $tutup_sabtu = '15:00:00';
         } else {
             // Mode Normal (Standar Jam Kerja ASN)
             // Silakan sesuaikan jika jam tutup normalnya berbeda
@@ -420,6 +427,8 @@ class SkpdController extends Controller
             $tutup_sk = '16:00:00';
             $buka_jumat = '08:00:00';
             $tutup_jumat = '16:30:00';
+            $buka_sabtu = '08:00:00';
+            $tutup_sabtu = '15:00:00';
         }
 
         try {
@@ -431,6 +440,8 @@ class SkpdController extends Controller
                 'tutup_senin_kamis' => $tutup_sk,
                 'buka_jumat' => $buka_jumat,
                 'tutup_jumat' => $tutup_jumat,
+                'buka_sabtu' => $buka_sabtu,
+                'tutup_sabtu' => $tutup_sabtu,
             ]);
 
             // Log Activity
@@ -581,6 +592,8 @@ class SkpdController extends Controller
             'tutup_senin_kamis' => 'required',
             'buka_jumat' => 'required',
             'tutup_jumat' => 'required',
+            'buka_sabtu' => 'required',
+            'tutup_sabtu' => 'required',
             'kuota_harian' => 'required|numeric',
         ], [
             'nama_skpd.required' => 'Nama SKPD wajib diisi',
@@ -649,6 +662,9 @@ class SkpdController extends Controller
             $data->tutup_jumat = $request->tutup_jumat;
             $data->kuota_harian = $request->kuota_harian;
             $data->is_force_close = $request->has('is_force_close') ? 1 : 0;
+            $data->is_sabtu_buka = $request->has('is_sabtu_buka') ? 1 : 0;
+            $data->buka_sabtu = $request->buka_sabtu;
+            $data->tutup_sabtu = $request->tutup_sabtu;
             $data->save();
 
             // ===============================
