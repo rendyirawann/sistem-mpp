@@ -56,26 +56,9 @@ class SkpdController extends Controller
 
     public function getSkpd(Request $request)
     {
-        $query = Skpd::query()->orderByDesc('created_at');
-        if (!empty($request->search['value'])) {
-            $search = $request->search['value'];
-            $query->where(function ($q) use ($search) {
-                $q->where('nama_skpd', 'like', "%{$search}%")->orWhere('kepala_skpd', 'like', "%{$search}%")->orWhere('nip_kepala', 'like', "%{$search}%")->orWhere('lokasi', 'like', "%{$search}%");
-            });
-        }
+        $query = Skpd::query();
+
         return DataTables::of($query)
-            ->addColumn('nama_skpd', function ($r) {
-                return $r->nama_skpd;
-            })
-            ->addColumn('kepala_skpd', function ($r) {
-                return $r->kepala_skpd ?? '-';
-            })
-            ->addColumn('nip_kepala', function ($r) {
-                return $r->nip_kepala ?? '-';
-            })
-            ->addColumn('no_urutan', function ($r) {
-                return $r->no_urutan ?? '-';
-            })
             ->addColumn('isaktif', function ($r) {
                 return $r->isaktif
                     ? '<span class="badge badge-light-success">Aktif</span>'
@@ -106,7 +89,7 @@ class SkpdController extends Controller
                         <li>
                             <a href="javascript:void(0)"
                                class="dropdown-item d-flex align-items-center"
-                               id="getShowRowData"
+                                id="getShowRowData"
                                data-id="' . $row->id . '">
                                 <i class="ki-outline ki-eye fs-5 me-2 text-info"></i>
                                 Detail
@@ -120,7 +103,7 @@ class SkpdController extends Controller
                         <li>
                             <a href="javascript:void(0)"
                                class="dropdown-item d-flex align-items-center"
-                               id="getEditRowData"
+                                id="getEditRowData"
                                data-id="' . $row->id . '">
                                 <i class="ki-outline ki-pencil fs-5 me-2 text-warning"></i>
                                 Edit
@@ -150,7 +133,6 @@ class SkpdController extends Controller
 
                 return $html;
             })
-
             ->rawColumns(['isaktif', 'action'])
             ->make(true);
     }
@@ -420,6 +402,13 @@ class SkpdController extends Controller
             $tutup_jumat = '15:30:00';
             $buka_sabtu = '08:00:00';
             $tutup_sabtu = '15:00:00';
+        } elseif ($mode === 'mpp') {
+            $buka_sk = '08:00:00';
+            $tutup_sk = '15:00:00';
+            $buka_jumat = '08:00:00';
+            $tutup_jumat = '16:00:00';
+            $buka_sabtu = '08:00:00';
+            $tutup_sabtu = '13:00:00';
         } else {
             // Mode Normal (Standar Jam Kerja ASN)
             // Silakan sesuaikan jika jam tutup normalnya berbeda

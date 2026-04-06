@@ -223,7 +223,18 @@
                                 </select>
                             </div>
 
-                            {{-- 4. Periode Filter --}}
+                            {{-- 4. Filter JK (Jenis Kelamin) - Hanya tampil untuk Detail Pelayanan --}}
+                            <div class="col-md-2" id="filter_jk_container">
+                                <label class="form-label fw-bold">Jenis Kelamin</label>
+                                <select name="jk" id="filter_jk" class="form-select form-select-solid" data-control="select2"
+                                    data-hide-search="true">
+                                    <option value="all" {{ (isset($jk) && $jk == 'all') || !isset($jk) ? 'selected' : '' }}>Semua JK</option>
+                                    <option value="L" {{ isset($jk) && $jk == 'L' ? 'selected' : '' }}>Laki-laki</option>
+                                    <option value="P" {{ isset($jk) && $jk == 'P' ? 'selected' : '' }}>Perempuan</option>
+                                </select>
+                            </div>
+
+                            {{-- 5. Periode Filter --}}
                             <div class="col-md-2">
                                 <label class="form-label fw-bold">Periode Filter</label>
                                 <select name="filter_type" id="filter_type" class="form-select form-select-solid"
@@ -268,7 +279,7 @@
                                 </div>
                             </div>
 
-                            {{-- 6. Tombol Action --}}
+                            {{-- 7. Tombol Action --}}
                             <div class="col-md-auto ms-auto">
                                 <div class="d-flex align-items-center gap-2">
                                     <button type="submit" class="btn btn-sm btn-primary fw-bold">
@@ -522,6 +533,7 @@
                     let params = {
                         loket_id: loketId,
                         status: $('select[name="status"]').val(),
+                        jk: $('select[name="jk"]').val(),
                         filter_type: $('#filter_type').val(),
                         start_date: $('input[name="start_date"]').val(),
                         end_date: $('input[name="end_date"]').val(),
@@ -561,14 +573,16 @@
                     });
                 });
 
-                // 5. 🔥 LOGIC BARU: HIDE/SHOW STATUS BERDASARKAN JENIS LAPORAN
-                // Jika pilih Rekap, sembunyikan dropdown Status
+                // 5. 🔥 LOGIC BARU: HIDE/SHOW STATUS & JK BERDASARKAN JENIS LAPORAN
+                // Jika pilih Rekap, sembunyikan dropdown Status & JK
                 $('#format_laporan').change(function() {
                     let val = $(this).val();
                     if (val === 'rekap') {
                         $('#filter_status_container').addClass('d-none');
+                        $('#filter_jk_container').addClass('d-none');
                     } else {
                         $('#filter_status_container').removeClass('d-none');
+                        $('#filter_jk_container').removeClass('d-none');
                     }
                 });
                 // Jalankan saat load halaman

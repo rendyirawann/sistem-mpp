@@ -120,7 +120,7 @@
                 <table class="data-table" nobr="true">
                     <thead>
                         <tr>
-                            <th colspan="10" style="text-align: left; background-color: #dbeafe;">
+                            <th colspan="11" style="text-align: left; background-color: #dbeafe;">
                                 LAYANAN: {{ strtoupper($namaLoket) }}
                             </th>
                         </tr>
@@ -130,6 +130,7 @@
                             <th width="8%">Status</th>
                             <th>NIK</th>
                             <th>Nama Customer</th>
+                            <th width="5%">JK</th>
                             <th>No HP</th>
                             <th width="8%">Tgl</th>
                             <th width="8%">Ambil</th>
@@ -156,6 +157,18 @@
 
                                 <td class="text-center">{{ $row->customer->nik ?? ($row->nik ?? '-') }}</td>
                                 <td>{{ $row->customer->nama ?? ($row->nama ?? '-') }}</td>
+                                <td class="text-center">
+                                    @php
+                                        $jkVal = $row->customer->jk ?? null;
+                                    @endphp
+                                    @if($jkVal == 'L')
+                                        <strong>L</strong>
+                                    @elseif($jkVal == 'P')
+                                        <strong>P</strong>
+                                    @else
+                                        -
+                                    @endif
+                                </td>
                                 <td class="text-center">{{ $row->customer->no_hp ?? ($row->no_hp ?? '-') }}</td>
 
                                 <td class="text-center">{{ \Carbon\Carbon::parse($row->tanggal)->format('d/m/y') }}
@@ -172,7 +185,7 @@
                         @endforeach
 
                         <tr>
-                            <td colspan="10" class="text-right"
+                            <td colspan="11" class="text-right"
                                 style="background-color: #f8f9fa; padding-right: 10px;">
                                 <strong>Total {{ $namaLoket }}: {{ $antrians->count() }} Antrian</strong>
                             </td>

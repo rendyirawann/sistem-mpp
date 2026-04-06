@@ -17,6 +17,9 @@
 
                 <td class="text-center">
                     <span class="text-gray-800 fw-bolder fs-5">{{ $item->no_antrian }}</span>
+                    @if(isset($item->customer->jk))
+                        <span class="badge badge-light-secondary ms-1">{{ $item->customer->jk }}</span>
+                    @endif
                 </td>
 
                 <td>

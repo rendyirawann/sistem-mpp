@@ -236,11 +236,14 @@ class FrontController extends Controller
             'loket_id' => 'required|exists:lokets,id',
             'nik'      => 'required|numeric|digits:16',
             'nama'     => 'required|string|max:100',
+            'jk'       => 'required|in:L,P',
             'no_hp'    => 'required|numeric|digits_between:10,14',
         ], [
             'nik.required' => 'NIK wajib diisi',
             'nik.digits'   => 'NIK harus 16 digit',
             'nama.required' => 'Nama wajib diisi',
+            'jk.required'  => 'Jenis Kelamin wajib dipilih', // <--- PESAN ERROR JK
+            'jk.in'        => 'Pilihan Jenis Kelamin tidak valid',
             'no_hp.required' => 'Nomor HP wajib diisi',
             'no_hp.digits_between' => 'Nomor HP minimal 10 dan maksimal 14 digit',
         ], [
@@ -248,6 +251,7 @@ class FrontController extends Controller
             'loket_id' => 'Loket',
             'nik'      => 'NIK',
             'nama'     => 'Nama Lengkap',
+            'jk'       => 'Jenis Kelamin',
             'no_hp'    => 'Nomor HP',
         ]);
 
@@ -265,13 +269,20 @@ class FrontController extends Controller
         DB::beginTransaction(); // Tambahkan Transaction biar aman
         try {
             // 2. SIMPAN / UPDATE CUSTOMER
-            $customer = Customer::firstOrCreate(
-                ['nik' => $request->nik],
-                [
-                    'nama'  => $request->nama,
-                    'no_hp' => $request->no_hp,
-                ]
-            );
+            // $customer = Customer::firstOrCreate(
+            //     ['nik' => $request->nik],
+            //     [
+            //         'nama'  => $request->nama,
+            //         'jk'    => $request->jk,
+            //         'no_hp' => $request->no_hp,
+            //     ]
+            // );
+            $customer = Customer::create([
+                'nik'   => $request->nik,
+                'nama'  => $request->nama,
+                'jk'    => $request->jk,
+                'no_hp' => $request->no_hp,
+            ]);
 
             // 3. AMBIL DATA LOKET DULU (Untuk Cek Prefix)
             $loket = Loket::findOrFail($request->loket_id); //

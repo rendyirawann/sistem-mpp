@@ -61,6 +61,35 @@ class SkmController extends Controller
     }
 
     // 1. Tampilkan Halaman Form SKM
+    // public function index()
+    // {
+    //     $baseUrl = 'https://sukmadeli.deliserdangkab.go.id/api/v1';
+    //     $token   = '694e5225-d868-8323-8e10-21b0d3774720';
+
+    //     // Logika: Kita bisa mengambil ID OPD dari session antrian jika user sudah input nomor antrian di awal,
+    //     // namun karena di multi-step ini nomor antrian baru dicek di client-side, 
+    //     // maka untuk pengambilan data awal (pooling) kita gunakan ID 18 sebagai default utama.
+    //     $defaultOpdId = 18;
+
+    //     $responses = Http::pool(fn(Pool $pool) => [
+    //         $pool->as('pendidikan')->withHeaders(['X-API-TOKEN' => $token])->get("{$baseUrl}/pendidikan"),
+    //         $pool->as('pekerjaan')->withHeaders(['X-API-TOKEN' => $token])->get("{$baseUrl}/pekerjaan"),
+    //         $pool->as('disabilitas')->withHeaders(['X-API-TOKEN' => $token])->get("{$baseUrl}/disabilitas"),
+    //         // Gunakan defaultOpdId
+    //         $pool->as('pelayanan')->withHeaders(['X-API-TOKEN' => $token])->get("{$baseUrl}/pelayanan?opd={$defaultOpdId}"),
+    //     ]);
+
+    //     $pendidikan  = $responses['pendidikan']->ok() ? $responses['pendidikan']->json() : [];
+    //     $pekerjaan   = $responses['pekerjaan']->ok()  ? $responses['pekerjaan']->json()  : [];
+    //     $disabilitas = $responses['disabilitas']->ok() ? $responses['disabilitas']->json() : [];
+    //     $pelayananRaw = $responses['pelayanan']->ok() ? $responses['pelayanan']->json() : [];
+    //     $pelayanan    = $pelayananRaw['layanan_list'] ?? [];
+    //     $pertanyaan = $this->getDaftarPertanyaan();
+
+    //     return view('skm.index', compact('pendidikan', 'pekerjaan', 'disabilitas', 'pelayanan', 'pertanyaan'));
+    // }
+
+    // 1. Tampilkan Halaman Form SKM
     public function index()
     {
         $baseUrl = 'https://sukmadeli.deliserdangkab.go.id/api/v1';
@@ -71,22 +100,42 @@ class SkmController extends Controller
         // maka untuk pengambilan data awal (pooling) kita gunakan ID 18 sebagai default utama.
         $defaultOpdId = 18;
 
-        $responses = Http::pool(fn(Pool $pool) => [
-            $pool->as('pendidikan')->withHeaders(['X-API-TOKEN' => $token])->get("{$baseUrl}/pendidikan"),
-            $pool->as('pekerjaan')->withHeaders(['X-API-TOKEN' => $token])->get("{$baseUrl}/pekerjaan"),
-            $pool->as('disabilitas')->withHeaders(['X-API-TOKEN' => $token])->get("{$baseUrl}/disabilitas"),
-            // Gunakan defaultOpdId
-            $pool->as('pelayanan')->withHeaders(['X-API-TOKEN' => $token])->get("{$baseUrl}/pelayanan?opd={$defaultOpdId}"),
-        ]);
+        try {
+            // TAMBAHKAN withOptions(['verify' => false]) AGAR TIDAK TERJADI CONNECTION EXCEPTION (SSL)
+            $responses = Http::pool(fn(Pool $pool) => [
+                $pool->as('pendidikan')->withOptions(['verify' => false])->withHeaders(['X-API-TOKEN' => $token])->get("{$baseUrl}/pendidikan"),
+                $pool->as('pekerjaan')->withOptions(['verify' => false])->withHeaders(['X-API-TOKEN' => $token])->get("{$baseUrl}/pekerjaan"),
+                $pool->as('disabilitas')->withOptions(['verify' => false])->withHeaders(['X-API-TOKEN' => $token])->get("{$baseUrl}/disabilitas"),
+                $pool->as('pelayanan')->withOptions(['verify' => false])->withHeaders(['X-API-TOKEN' => $token])->get("{$baseUrl}/pelayanan?opd={$defaultOpdId}"),
+            ]);
 
-        $pendidikan  = $responses['pendidikan']->ok() ? $responses['pendidikan']->json() : [];
-        $pekerjaan   = $responses['pekerjaan']->ok()  ? $responses['pekerjaan']->json()  : [];
-        $disabilitas = $responses['disabilitas']->ok() ? $responses['disabilitas']->json() : [];
-        $pelayananRaw = $responses['pelayanan']->ok() ? $responses['pelayanan']->json() : [];
-        $pelayanan    = $pelayananRaw['layanan_list'] ?? [];
-        $pertanyaan = $this->getDaftarPertanyaan();
+            // Cek apakah ada response yang error / berupa exception (ConnectionException)
+            $isError = false;
+            foreach (['pendidikan', 'pekerjaan', 'disabilitas', 'pelayanan'] as $key) {
+                if (!isset($responses[$key]) || !($responses[$key] instanceof \Illuminate\Http\Client\Response) || !$responses[$key]->ok()) {
+                    $isError = true;
+                    break;
+                }
+            }
 
-        return view('skm.index', compact('pendidikan', 'pekerjaan', 'disabilitas', 'pelayanan', 'pertanyaan'));
+            if ($isError) {
+                Log::error("API SUKMA DOWN: Endpoints tidak merespon 200 OK.");
+                return view('skm.error');
+            }
+
+            $pendidikan   = $responses['pendidikan']->json();
+            $pekerjaan    = $responses['pekerjaan']->json();
+            $disabilitas  = $responses['disabilitas']->json();
+            $pelayananRaw = $responses['pelayanan']->json();
+            $pelayanan    = $pelayananRaw['layanan_list'] ?? [];
+            $pertanyaan   = $this->getDaftarPertanyaan();
+
+            return view('skm.index', compact('pendidikan', 'pekerjaan', 'disabilitas', 'pelayanan', 'pertanyaan'));
+            
+        } catch (\Exception $e) {
+            Log::error("API SUKMA EXC: " . $e->getMessage());
+            return view('skm.error');
+        }
     }
 
     // 2. API: Cek Nomor Antrian
@@ -140,6 +189,7 @@ class SkmController extends Controller
             'data' => [
                 'id'       => $antrian->id,
                 'nama'     => $antrian->customer->nama,
+                'jk'       => $antrian->customer->jk,
                 'nik'      => $antrian->customer->nik,
                 'layanan'  => $antrian->loket->nama_loket,
                 'instansi' => $antrian->skpd->nama_skpd,
@@ -275,7 +325,7 @@ class SkmController extends Controller
         $request->validate([
             'antrian_id'   => 'required|exists:antrians,id',
             'umur'         => 'required|numeric',
-            'jk'           => 'required|in:L,P',
+            // 'jk'           => 'required|in:L,P',
             'pendidikan'   => 'required|string',
             'pekerjaan'    => 'required|string',
             'disabilitas'  => 'required|in:YA,TIDAK',
@@ -295,9 +345,11 @@ class SkmController extends Controller
             'kritik_saran'      => 'nullable|string'
         ]);
 
-        $antrian = Antrian::with('skpd')->findOrFail($request->antrian_id);
+        // $antrian = Antrian::with('skpd')->findOrFail($request->antrian_id);
+        $antrian = Antrian::with(['skpd', 'customer'])->findOrFail($request->antrian_id);
         // Default ID 18 jika tidak ada di database
         $externalIdSkpd = $antrian->skpd->external_id_sukma ?? 18;
+        $jenisKelamin = $antrian->customer->jk ?? 'L';
 
         DB::beginTransaction();
         try {
@@ -306,7 +358,7 @@ class SkmController extends Controller
                 'antrian_id' => $request->antrian_id,
                 'nilai'      => round($request->u1 + $request->u2 + $request->u3 + $request->u4 + $request->u5 + $request->u6 + $request->u7 + $request->u8 + $request->u9),
                 'umur'       => $request->umur,
-                'jk'         => $request->jk,
+                'jk'         => $jenisKelamin,
                 'pendidikan' => $request->pendidikan,
                 'pekerjaan'  => $request->pekerjaan,
                 'disabilitas' => $request->disabilitas,
@@ -336,7 +388,7 @@ class SkmController extends Controller
             $payload = [
                 "id_skpd"      => (int)$externalIdSkpd,
                 "umur"         => (int)$request->umur,
-                "jk"           => $request->jk,
+                "jk"           => $jenisKelamin,
                 "pendidikan"   => $request->pendidikan,
                 "pekerjaan"    => $request->pekerjaan,
                 "disabilitas"  => $request->disabilitas,

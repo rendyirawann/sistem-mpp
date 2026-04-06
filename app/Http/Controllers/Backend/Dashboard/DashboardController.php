@@ -93,6 +93,14 @@ class DashboardController extends Controller
             $rekapQuery->where('status', $status);
         }
 
+        // C. Filter JK (Jenis Kelamin) — hanya berlaku untuk format Detail
+        $jk = $request->jk ?? 'all';
+        if ($jk !== 'all') {
+            $rekapQuery->whereHas('customer', function ($q) use ($jk) {
+                $q->where('jk', $jk);
+            });
+        }
+
         // D. Grouping Data (Rekap Layanan) - Kode Lama tapi variable status ikut dipassing
         $rekapLayanan = (clone $rekapQuery)
             ->select('loket_id', DB::raw('count(*) as total'))
@@ -118,7 +126,8 @@ class DashboardController extends Controller
             'startDate',
             'endDate',
             'bulan',
-            'status'
+            'status',
+            'jk'
         ));
     }
 
@@ -153,6 +162,13 @@ class DashboardController extends Controller
         // Filter Status (jika ada)
         if ($request->filled('status') && $request->status !== 'all') {
             $query->where('status', $request->status);
+        }
+
+        // Filter JK (jika ada)
+        if ($request->filled('jk') && $request->jk !== 'all') {
+            $query->whereHas('customer', function ($q) use ($request) {
+                $q->where('jk', $request->jk);
+            });
         }
 
         $antrian = $query->orderBy('no_urut', 'asc')->get();
@@ -298,6 +314,13 @@ class DashboardController extends Controller
                 $query->where('status', $request->status);
             }
 
+            // Filter JK
+            if ($request->filled('jk') && $request->jk !== 'all') {
+                $query->whereHas('customer', function ($q) use ($request) {
+                    $q->where('jk', $request->jk);
+                });
+            }
+
             // Load relasi lengkap
             $rawData = $query->with(['loket', 'loket.skpd', 'customer'])
                 ->orderBy('created_at')
@@ -339,12 +362,27 @@ class DashboardController extends Controller
             $query->where('status', $request->status);
         }
 
+        // Filter JK (Jenis Kelamin)
+        $jkFilter = $request->jk ?? 'all';
+        if ($jkFilter !== 'all') {
+            $query->whereHas('customer', function ($q) use ($jkFilter) {
+                $q->where('jk', $jkFilter);
+            });
+        }
+
         // Load Relasi
         $query->with(['loket', 'loket.skpd', 'customer']);
 
         // Ambil Data & Urutkan
         $rawData = $query->orderBy('skpd_id')->orderBy('loket_id')->orderBy('created_at')->get();
         $total = $rawData->count();
+
+        // Label JK untuk judul PDF
+        $labelJk = match ($jkFilter) {
+            'L' => ' — Filter: Laki-laki',
+            'P' => ' — Filter: Perempuan',
+            default => ''
+        };
 
         // Grouping Data: Instansi -> Loket -> Antrian
         $groupedData = $rawData->groupBy([
@@ -357,10 +395,10 @@ class DashboardController extends Controller
         ]);
 
         $pdf = Pdf::loadView('backend.dashboard.export', [
-            'data' => $groupedData,
-            'total' => $total,
-            'labelPeriode' => $labelPeriode,
-            'type' => 'pdf'
+            'data'         => $groupedData,
+            'total'        => $total,
+            'labelPeriode' => $labelPeriode . $labelJk,
+            'type'         => 'pdf'
         ]);
         $pdf->setPaper('a4', 'landscape');
         return $pdf->stream('laporan_antrian_detail.pdf');

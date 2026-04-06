@@ -650,6 +650,7 @@
                     columns: [
                         canMassDelete ? {
                             data: null,
+                            name: 'id',
                             orderable: false,
                             searchable: false,
                             render: function(data) {
@@ -662,13 +663,16 @@
                             }
                         } : null,
                         {
-                            data: 'nama_skpd'
+                            data: 'nama_skpd',
+                            name: 'nama_skpd'
                         },
                         {
-                            data: 'kepala_skpd'
+                            data: 'kepala_skpd',
+                            name: 'kepala_skpd'
                         },
                         {
                             data: 'nip_kepala',
+                            name: 'nip_kepala',
                             className: 'text-center nip-cell',
                             render: function(data) {
                                 if (!data) return '-';
@@ -676,11 +680,13 @@
                             }
                         },
                         {
-                            data: 'isaktif'
+                            data: 'isaktif',
+                            name: 'isaktif'
                         },
 
                         (canShow || canEdit || canDelete) ? {
                             data: 'action',
+                            name: 'action',
                             orderable: false,
                             searchable: false
                         } : null
@@ -693,9 +699,8 @@
                     table.ajax.reload(null, false);
                 });
 
-                // 🔍 Search input (native DataTables, JANGAN debounce)
-                $('#search').on('keyup', debounce(function() {
-                    var table = $('.chimox').DataTable();
+                // 🔍 Search input
+                $('#search').on('input', debounce(function() {
                     table.search($(this).val()).draw();
                 }, 500));
 
@@ -817,25 +822,25 @@
             $('#btn_batch_jam').click(function() {
                 Swal.fire({
                     title: 'Ubah Jam Operasional Masal',
-                    text: "Pilih mode jam operasional untuk SELURUH instansi:",
-                    icon: 'question',
-                    showDenyButton: true,
+                    html: `
+                        <div class="text-muted mb-5">Pilih mode jam operasional untuk SELURUH instansi:</div>
+                        <div class="d-grid gap-3">
+                            <button type="button" class="btn btn-primary btn-sm py-3" onclick="Swal.close(); sendBatchJam('normal')">
+                                <i class="fa fa-sun text-white me-2"></i> Mode Normal
+                            </button>
+                            <button type="button" class="btn btn-warning btn-sm py-3" onclick="Swal.close(); sendBatchJam('ramadan')">
+                                <i class="fa fa-moon text-white me-2"></i> Mode Ramadhan
+                            </button>
+                            <button type="button" class="btn btn-danger btn-sm py-3" onclick="Swal.close(); sendBatchJam('mpp')">
+                                <i class="fa fa-star text-white me-2"></i> Mode MPP
+                            </button>
+                        </div>
+                    `,
+                    showConfirmButton: false,
                     showCancelButton: true,
-                    confirmButtonText: '<i class="fa fa-sun text-white"></i> Mode Normal',
-                    confirmButtonColor: '#009ef7', // Warna Biru Metronic
-                    denyButtonText: '<i class="fa fa-moon text-white"></i> Mode Ramadhan',
-                    denyButtonColor: '#ffc700', // Warna Kuning/Warning
                     cancelButtonText: 'Batal',
                     customClass: {
-                        confirmButton: 'btn btn-primary btn-sm me-2',
-                        denyButton: 'btn btn-warning btn-sm me-2',
-                        cancelButton: 'btn btn-secondary btn-sm'
-                    }
-                }).then((result) => {
-                    if (result.isConfirmed) {
-                        sendBatchJam('normal');
-                    } else if (result.isDenied) {
-                        sendBatchJam('ramadan');
+                        cancelButton: 'btn btn-secondary btn-sm mt-3'
                     }
                 });
             });

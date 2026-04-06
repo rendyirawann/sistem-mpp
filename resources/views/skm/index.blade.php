@@ -113,8 +113,10 @@
                             <div class="d-flex flex-stack flex-grow-1 flex-wrap flex-md-nowrap">
                                 <div class="mb-3 mb-md-0 fw-semibold">
                                     <h4 class="text-gray-900 fw-bold" id="cust-nama">-</h4>
-                                    <div class="fs-6 text-gray-700 pe-7">NIK: <span id="cust-nik"
-                                            class="fw-bold font-monospace">-</span></div>
+                                    <div class="fs-6 text-gray-700 pe-7">
+                                        NIK: <span id="cust-nik" class="fw-bold font-monospace">-</span> |
+                                        Jenis Kelamin: <span id="cust-jk" class="fw-bold text-dark">-</span>
+                                    </div>
                                     <div class="fs-6 text-primary mt-1"><i class="fa fa-building me-1 text-primary"></i>
                                         <span id="cust-instansi">-</span>
                                     </div>
@@ -145,9 +147,9 @@
                                         class="form-control form-control-solid save-local" placeholder="Contoh: 25"
                                         required />
                                 </div>
-                                <div class="col-md-6">
+                                {{-- <div class="col-md-6">
                                     <label class="form-label required fw-bold">Jenis Kelamin</label>
-                                    {{-- Menggunakan Metronic Select2 --}}
+                           
                                     <select name="jk" id="jk"
                                         class="form-select form-select-solid save-local" data-control="select2"
                                         data-placeholder="Pilih Jenis Kelamin" data-hide-search="true" required>
@@ -155,7 +157,7 @@
                                         <option value="L">Laki-laki</option>
                                         <option value="P">Perempuan</option>
                                     </select>
-                                </div>
+                                </div> --}}
                                 <div class="col-md-6">
                                     <label class="form-label required fw-bold">Pendidikan Terakhir</label>
                                     <select name="pendidikan" id="pendidikan"
@@ -503,6 +505,7 @@
             $('#disp_no_antrian').val(no.toUpperCase());
             $('#cust-nama').text(data.nama);
             $('#cust-nik').text(data.nik);
+            $('#cust-jk').text(data.jk === 'L' ? 'Laki-Laki' : (data.jk === 'P' ? 'Perempuan' : '-'));
             $('#cust-instansi').text(data.instansi);
             $('#cust-layanan').text(data.layanan);
             $('#info-bar').removeClass('d-none');

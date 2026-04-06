@@ -438,6 +438,24 @@
                             <div class="invalid-feedback fw-bold fs-7" id="error-nama"></div>
                         </div>
 
+                        <div class="fv-row mb-4">
+                            <label class="required form-label fw-bold fs-7">Jenis Kelamin</label>
+                            <div class="d-flex align-items-center mt-2">
+                                <label class="form-check form-check-custom form-check-solid me-10 cursor-pointer">
+                                    <input class="form-check-input" type="radio" name="jk" value="L"
+                                        required />
+                                    <span class="form-check-label fw-bold text-gray-700">Laki-laki</span>
+                                </label>
+
+                                <label class="form-check form-check-custom form-check-solid cursor-pointer">
+                                    <input class="form-check-input" type="radio" name="jk" value="P"
+                                        required />
+                                    <span class="form-check-label fw-bold text-gray-700">Perempuan</span>
+                                </label>
+                            </div>
+                            <div class="invalid-feedback fw-bold fs-7" id="error-jk" style="display: block;"></div>
+                        </div>
+
                         <div class="fv-row mb-5">
                             <label class="required form-label fw-bold fs-7">No. HP / WhatsApp</label>
                             <input type="text" name="no_hp" id="inputHp"
