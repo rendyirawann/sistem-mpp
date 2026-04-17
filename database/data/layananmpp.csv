@@ -1,0 +1,1509 @@
+﻿Column1.id_opd;Column1.opd;Column1.id_layanan;Column1.layanan
+2;Inspektorat;393;Konsultasi
+2;Inspektorat;1311;Kunjungan Kerja/Perjalanan Dinas
+2;Inspektorat;394;Pemeriksaan dengan Tujuan Tertentu
+2;Inspektorat;231;Pemeriksaan Monitoring
+2;Inspektorat;229;Pemeriksaan Reguler
+3;Dinas Pendidikan;308;Layanan Administrasi Kepegawaian
+3;Dinas Pendidikan;541;Layanan Amprah SK Pensiun Pegawai
+3;Dinas Pendidikan;304;Layanan Bantuan Operasional Sekolah (BOS)
+3;Dinas Pendidikan;536;Layanan BOS PNF
+3;Dinas Pendidikan;535;Layanan BOSP PAUD
+3;Dinas Pendidikan;303;Layanan Data Pokok Pendidik (DAPODIK)
+3;Dinas Pendidikan;305;Layanan Penerimaan Peserta Didik Baru (PPDB)
+3;Dinas Pendidikan;302;Layanan Proses Penyaluran Tunjangan Profesi
+3;Dinas Pendidikan;540;Layanan Tambah Kurang Tanggungan
+3;Dinas Pendidikan;537;Layanan Usulan Surat Penyediaan Dana (SPD)
+3;Dinas Pendidikan;20;Legalisir Ijazah / STTB/ SKHU dan Surat lainnya
+3;Dinas Pendidikan;1464;Penanganan Layanan Pengaduan
+3;Dinas Pendidikan;300;Penerbitan Nomor Pokok Sekolah Nasional (NPSN)
+3;Dinas Pendidikan;534;Penerbitan NUPTK
+3;Dinas Pendidikan;297;Penerbitan Rekomendasi untuk Penerbitan SIOP Satuan Pendidikan PAUD, SD, SMP dan Lembaga Pendidikan Non Formal
+3;Dinas Pendidikan;538;Penerbitan Surat Permintaan Pembayaran (SPP) dan Surat Perintah Membayar (SPM-LS, SPM-GU), SPM-TU)
+3;Dinas Pendidikan;542;Pengembalian Kelebihan Bayar Tunjangan
+3;Dinas Pendidikan;301;Pengesahan Kurikulum Tingkat Satuan Pendidikan
+3;Dinas Pendidikan;306;Pengurusan Magang / PKL / KKN / Penelitian
+3;Dinas Pendidikan;299;Pengurusan Mutasi Siswa SD, SMP, PNF Negeri dan Swasta
+3;Dinas Pendidikan;298;Pengurusan Surat Keterangan Pengganti Surat Keterangan Kesalahan Penulisam Ijazah Hilang / Rusak Tingkat SD, SMp, PNF Negeri dan Swasta
+3;Dinas Pendidikan;539;Penyesuaian Gaji (Kenaikan Gaji Berkala dan Kenaikan Gaji Pangkat/Golongan)
+3;Dinas Pendidikan;307;Rekomendasi Mutasi Aparatur Sipil Negara (ASN)
+4;Dinas Kesehatan;477;Izin Survei Penelitian Mahasiswa
+4;Dinas Kesehatan;241;Penerbitan Sertifikat Penyuluhan Keamanan Pangan
+4;Dinas Kesehatan;474;Penerbitan Surat Kematian
+4;Dinas Kesehatan;245;Penerbitan Surat Rekomendasi Peserta Unregister
+4;Dinas Kesehatan;242;Permohonan Perjanjian Kerjasama (MoU) Kepaniteraan Klinik Senior Stase Public Helath Mahasiswa Co-Ass FK
+4;Dinas Kesehatan;476;Survei Pemeriksaan Kualitas Air Minum di UPT Laboratorium Kesehatan Daerah
+5;Dinas Sumber Daya Air, Bina Marga dan Bina Konstruksi;762;Fasilitasi Tenaga Konstruksi Jenjang Teknisi/Analis dan Operator
+5;Dinas Sumber Daya Air, Bina Marga dan Bina Konstruksi;761;Pelayanan Pemanfaatan Penggunaan Bagian Jalan
+5;Dinas Sumber Daya Air, Bina Marga dan Bina Konstruksi;759;Pelayanan Permohonan Operasi, Normalisasi Sungai, dan Saluran Pembuangan
+5;Dinas Sumber Daya Air, Bina Marga dan Bina Konstruksi;119;Pelayanan Permohonan Pemakaian Penyewaan Kendaraan Alat Berat
+5;Dinas Sumber Daya Air, Bina Marga dan Bina Konstruksi;763;Pelayanan Permohonan Pemasangan Baru Lampu Penerangan Jalan Umum (LPJU)
+5;Dinas Sumber Daya Air, Bina Marga dan Bina Konstruksi;116;Pelayanan Permohonan Pembangunan / Pemeliharaan Jalan, dan Jembatan
+5;Dinas Sumber Daya Air, Bina Marga dan Bina Konstruksi;118;Pelayanan Permohonan Pembangunan, Peningkatan dan Pemeliharaan Irigasi
+5;Dinas Sumber Daya Air, Bina Marga dan Bina Konstruksi;117;Pelayanan Permohonan Pemeliharaan Lampu Penerangan Jalan Umum (LPJU)
+5;Dinas Sumber Daya Air, Bina Marga dan Bina Konstruksi;764;Pelayanan Permohonan Pencabangan Pohon
+5;Dinas Sumber Daya Air, Bina Marga dan Bina Konstruksi;760;Pelayanan Permohonan Penerbitan Rekomendasi Pemindahan Aset Irigasi
+5;Dinas Sumber Daya Air, Bina Marga dan Bina Konstruksi;765;Pelayanan Permohonan Pinjam Pakai Kendaraan Alat Berat
+5;Dinas Sumber Daya Air, Bina Marga dan Bina Konstruksi;766;Pengujian/Pengambilan Sampel Uji
+6;Dinas Cipta Karya dan Tata Ruang;1323;Bantuan Bahan Material Rumah Ibadah
+6;Dinas Cipta Karya dan Tata Ruang;1316;Informasi Tata Ruang
+6;Dinas Cipta Karya dan Tata Ruang;273;Keterangan Rencana Kabupaten (KRK)
+6;Dinas Cipta Karya dan Tata Ruang;1322;Pembangunan Air Bersih/Peningkatan Air Bersih
+6;Dinas Cipta Karya dan Tata Ruang;1321;Pembangunan Tangki Septik Masyarakat Berpenghasilan Rendah (MBR)
+6;Dinas Cipta Karya dan Tata Ruang;1318;Pembuatan Rencana Anggaran Biaya (RAB) dan Tenaga Teknis
+6;Dinas Cipta Karya dan Tata Ruang;269;Peminjaman toilet portable
+6;Dinas Cipta Karya dan Tata Ruang;1320;Penerimaan Surat Masuk
+6;Dinas Cipta Karya dan Tata Ruang;1319;Rehabilitasi Bangunan Gedung
+6;Dinas Cipta Karya dan Tata Ruang;494;Ruang Terbuka Hijau (RTH)/Taman Buah
+6;Dinas Cipta Karya dan Tata Ruang;270;Sedot Tinja
+6;Dinas Cipta Karya dan Tata Ruang;271;Sertifikat Laik Fungsi (SLF)
+6;Dinas Cipta Karya dan Tata Ruang;285;Sistem informasi manajemen bangunan gedung (SIMBG)
+6;Dinas Cipta Karya dan Tata Ruang;272;Sistem informasi perencanaan dan pengendalian pemanfaatan ruang interaktif (SIP3NTAR)
+6;Dinas Cipta Karya dan Tata Ruang;1317;Validasi Persetujuan Kesesuaian Kegiatan Pemanfaatan Ruang
+7;Dinas Perumahan dan Kawasan Permukiman serta Pertanahan;267;Pelayanan Bantuan Rumah Akibat Bencana
+7;Dinas Perumahan dan Kawasan Permukiman serta Pertanahan;266;Pelayanan Bantuan Rumah Tidak Layak Huni
+7;Dinas Perumahan dan Kawasan Permukiman serta Pertanahan;281;Pelayanan Informasi Pertanahan
+7;Dinas Perumahan dan Kawasan Permukiman serta Pertanahan;21;Pelayanan Pembangunan/Rehabilitasi/Pemeliharaan Prasarana, Sarana dan Utilitas Umum
+7;Dinas Perumahan dan Kawasan Permukiman serta Pertanahan;702;Pelayanan Pemeliharaan Prasarana, Sarana dan Utilitas Umum pada Perumahan
+7;Dinas Perumahan dan Kawasan Permukiman serta Pertanahan;268;Pelayanan Penataan Prasarana, Sarana dan Utilitas Umum pada Kawasan Kumuh
+7;Dinas Perumahan dan Kawasan Permukiman serta Pertanahan;703;Pelayanan Pengadaan Tanah Bagi Kepentingan Umum
+7;Dinas Perumahan dan Kawasan Permukiman serta Pertanahan;513;Pelayanan Penyerahan Prasarana, Sarana dan Utilitas Umum Kepada Pemerintah Daerah
+8;Satuan Polisi Pamong Praja;115;Pelayanan Bantuan Penanggulangan Bencana
+8;Satuan Polisi Pamong Praja;111;Pelayanan Kerugian Materil dan/atau Cedera Fisik akibat Penegakan Hukum Terhadap Pelanggaran Perda dan Perkada
+8;Satuan Polisi Pamong Praja;114;Pelayanan Patroli
+8;Satuan Polisi Pamong Praja;108;Pelayanan Pengaduan Pelanggaran Peraturan Daerah dan Peraturan Kepala Daerah
+8;Satuan Polisi Pamong Praja;112;Pelayanan Pengamanan
+8;Satuan Polisi Pamong Praja;113;Pelayanan Pengamanan Unjuk Rasa
+9;Dinas Sosial;138;Pengaduan PKH dan BPNT
+9;Dinas Sosial;143;Pengusulan DTKS
+9;Dinas Sosial;146;Pengusulan PBI
+9;Dinas Sosial;139;Pengusulan PKH dan BPNT
+9;Dinas Sosial;559;PROGRAM GOTONG ROYONG
+9;Dinas Sosial;142;Surat Keterangan DTSEN
+9;Dinas Sosial;140;Surat Keterangan Tidak Mampu
+9;Dinas Sosial;558;SURAT REKOMENDASI PAS PULA
+9;Dinas Sosial;145;Unregister/Nonregister
+10;Dinas Ketenagakerjaan;440; Pelayanan Pendaftaran Perjanjian Kerja Bersama (PKB)
+10;Dinas Ketenagakerjaan;449;Pelayanan Pelatihan Berbasis Kompetensi (PBK)
+10;Dinas Ketenagakerjaan;446;Pelayanan Pemberian Rekomendasi Bagi Lembaga Pelatihan Kerja Swasta (LPKS) dan Balai Latihan Kerja Komunitas (BLKK)
+10;Dinas Ketenagakerjaan;493;Pelayanan Pemberian Surat Persetujuan Penyelenggaraan Pemagangan Dalam Negeri (PDN)
+10;Dinas Ketenagakerjaan;447;Pelayanan Pemberian Surat Persetujuan Penyelenggaraan Pemagangan Luar Negeri (PLN)
+10;Dinas Ketenagakerjaan;445;Pelayanan Pemberian Tanda Daftar Bagi Balai Latihan Kerja (BLK) Pemerintah, Lembaga Pelatihan Kerja (LPK) Lapas dan Lembaga Pelatihan Kerja (LPK) Perusahaan
+10;Dinas Ketenagakerjaan;441;Pelayanan Pencatatan Lembaga Kerja Sama Bipartit (LKS Bipartit)
+10;Dinas Ketenagakerjaan;442;Pelayanan Pencatatan Perjanjian Kerja Waktu Tertentu (PKWT)
+10;Dinas Ketenagakerjaan;438;Pelayanan Pencatatan Serikat Pekerja/Serikat Buruh (SP/SB)
+10;Dinas Ketenagakerjaan;371;Pelayanan Penerbitan Kartu Tanda Bukti Pendaftaran Pencari Kerja (AK-I)
+10;Dinas Ketenagakerjaan;373;Pelayanan Penerbitan Rekomendasi Paspor Calon Pekerja Migran Indonesia (CPMI)
+10;Dinas Ketenagakerjaan;444;Pelayanan Penerbitan Tanda Daftar Bursa Kerja Khusus (BKK)
+10;Dinas Ketenagakerjaan;439;Pelayanan Pengesahan Peraturan Perusahaan (PP)
+10;Dinas Ketenagakerjaan;443;Pelayanan Penyelesaian Perselisihan Hubungan Industrial (PHI)
+11;Dinas Pemberdayaan Perempuan dan Perlindungan Anak serta Pengendalian Penduduk dan Keluarga Berencana;360;Layanan Pengaduan dan Penanganan Korban Kekerasan Terhadap Perempuan dan Anak
+11;Dinas Pemberdayaan Perempuan dan Perlindungan Anak serta Pengendalian Penduduk dan Keluarga Berencana;363;Layanan PUSPAGA
+12;Dinas Ketahanan Pangan;1324;Gerakan Pangan Murah (GPM)
+12;Dinas Ketahanan Pangan;1690;Pemberian Bantuan bibit, Benih dan Ternak Pekarangan Pangan Lestari
+12;Dinas Ketahanan Pangan;357;Registrasi Keamanan Pangan segar Asal Tumbuhan Produksi Dalam Negeri Usaha Kecil
+13;Dinas Lingkungan Hidup;630;Pembinaan dan Penilaian Gerakan Peduli Berbudaya Lingkungan Hidup di Sekolah (GPBLHS)
+13;Dinas Lingkungan Hidup;629;Pemeriksaan Substansi Rincian Teknis Penyimpanan Limbah B3
+13;Dinas Lingkungan Hidup;633;Pengaduan dan/atau Perusakan Lingkungan Hidup
+13;Dinas Lingkungan Hidup;631;Permohonan Magang
+13;Dinas Lingkungan Hidup;548;Permohonan Pemeriksaan Formulir Kerangka Acuan (KA)
+13;Dinas Lingkungan Hidup;549;Permohonan Pemeriksaan Formulir UKL-UPL
+13;Dinas Lingkungan Hidup;632;Permohonan Penelitian
+13;Dinas Lingkungan Hidup;634;Permohonan Pengambilan Contoh Uji Kualitas Lingkungan
+13;Dinas Lingkungan Hidup;622;Permohonan Penilaian Andal dan RKL-RPL
+13;Dinas Lingkungan Hidup;623;Permohonan Persetujuan Dokumen Evaluasi Lingkungan Hidup (DELH)
+13;Dinas Lingkungan Hidup;624;Permohonan Persetujuan Dokumen Pengelolaan Lingkungan Hidup (DPLH)
+13;Dinas Lingkungan Hidup;550;Permohonan Surat Arahan Penapisan Penyusunan Dokumen Lingkungan
+13;Dinas Lingkungan Hidup;625;Persetujuan Teknis Pemenuhan Baku Mutu Air Limbah
+13;Dinas Lingkungan Hidup;627;Persetujuan Teknis Pemenuhan Baku Mutu Emisi
+13;Dinas Lingkungan Hidup;626;Surat Kelayakan Operasional (SLO) Pemenuhan Baku Mutu Air Limbah
+13;Dinas Lingkungan Hidup;628;Surat Kelayakan Operasional (SLO) Pemenuhan Baku Mutu Emisi
+14;Dinas Kependudukan dan Pencatatan Sipil;332;Layanan Akta Kelahiran
+14;Dinas Kependudukan dan Pencatatan Sipil;334;Layanan Akta Kematian
+14;Dinas Kependudukan dan Pencatatan Sipil;336;Layanan AKta Kutipan II
+14;Dinas Kependudukan dan Pencatatan Sipil;335;Layanan Akta Perceraian
+14;Dinas Kependudukan dan Pencatatan Sipil;333;Layanan Akta Perkawinan
+14;Dinas Kependudukan dan Pencatatan Sipil;338;Layanan Identitas Kependudukan Digital (IKD)
+14;Dinas Kependudukan dan Pencatatan Sipil;328;Layanan Kartu Identitas Anak (KIA)
+14;Dinas Kependudukan dan Pencatatan Sipil;326;Layanan Kartu Keluarga
+14;Dinas Kependudukan dan Pencatatan Sipil;337;Layanan Konsolidasi Data
+14;Dinas Kependudukan dan Pencatatan Sipil;310;Layanan KTP-El
+14;Dinas Kependudukan dan Pencatatan Sipil;324;Layanan Legalisir
+14;Dinas Kependudukan dan Pencatatan Sipil;330;Layanan Pengesahan Anak
+14;Dinas Kependudukan dan Pencatatan Sipil;325;Layanan Perpindahan Penduduk dalam satu Desa, antar Desa dalam satu Kecamatan, antar Kecamatan dalam satu Kabupaten, antar Kabupaten dalam satu Provinsi dan antar Provinsi
+14;Dinas Kependudukan dan Pencatatan Sipil;327;Layanan Surat Keterangan Tempat Tinggal/SKTT
+15;Dinas Pemberdayaan Masyarakat dan Desa;1687;Fasilitas Pendaftaran Nama dan Badan Hukum BUMDES
+15;Dinas Pemberdayaan Masyarakat dan Desa;1688;Fasilitas Pengembangan Usaha Ekonomi Masyarakat ( Pelatihan dan Pembinaan Bagi Warga Binaan PTP2WKSS
+15;Dinas Pemberdayaan Masyarakat dan Desa;1686;Fasilitas Penyusunan RPJM dan RKP Desa
+15;Dinas Pemberdayaan Masyarakat dan Desa;1683;Fasilitas Proses Administrasi Permohonan APBDesa
+15;Dinas Pemberdayaan Masyarakat dan Desa;1689;Pelaksanaan Supervisi/ Pembinaan dan Monitoring/Evaluasi Desa Percontohan 10 Program Pokok PKK Kategori Tertib Administrasi PKK
+15;Dinas Pemberdayaan Masyarakat dan Desa;1684;Pelayanan Pengusulan Pengangkatan dan Pemberhentian Badan Permusyawaratan Desa Antar Waktu
+15;Dinas Pemberdayaan Masyarakat dan Desa;1685;Pengusulan Pengankatan Pejabatan Kepala Desa dan atau Pemberitahuan Kepala Desa 
+16;Dinas Perhubungan;356;pengujian kendaraan bermotor
+17;Dinas Koperasi dan Usaha Kecil dan Menengah;358;Pelayanan Data dan Informasi Perkoperasian
+17;Dinas Koperasi dan Usaha Kecil dan Menengah;354;Pelayanan data dan informasi Usaha mikro Binaan
+18;Dinas Penanaman Modal dan Pelayanan Terpadu Satu Pintu;147; IZIN KERJA FISIOTERAPI
+18;Dinas Penanaman Modal dan Pelayanan Terpadu Satu Pintu;155; IZIN KERJA TERAPI WICARA
+18;Dinas Penanaman Modal dan Pelayanan Terpadu Satu Pintu;156; IZIN KERJA TERAPIS GIGI DAN MULUT
+18;Dinas Penanaman Modal dan Pelayanan Terpadu Satu Pintu;161; IZIN PENDIRIAN SATUAN PENDIDIKAN FORMAL TAMAN KANAK-KANAK (TK)
+18;Dinas Penanaman Modal dan Pelayanan Terpadu Satu Pintu;175; IZIN PRAKTIK DOKTER SPESIALIS MANDIRI
+18;Dinas Penanaman Modal dan Pelayanan Terpadu Satu Pintu;125;IZIN KERJA ANALIS
+18;Dinas Penanaman Modal dan Pelayanan Terpadu Satu Pintu;126;IZIN KERJA ELEKTROMEDIS
+18;Dinas Penanaman Modal dan Pelayanan Terpadu Satu Pintu;148;IZIN KERJA NUTRISIONIS
+18;Dinas Penanaman Modal dan Pelayanan Terpadu Satu Pintu;1380;IZIN KERJA ORTOTIS PROSTETIS (SIKOP)
+18;Dinas Penanaman Modal dan Pelayanan Terpadu Satu Pintu;149;IZIN KERJA PEREKAM MEDIS DAN INFORMASI KESEHATAN
+18;Dinas Penanaman Modal dan Pelayanan Terpadu Satu Pintu;150;IZIN KERJA RADIOLOGI
+18;Dinas Penanaman Modal dan Pelayanan Terpadu Satu Pintu;151;IZIN KERJA REFRAKSIONIS OPTISIEN
+18;Dinas Penanaman Modal dan Pelayanan Terpadu Satu Pintu;152;IZIN KERJA SANITARIAN
+18;Dinas Penanaman Modal dan Pelayanan Terpadu Satu Pintu;153;IZIN KERJA TENAGA TEKNIS KEFARMASIAN
+18;Dinas Penanaman Modal dan Pelayanan Terpadu Satu Pintu;154;IZIN KERJA TENAGA TEKNIS KESEHATAN MASYARAKAT
+18;Dinas Penanaman Modal dan Pelayanan Terpadu Satu Pintu;158;IZIN OPERASIONAL LEMBAGA KESEJAHTERAAN SOSIAL ANAK
+18;Dinas Penanaman Modal dan Pelayanan Terpadu Satu Pintu;157;IZIN PEMAKAIAN TEMPAT USAHA (SIPTU)
+18;Dinas Penanaman Modal dan Pelayanan Terpadu Satu Pintu;159;IZIN PENDIRIAN SATUAN PENDIDIKAN FORMAL SEKOLAH DASAR (SD)
+18;Dinas Penanaman Modal dan Pelayanan Terpadu Satu Pintu;160;IZIN PENDIRIAN SATUAN PENDIDIKAN FORMAL SEKOLAH MENENGAH PERTAMA (SMP)
+18;Dinas Penanaman Modal dan Pelayanan Terpadu Satu Pintu;162;IZIN PENDIRIAN SATUAN PENDIDIKAN NON FORMAL KELOMPOK BERMAIN
+18;Dinas Penanaman Modal dan Pelayanan Terpadu Satu Pintu;163;IZIN PENDIRIAN SATUAN PENDIDIKAN NON FORMAL LEMBAGA KURSUS DAN PELATIHAN (LKP)
+18;Dinas Penanaman Modal dan Pelayanan Terpadu Satu Pintu;164;IZIN PENDIRIAN SATUAN PENDIDIKAN NON FORMAL PUSAT KEGIATAN BELAJAR MASYARAKAT (PKBM)
+18;Dinas Penanaman Modal dan Pelayanan Terpadu Satu Pintu;165;IZIN PENDIRIAN SATUAN PENDIDIKAN NON FORMAL SATUAN PAUD SEJENIS (SPS)
+18;Dinas Penanaman Modal dan Pelayanan Terpadu Satu Pintu;166;IZIN PENDIRIAN SATUAN PENDIDIKAN NON FORMAL TAMAN BACAAN MASYARAKAT (TBM)
+18;Dinas Penanaman Modal dan Pelayanan Terpadu Satu Pintu;167;IZIN PENDIRIAN SATUAN PENDIDIKAN NON FORMAL TEMPAT PENITIPAN ANAK (TPA)
+18;Dinas Penanaman Modal dan Pelayanan Terpadu Satu Pintu;1374;IZIN PRAKTEK DOKTER HEWAN
+18;Dinas Penanaman Modal dan Pelayanan Terpadu Satu Pintu;187;IZIN PRAKTIK AHLI TEKNOLOGI LABORATORIUM MEDIK (ATLM)
+18;Dinas Penanaman Modal dan Pelayanan Terpadu Satu Pintu;1384;IZIN PRAKTIK AKUPUNTUR TRAPIS
+18;Dinas Penanaman Modal dan Pelayanan Terpadu Satu Pintu;168;IZIN PRAKTIK APOTEKER
+18;Dinas Penanaman Modal dan Pelayanan Terpadu Satu Pintu;169;IZIN PRAKTIK BIDAN DI SARANA KESEHATAN
+18;Dinas Penanaman Modal dan Pelayanan Terpadu Satu Pintu;170;IZIN PRAKTIK BIDAN MANDIRI
+18;Dinas Penanaman Modal dan Pelayanan Terpadu Satu Pintu;171;IZIN PRAKTIK DOKTER GIGI DI SARANA KESEHATAN
+18;Dinas Penanaman Modal dan Pelayanan Terpadu Satu Pintu;172;IZIN PRAKTIK DOKTER GIGI MANDIRI
+18;Dinas Penanaman Modal dan Pelayanan Terpadu Satu Pintu;1382;IZIN PRAKTIK DOKTER GIGI SPESIALIS DI SARANA KESEHATAN
+18;Dinas Penanaman Modal dan Pelayanan Terpadu Satu Pintu;1383;IZIN PRAKTIK DOKTER GIGI SPESIALIS MANDIRI
+18;Dinas Penanaman Modal dan Pelayanan Terpadu Satu Pintu;173;IZIN PRAKTIK DOKTER INTERNSIP
+18;Dinas Penanaman Modal dan Pelayanan Terpadu Satu Pintu;1381;IZIN PRAKTIK DOKTER RESIDEN DI SARANA KESEHATAN
+18;Dinas Penanaman Modal dan Pelayanan Terpadu Satu Pintu;174;IZIN PRAKTIK DOKTER SPESIALIS DI SARANA KESEHATAN
+18;Dinas Penanaman Modal dan Pelayanan Terpadu Satu Pintu;176;IZIN PRAKTIK DOKTER UMUM DI SARANA KESEHATAN
+18;Dinas Penanaman Modal dan Pelayanan Terpadu Satu Pintu;177;IZIN PRAKTIK DOKTER UMUM MANDIRI
+18;Dinas Penanaman Modal dan Pelayanan Terpadu Satu Pintu;178;IZIN PRAKTIK FISIOTERAPI
+18;Dinas Penanaman Modal dan Pelayanan Terpadu Satu Pintu;1379;IZIN PRAKTIK ORTOTIS  PROSTETIS (SIPOP)
+18;Dinas Penanaman Modal dan Pelayanan Terpadu Satu Pintu;179;IZIN PRAKTIK PERAWAT DI SARANA KESEHATAN
+18;Dinas Penanaman Modal dan Pelayanan Terpadu Satu Pintu;180;IZIN PRAKTIK PERAWAT MANDIRI
+18;Dinas Penanaman Modal dan Pelayanan Terpadu Satu Pintu;181;IZIN PRAKTIK PERAWAT PENATA ANESTESI (SIPPA) DI SARANA KESEHATAN
+18;Dinas Penanaman Modal dan Pelayanan Terpadu Satu Pintu;1377;IZIN PRAKTIK PSIKOLOG KLINIS (SIK-PK) MANDIRI
+18;Dinas Penanaman Modal dan Pelayanan Terpadu Satu Pintu;182;IZIN PRAKTIK PSIKOLOGIS KLINIS DI SARANA KESEHATAN
+18;Dinas Penanaman Modal dan Pelayanan Terpadu Satu Pintu;1378;IZIN PRAKTIK TEKNISI TRANSFUSI DARAH (SIP-TTD)
+18;Dinas Penanaman Modal dan Pelayanan Terpadu Satu Pintu;183;IZIN PRAKTIK TERAPIS GIGI DAN MULUT
+18;Dinas Penanaman Modal dan Pelayanan Terpadu Satu Pintu;1376;IZIN PRAKTIK TERAPIS WICARA MANDIRI
+18;Dinas Penanaman Modal dan Pelayanan Terpadu Satu Pintu;1375;IZIN PRAKTIK TUKANG GIGI
+18;Dinas Penanaman Modal dan Pelayanan Terpadu Satu Pintu;184;IZIN REKLAME
+18;Dinas Penanaman Modal dan Pelayanan Terpadu Satu Pintu;185;IZIN USAHA PENGELOLAAN PASAR RAKYAT (IUPPR)
+18;Dinas Penanaman Modal dan Pelayanan Terpadu Satu Pintu;186;PERSETUJUAN KESESUAIAN KEGIATAN PEMANFAATAN RUANG (PKKPR) NON BERUSAHA
+18;Dinas Penanaman Modal dan Pelayanan Terpadu Satu Pintu;188;SURAT TERDAFTAR PENYEHAT TRADISIONAL (STPT)
+18;Dinas Penanaman Modal dan Pelayanan Terpadu Satu Pintu;189;TANDA DAFTAR PANTI ASUHAN
+18;Dinas Penanaman Modal dan Pelayanan Terpadu Satu Pintu;190;TANDA DAFTAR PANTI JOMPO
+18;Dinas Penanaman Modal dan Pelayanan Terpadu Satu Pintu;191;TANDA DAFTAR PELAYANAN REHABILITASI NARKOBA
+18;Dinas Penanaman Modal dan Pelayanan Terpadu Satu Pintu;192;TANDA DAFTAR PELAYANAN TUNA NETRA
+19;Dinas Kebudayaan, Pemuda dan Olahraga serta Pariwisata;1674;Layanan Pembentukan Kelompok Sadar Wisata
+19;Dinas Kebudayaan, Pemuda dan Olahraga serta Pariwisata;1675;Layanan Pemilihan Duta Wisata Kabupaten Deli Serdang
+19;Dinas Kebudayaan, Pemuda dan Olahraga serta Pariwisata;1673;Layanan Penerbitan Tanda Daftar Sanggar
+19;Dinas Kebudayaan, Pemuda dan Olahraga serta Pariwisata;1678;Layanan Rekomendasi Izin Pinjam Pakai Gedung Olahraga Dinas Kebudayaan, Pemuda dan Olahraga serta Pariwisata Kab. Deli Serdang
+19;Dinas Kebudayaan, Pemuda dan Olahraga serta Pariwisata;1677;Layanan Rekomendasi Izin Pinjam Pakai Sradion Bharoeddin Siregar
+19;Dinas Kebudayaan, Pemuda dan Olahraga serta Pariwisata;1671;Layanan Rekomendasi Pemberian Sarana dan Prasana Olahraga
+19;Dinas Kebudayaan, Pemuda dan Olahraga serta Pariwisata;1670;Layanan Rekomendasi Pemberian Sarana dan Prasarana Kebudayaan
+19;Dinas Kebudayaan, Pemuda dan Olahraga serta Pariwisata;1672;Layanan Rekomendasi Pemberian Sarana dan Prasarana Pariwisata
+19;Dinas Kebudayaan, Pemuda dan Olahraga serta Pariwisata;1676;Layanan TIC
+19;Dinas Kebudayaan, Pemuda dan Olahraga serta Pariwisata;235;Pelayanan Pengunjung Museum Daerah Deli Serdang
+20;Dinas Perpustakaan dan Arsip;662;Pelayanan akuisisi arsip
+20;Dinas Perpustakaan dan Arsip;201;Pelayanan Anak
+20;Dinas Perpustakaan dan Arsip;203;Pelayanan aplikasi Srikandi
+20;Dinas Perpustakaan dan Arsip;194;Pelayanan Baca Ditempat
+20;Dinas Perpustakaan dan Arsip;199;Pelayanan Bimbingan Pemustaka rombongan
+20;Dinas Perpustakaan dan Arsip;200;Pelayanan Buku Refensi
+20;Dinas Perpustakaan dan Arsip;202;Pelayanan Informasi dan Pemanfaatan arsip
+20;Dinas Perpustakaan dan Arsip;198;Pelayanan Internet (Wifi)
+20;Dinas Perpustakaan dan Arsip;204;Pelayanan Kearsipan melalui JIKN
+20;Dinas Perpustakaan dan Arsip;197;Pelayanan Komputer Internet
+20;Dinas Perpustakaan dan Arsip;661;Pelayanan Naskah Kuno
+20;Dinas Perpustakaan dan Arsip;665;Pelayanan pembinaan/konsultasi kearsipan
+20;Dinas Perpustakaan dan Arsip;110;Pelayanan Pembuatan Kartu Anggota Perpustakaan
+20;Dinas Perpustakaan dan Arsip;196;Pelayanan Peminjaman/Perpanjangan /Pengembalian Buku
+20;Dinas Perpustakaan dan Arsip;663;Pelayanan penyimpanan arsip dari OPD
+20;Dinas Perpustakaan dan Arsip;664;Pelayanan penyusutan arsip
+20;Dinas Perpustakaan dan Arsip;109;Pelayanan Perpanjangan Kartu Anggota Perpustakaan
+20;Dinas Perpustakaan dan Arsip;660;"Pelayanan Perpustakaan digital ""DIBACA"""
+20;Dinas Perpustakaan dan Arsip;195;Pelayanan Perpustakaan keliling
+20;Dinas Perpustakaan dan Arsip;659;Pelayanan PISA (Pusat Informasi Sahabat Anak)
+21;Dinas Perikanan;506;Bantuan Sarana dan Prasarana Perikanan
+21;Dinas Perikanan;515;Kartu Asuransi Ramayana
+21;Dinas Perikanan;514;Kartu BPJS Ketenagakerjaan
+21;Dinas Perikanan;451;Pelatihan Perikanan
+21;Dinas Perikanan;452;Pembentukan Kelompok Perikanan
+21;Dinas Perikanan;453;Pembinaan Pelaku Usaha Perikanan dan Kelautan
+21;Dinas Perikanan;459;Rekomendasi BBM/Nomor Induk Berusaha (NIB)
+22;Dinas Pertanian;121;Bantuan Benih Unggul Tanaman Pangan
+22;Dinas Pertanian;120;Kemanfaatan Bantuan Alsintan
+22;Dinas Pertanian;122;Pelayanan  Surat Tanda Daftar Budidaya (Petugas STD-B)
+22;Dinas Pertanian;353;Pelayanan Inseminasi Buatan
+22;Dinas Pertanian;124;Pelayanan Kesehatan Hewan
+22;Dinas Pertanian;123;Pelayanan Penyuluhan Pertanian
+23;Dinas Perindustrian dan Perdagangan;1426;Fasilitasi Industri Kecil dan Menengah (IKM)
+23;Dinas Perindustrian dan Perdagangan;1424;Konsultasi dan Bimbingan Pengisian Melalui SIINas
+23;Dinas Perindustrian dan Perdagangan;1432;Laporan Bulanan Penjualan Produk
+23;Dinas Perindustrian dan Perdagangan;1414;Monitoring Harga Kebutuhan Pokok dan Barang Penting
+23;Dinas Perindustrian dan Perdagangan;1416;Monitoring Pendistribusian Pupuk Bersubsidi
+23;Dinas Perindustrian dan Perdagangan;1417;Operasi Pasar
+23;Dinas Perindustrian dan Perdagangan;1427;Pameran Produk Unggulan Daerah
+23;Dinas Perindustrian dan Perdagangan;1431;Pelaksanaan Stock Opname
+23;Dinas Perindustrian dan Perdagangan;1428;Pelatihan Keterampilan Tingkat Lanjutan
+23;Dinas Perindustrian dan Perdagangan;1423;Pelatihan Sumber Daya Manusia Industri
+23;Dinas Perindustrian dan Perdagangan;1462;Pelayanan Surat Masuk dan Surat Keluar
+23;Dinas Perindustrian dan Perdagangan;495;Pelayanan Tera/Tera Ulang
+23;Dinas Perindustrian dan Perdagangan;1434;Pembayaran Produk Mitra P3UD
+23;Dinas Perindustrian dan Perdagangan;1430;Pendaftaran Mitra
+23;Dinas Perindustrian dan Perdagangan;1420;Penerbitan Surat Rekomendasi Izin Pemakaian Tempat Usaha (SIPTU)
+23;Dinas Perindustrian dan Perdagangan;1418;Penerbitan Surat Rekomendasi Izin Usaha Pengelolaan Pasar Tradisional (IUPPT)
+23;Dinas Perindustrian dan Perdagangan;1421;Penerbitan Surat Rekomendasi Izin Waralaba
+23;Dinas Perindustrian dan Perdagangan;1433;Penerimaan Produk Masuk Mitra P3UD
+23;Dinas Perindustrian dan Perdagangan;1422;Promosi Produk Lokal
+23;Dinas Perindustrian dan Perdagangan;1425;Registrasi Akun SIINas dan Pengisian Data Usaha
+23;Dinas Perindustrian dan Perdagangan;1415;Rekomendasi Distributor LPG 3 Kg Bersubsidi
+23;Dinas Perindustrian dan Perdagangan;1413;Rekomendasi Distributor Pupuk Bersubsidi
+23;Dinas Perindustrian dan Perdagangan;1429;Standar Pelayanan P3UD
+23;Dinas Perindustrian dan Perdagangan;1419;Verifikasi Tanda Daftar Gudang (TDG)
+24;Dinas Komunikasi, Informatika, Statistik dan Persandian;556;FASILITAS APLIKASI UNTUK OPD 
+24;Dinas Komunikasi, Informatika, Statistik dan Persandian;557;PELAYANAN CALL CENTER 112 
+24;Dinas Komunikasi, Informatika, Statistik dan Persandian;497;PELAYANAN JARINGAN INTERNET
+24;Dinas Komunikasi, Informatika, Statistik dan Persandian;498;PELAYANAN PPID  
+24;Dinas Komunikasi, Informatika, Statistik dan Persandian;381;Pelayanan Radio DSB
+24;Dinas Komunikasi, Informatika, Statistik dan Persandian;1461;PELAYANAN SP4N LAPOR 
+24;Dinas Komunikasi, Informatika, Statistik dan Persandian;504;PELAYANAN SPBE (SISTEM PEMERINTAHAN BERBASIS ELEKTRONIK) 
+24;Dinas Komunikasi, Informatika, Statistik dan Persandian;553;PELAYANAN TALKSHOW
+24;Dinas Komunikasi, Informatika, Statistik dan Persandian;554;PEMBUATAN AKUN EMAIL
+24;Dinas Komunikasi, Informatika, Statistik dan Persandian;543;PEMBUATAN TANDA TANGAN ELEKTRONIK
+24;Dinas Komunikasi, Informatika, Statistik dan Persandian;546;PEMBUATAN VPS DI SERVER 
+24;Dinas Komunikasi, Informatika, Statistik dan Persandian;544;PENAYANGAN VIDEO/KONTEN VIDEOTRON
+24;Dinas Komunikasi, Informatika, Statistik dan Persandian;555;PENYELENGGARAAN VIDEO CONFRENCE
+24;Dinas Komunikasi, Informatika, Statistik dan Persandian;547;PERMINTAAN DATA STATISTIK SEKTORAL 
+24;Dinas Komunikasi, Informatika, Statistik dan Persandian;1460;PODCAST CAKEP DI BALKON 
+24;Dinas Komunikasi, Informatika, Statistik dan Persandian;545;REKAMAN CCTV
+25;Dinas Pemadam Kebakaran dan Penyelamatan;28;Pelayanan Kunjungan Edukasi Siswa
+25;Dinas Pemadam Kebakaran dan Penyelamatan;25;Pelayanan Pemadam Kebakaran
+25;Dinas Pemadam Kebakaran dan Penyelamatan;24;Pelayanan Penggunaan Unit Pemadam Kebakaran Kegiatan Non Kebakaran Non Komersil
+25;Dinas Pemadam Kebakaran dan Penyelamatan;1400;Pelayanan Penggunaan Unit Pemadam Kebakaran pada Kegiatan Bencana Non Kebakaran 
+25;Dinas Pemadam Kebakaran dan Penyelamatan;1398;Pelayanan Penyelamatan dan Evakuasi Kebakaran
+25;Dinas Pemadam Kebakaran dan Penyelamatan;26;Pelayanan Penyelamatan dan Evakuasi Non Kebakaran ( Animal Rescue )
+25;Dinas Pemadam Kebakaran dan Penyelamatan;1399;Pelayanan Penyelamatan dan Evakuasi Non Kebakaran ( Human Rescue ) 
+25;Dinas Pemadam Kebakaran dan Penyelamatan;27;Pelayanan Surat Keterangan Alat Proteksi Pemadam Kebakaran terhadap Bangunan dan Gedung
+26;Badan Perencanaan Pembangunan Daerah, Penelitian dan Pengembangan;132;Asistensi Perencanaan
+26;Badan Perencanaan Pembangunan Daerah, Penelitian dan Pengembangan;383;konsultasi
+26;Badan Perencanaan Pembangunan Daerah, Penelitian dan Pengembangan;134;Permintaan Data
+26;Badan Perencanaan Pembangunan Daerah, Penelitian dan Pengembangan;133;Rekomendasi Izin Penelitan
+27;Badan Kepegawaian dan Pengembangan Sumber Daya Manusia;375;Kenaikan Pangkat
+27;Badan Kepegawaian dan Pengembangan Sumber Daya Manusia;433;Pelayanan Cuti PNS
+27;Badan Kepegawaian dan Pengembangan Sumber Daya Manusia;436;Pelayanan Gaji Berkala 
+27;Badan Kepegawaian dan Pengembangan Sumber Daya Manusia;432;Pelayanan Ijin Belajar PNS / Tugas Belajar PNS
+27;Badan Kepegawaian dan Pengembangan Sumber Daya Manusia;435;Pelayanan Mutasi PNS
+27;Badan Kepegawaian dan Pengembangan Sumber Daya Manusia;437;Pelayanan Penerbitan Karsu dan Karis
+27;Badan Kepegawaian dan Pengembangan Sumber Daya Manusia;434;Pelayanan Pensiun PNS
+27;Badan Kepegawaian dan Pengembangan Sumber Daya Manusia;1703;Pelayanan Penyaluran Dana Sosial ASN
+27;Badan Kepegawaian dan Pengembangan Sumber Daya Manusia;1702;Pelayanan Peremajaan Data ASN
+28;Badan Keuangan dan Aset Daerah;462;Pelayanan Asistensi Penyusunan Dokumen Pelaksanaan Anggaran dan Perubahan Dokumen Pelaksanaan Anggaran (DPA/DPPA SKPD)
+28;Badan Keuangan dan Aset Daerah;461;Pelayanan Asistensi Penyusunan Rencana Kerja dan Anggaran (RKA SKPD)
+28;Badan Keuangan dan Aset Daerah;468;Pelayanan Pendampingan Penginputan Saldo Awal
+28;Badan Keuangan dan Aset Daerah;466;Pelayanan Pendampingan Penyusunan Laporan Keuangan
+28;Badan Keuangan dan Aset Daerah;467;Pelayanan Pendampingan Penyusunan Laporan Keuangan Semester
+28;Badan Keuangan dan Aset Daerah;472;Pelayanan Pendampingan Penyusunan Standar Satuan Harga Barang dan Jasa
+28;Badan Keuangan dan Aset Daerah;380;Pelayanan Penerbitan Surat Keterangan Pemberhentian Pembayaran (SKPP)
+28;Badan Keuangan dan Aset Daerah;463;Pelayanan Penerbitan Surat Penyediaan Dana (SPD)
+28;Badan Keuangan dan Aset Daerah;464;Pelayanan Penerbitan Surat Perintah Pencairan Dana (SP2D)
+28;Badan Keuangan dan Aset Daerah;471;Pelayanan penertiban administrasi Aset Tanah Pemkab untuk dilakukan Pensertifikatan Tanah Pemkab
+28;Badan Keuangan dan Aset Daerah;469;Pelayanan Penyusunan Peraturan Daerah dan Peraturan Bupati tentang Pertanggungjawaban Pelaksanaan APBD
+28;Badan Keuangan dan Aset Daerah;465;Pelayanan Verifikasi Gaji Bulanan
+28;Badan Keuangan dan Aset Daerah;470;Pelayanan Verifikasi Laporan Inventaris Barang Milik Daerah
+29;Badan Pendapatan Daerah;384;Pembayaran BPHTB
+29;Badan Pendapatan Daerah;422;Pembayaran Pajak Air Tanah
+29;Badan Pendapatan Daerah;421;Pembayaran Pajak Galian C
+29;Badan Pendapatan Daerah;418;Pembayaran Pajak Hiburan
+29;Badan Pendapatan Daerah;417;Pembayaran Pajak Hotel
+29;Badan Pendapatan Daerah;419;Pembayaran Pajak Parkir
+29;Badan Pendapatan Daerah;424;Pembayaran Pajak Penerangan Jalan
+29;Badan Pendapatan Daerah;423;Pembayaran Pajak Reklame
+29;Badan Pendapatan Daerah;416;Pembayaran Pajak Restoran
+29;Badan Pendapatan Daerah;420;Pembayaran Pajak Sarang Burung Walet
+29;Badan Pendapatan Daerah;379;Pembayaran PBB
+30;Badan Kesatuan Bangsa dan Politik;372;Surat Keterangan Keberadaan/Terdaftar Ormas/LSM
+30;Badan Kesatuan Bangsa dan Politik;374;Surat Rekomendasi Riset / Praktek Kerja Lapangan (PKL)
+31;Badan Penanggulangan Bencana Daerah;1409;"Pelayanan	Pendistribusian Logistik terhadap masyarakat yang terdampak bencana"
+31;Badan Penanggulangan Bencana Daerah;1410;Pelayanan Informasi Dan Pusdalops- PB (Pusat Pengendalian Operasi Penanggulangan Bencana)
+31;Badan Penanggulangan Bencana Daerah;1407;Pelayanan Monitoring Dan Evaluasi Risiko (Mitigasi Rawan Bencana)
+31;Badan Penanggulangan Bencana Daerah;492;Pelayanan Penanganan Kebencanaan
+31;Badan Penanggulangan Bencana Daerah;1408;Pelayanan peningkatan kapasitas dan pelatihan masyarakat (sosialisasi, komunikasi, informasi dan edukasi)
+31;Badan Penanggulangan Bencana Daerah;1411;Pelayanan Rehabilitasi dan Rekonstruksi Pasca Bencana
+32;RSUD Drs. H. Amri Tambunan;479;HEMODIALISA
+32;RSUD Drs. H. Amri Tambunan;480;INSTALASI GAWAT DARURAT
+32;RSUD Drs. H. Amri Tambunan;478;MEDICAL CHECK UP
+32;RSUD Drs. H. Amri Tambunan;23;RAWAT INAP
+32;RSUD Drs. H. Amri Tambunan;22;RAWAT JALAN
+32;RSUD Drs. H. Amri Tambunan;481;REHABILITASI MEDIK
+33;Bagian Tata Pemerintahan;352;Aplikasi Sistem Administrasi Pelayanan Perjalanan Dinas Luar Negeri bagi Kepala Daerah, Wakil Kepala Daerah, Anggota DPRD dan ASN di lingkungan Pemerintahan Kabupaten Daerah (SIUPDLN)
+33;Bagian Tata Pemerintahan;349;Fasilitasi pelaksanaan kegiatan Evaluasi Kinerja Kecamatan
+33;Bagian Tata Pemerintahan;392;Fasilitasi pelaksanaan kerjasama daerah
+33;Bagian Tata Pemerintahan;346;Fasilitasi pengecekan Surat Keterangan Tanah (SKT)
+33;Bagian Tata Pemerintahan;350;Fasilitasi penyelesaian sengketa tanah
+33;Bagian Tata Pemerintahan;347;Fasilitasi penyusunan dokumen LPPD Kabupaten Deli Serdang
+33;Bagian Tata Pemerintahan;348;Fasilitasi penyusunan dokumen SPM Kabupaten Deli Serdang
+33;Bagian Tata Pemerintahan;351;Fasilitasi proses Penggantian Antar Waktu (PAW) anggota DPRD Kabupaten Deli Serdang
+34;Bagian Kesejahteraan Rakyat;569;Pelayanan Kegiatan Keagamaan Tingkat Kabupaten
+34;Bagian Kesejahteraan Rakyat;209;Pelayanan Koordinasi/ Konsultasi
+34;Bagian Kesejahteraan Rakyat;208;Pelayanan Pemberian Data dan Informasi
+34;Bagian Kesejahteraan Rakyat;207;Pelayanan Pemberian Tali Asih
+34;Bagian Kesejahteraan Rakyat;206;Verifikasi Proposal Bantuan Hibah dan Administrasi Bantuan Hibah
+35;Bagian Hukum;317;Fasilitasi Bantuan Hukum
+35;Bagian Hukum;339;Fasilitasi Produk Hukum
+35;Bagian Hukum;314;Pengelolaan Data dan Informasi Peraturan Daerah
+36;Bagian Perekonomian dan SDA;319;Fasilitasi kegiatan pembinaan BUMD
+36;Bagian Perekonomian dan SDA;323;Fasilitasi pelaksanaan kegiatan Sumber Daya Alam
+36;Bagian Perekonomian dan SDA;320;Fasilitasi pelaksanaan pengendalian inflasi daerah
+36;Bagian Perekonomian dan SDA;321;Fasilitasi pelaksanaan percepatan akses keuangan daerah
+37;Bagian Administrasi Pembangunan;1682;PELAYANAN ASISTENSI/VERIFIKASI RENCANA KERJA DAN ANGGARAN (RKA) DAN DOKUMEN PELAKSANAAN ANGGARAN (DPA)
+38;Bagian Pengadaan Barang dan Jasa;1699;Layanan Fasilititasi Pengisian Rencana Umum Pengadaan (RUP)  pada Aplikasi SIRUP LKPP
+38;Bagian Pengadaan Barang dan Jasa;1696;Layanan Pembuatan ID INAPROC Pengguna Anggaran (PA) dan Pejabat Pembuat Komitmen (PPK) di Perangkat Daerah
+38;Bagian Pengadaan Barang dan Jasa;318;Layanan Pembuatan ID LPSE Pelaku Usaha
+38;Bagian Pengadaan Barang dan Jasa;1695;Layanan Pembuatan ID LPSE Pengguna Anggaran (PA) dan Pejabat Pembuat Komitmen (PPK) di Perangkat Daerah
+38;Bagian Pengadaan Barang dan Jasa;1697;Layanan Permasalahan/ gangguan ID LPSE Pelaku Usaha
+38;Bagian Pengadaan Barang dan Jasa;1701;Layanan Proses Pemelihan Penyedia Metode Pengadaan  Langsung transaksional (E-PL) Pengadaan Barang/Jasa
+38;Bagian Pengadaan Barang dan Jasa;1700;Layanan Proses Persiapan Pengadaan Metode Pengadaan  Langsung transaksional (E-PL) Pengadaan Barang/Jasa 
+38;Bagian Pengadaan Barang dan Jasa;1698;Layanan Proses Persiapan Pengadaan Metode Tender/ Seleksi Pengadaan Barang/Jasa
+39;Bagian Umum;313;Pelayanan Administrasi Kepegawaian Dilingkungan Sekretariat Daerah Kabupaten Deli Serdang
+39;Bagian Umum;329;Pelayanan Jasa Surat Menyurat Kabupaten Deli Serdang
+40;Bagian Organisasi;1;Fasilitasi Kelembagaan Perangkat Daerah
+40;Bagian Organisasi;12;Fasilitasi Pelaksanaan Forum Konsultasi Publik (FKP)
+40;Bagian Organisasi;13;Fasilitasi Pelaksanaan Inovasi Pelayanan Publik
+40;Bagian Organisasi;15;Fasilitasi Pelaksanaan Sistem Akuntabilitas Kinerja Instasnsi Pemerintah (SAKIP)
+40;Bagian Organisasi;8;Fasilitasi Pelaksanaan Sistem Kerja
+40;Bagian Organisasi;7;Fasilitasi Penerapan Pakaian Dinas
+40;Bagian Organisasi;6;Fasilitasi Penerapan Tata Naskah Dinas
+40;Bagian Organisasi;523;Fasilitasi Penggunaan Aplikasi PAKDe
+40;Bagian Organisasi;524;Fasilitasi Penggunaan Aplikasi Sukma Deli
+40;Bagian Organisasi;2;Fasilitasi Penyusunan Analisis Jabatan, Analisis Beban Kerja dan Evaluasi Jabatan
+40;Bagian Organisasi;18;Fasilitasi Penyusunan Indikator Kinerja Utama (IKU)
+40;Bagian Organisasi;16;Fasilitasi Penyusunan Laporan Kinerja Instansi Pemerintah (LKIP) Kabupaten dan Perangkat Daerah
+40;Bagian Organisasi;17;Fasilitasi Penyusunan Perjanjian  Kinerja  (PK) Perangkat Daerah
+40;Bagian Organisasi;4;Fasilitasi Penyusunan Profil Kelembagaan Perangkat Daerah
+40;Bagian Organisasi;11;Fasilitasi Penyusunan Standar Kepuasan Masyarakat (SKM)
+40;Bagian Organisasi;3;Fasilitasi Penyusunan Standar Kompetisi Jabatan
+40;Bagian Organisasi;10;Fasilitasi Penyusunan Standar Operasional Prosedur (SOP)
+40;Bagian Organisasi;9;Fasilitasi Penyusunan Standar Pelayanan (SP)
+40;Bagian Organisasi;14;Penyajian Data terkait Ketatalaksanaan dan Pelayanan Publik
+40;Bagian Organisasi;19;Penyajian Data terkait Kinerja dan Reformasi Birokrasi
+40;Bagian Organisasi;5;Penyajian Data terkait Pelayanan Publik dan Tatalaksana
+41;Bagian Protokol dan Komunikasi Pimpinan;316;Memfasilitasi Keprotokolan Kegiatan Kepala Daerah dan Wakil Kepala Daerah
+41;Bagian Protokol dan Komunikasi Pimpinan;309;Mendokumentasikan Kegiatan Kepala Daerah dan Wakil Kepala Daerah
+41;Bagian Protokol dan Komunikasi Pimpinan;315;Menyusun  Naskah Pidato Kepala Daerah dan Wakil Kepala Daerah
+42;Bagian Perencanaan dan Keuangan;410;1. Meneliti Kelengkapan SPP-UP,SPP-GU,SPP-TU dan SPP-LS gaji dan tunjangan PNS
+42;Bagian Perencanaan dan Keuangan;411;2. Melakukan Verivikasi SPP dan Menyiapkan SPM
+42;Bagian Perencanaan dan Keuangan;564;3. Melakukan Penyusunan RENSTRA Sekretariat Daerah
+42;Bagian Perencanaan dan Keuangan;565;4. Melakukan Penyusunan Dokumen RENJA Sekretariat Daerah 
+42;Bagian Perencanaan dan Keuangan;566;5. Menyusun Bahan Laporan Kinerja Instansi Pemerintah (LKIP) Sekretariat Daerah 
+42;Bagian Perencanaan dan Keuangan;567;6. Menyusun Bahan Evaluasi Renja Sekretariat Daerah Kabupaten. Deli Serdang
+42;Bagian Perencanaan dan Keuangan;568;7. Menyusun Bahan Laporan SPIP Sekretariat Daerah 
+43;Kecamatan STM Hulu;580;Pelayanan Akta Kelahiran
+43;Kecamatan STM Hulu;581;Pelayanan Akta Kematian
+43;Kecamatan STM Hulu;583;Pelayanan Akta Perceraian
+43;Kecamatan STM Hulu;582;Pelayanan Akta Perkawinan
+43;Kecamatan STM Hulu;585;Pelayanan Identitas Kependudukan Digital (IKD) 
+43;Kecamatan STM Hulu;574;Pelayanan Kartu Keluarga Bagi Penduduk WNI
+43;Kecamatan STM Hulu;576;Pelayanan KIA (Kartu Identitas Anak) Penduduk WNI
+43;Kecamatan STM Hulu;575;Pelayanan KTP-El Bagi Penduduk WNI
+43;Kecamatan STM Hulu;586;Pelayanan Online Data
+43;Kecamatan STM Hulu;584;Pelayanan Penerbitan Nomor Induk Berusaha (NIB) 
+43;Kecamatan STM Hulu;577;Pelayanan Surat Pindah Antar Desa/Kelurahan Bagi Penduduk WNI
+43;Kecamatan STM Hulu;579;Pelayanan Surat Pindah antar Kabupaten dan Provinsi Bagi Penduduk WNI
+43;Kecamatan STM Hulu;578;Pelayanan Surat Pindah Antar Kecamatan Bagi Penduduk WNI
+43;Kecamatan STM Hulu;570;Penerbitan Surat Ahli Waris
+43;Kecamatan STM Hulu;573;Penerbitan Surat Keterangan Domisili Usaha (IUMK) 
+43;Kecamatan STM Hulu;572;Penerbitan Surat Keterangan Tidak Mampu
+43;Kecamatan STM Hulu;571;Penerbitan Surat Tanah
+44;Kecamatan STM Hilir;213;Pelayanan Akta Kelahiran
+44;Kecamatan STM Hilir;212;Pelayanan Akta Kematian
+44;Kecamatan STM Hilir;210;Pelayanan Akta Perceraian
+44;Kecamatan STM Hilir;211;Pelayanan Akta Perkawinan
+44;Kecamatan STM Hilir;219;Pelayanan Kartu Keluarga Bagi Penduduk WNI
+44;Kecamatan STM Hilir;217;Pelayanan KIA (Kartu Identitas Anak) Bagi Penduduk WNI
+44;Kecamatan STM Hilir;218;Pelayanan KTP-el Bagi Penduduk WNI
+44;Kecamatan STM Hilir;216;Pelayanan Surat Pindah Antar Desa/Kelurahan Bagi Penduduk WNI
+44;Kecamatan STM Hilir;214;Pelayanan Surat Pindah Antar Kabupaten dan Provinsi Bagi Penduduk WNI
+44;Kecamatan STM Hilir;215;Pelayanan Surat Pindah Antar Kecamatan Bagi Penduduk WNI
+44;Kecamatan STM Hilir;473;Penerbitan Surat Ahli Waris
+44;Kecamatan STM Hilir;220;Penerbitan Surat Keterangan Domisili Usaha (IUMK)
+44;Kecamatan STM Hilir;221;Penerbitan Surat Keterangan Tidak Mampu
+44;Kecamatan STM Hilir;225;Penerbitan Surat Tanah
+45;Kecamatan Pantai Labu;1356;Izin penggunaan fasilitas umum (aset daerah yang dikelola kecamatan)
+45;Kecamatan Pantai Labu;560;Pelayanan  aktivasi Identitas Kependudukan Digital (IKD)
+45;Kecamatan Pantai Labu;561;Pelayanan dan Penerbitan Akta Kelahiran Anak usia 0-17 tahun
+45;Kecamatan Pantai Labu;562;Pelayanan dan Penerbitan Akta Kematian (maksimal 3 [tiga] tahun dari tanggal kematian)
+45;Kecamatan Pantai Labu;1355;Pelayanan dan Penerbitan Kartu Identitas Anak (KIA) bagi penduduk WNI
+45;Kecamatan Pantai Labu;400;Pelayanan dan Penerbitan Kartu Keluarga bagi Penduduk WNI
+45;Kecamatan Pantai Labu;1353;Pelayanan dan Penerbitan KTP-el hilang dan rusak bagi Penduduk WNI
+45;Kecamatan Pantai Labu;401;Pelayanan dan Penerbitan KTP-el Pemula bagi Penduduk WNI
+45;Kecamatan Pantai Labu;1354;Pelayanan Online Data
+45;Kecamatan Pantai Labu;402;Pelayanan Surat Pindah antar desa/kelurahan dalam satu kecamatan bagi penduduk WNI
+45;Kecamatan Pantai Labu;1362;Pendampingan pelayanan pendaftaran perizinan dan non perizinan melalui sistem Seri Deli
+45;Kecamatan Pantai Labu;1361;Pendampingan pelayanan perizinan berusaha untuk penerbitan Nomor Induk Berusaha (NIB) melalui sistem Online Single Submission (OSS) berbasis risiko kepada pelaku Usaha Mikro Kecil (UMK)
+45;Kecamatan Pantai Labu;1363;Pendampingan Pembuatan Email dan Akun Simbg
+45;Kecamatan Pantai Labu;1364;Pendampingan pendaftaran Persetujuan Bangunan Gedung (PBG) melalui http://simbg.pu.go.id
+45;Kecamatan Pantai Labu;1360;Penerbitan Surat Keterangan Domisili Usaha
+45;Kecamatan Pantai Labu;403;Penerbitan Surat Pindah antar Kecamatan
+45;Kecamatan Pantai Labu;1370;Permohonan keberatan PBB
+45;Kecamatan Pantai Labu;1366;Permohonan Mutasi PBB
+45;Kecamatan Pantai Labu;1367;Permohonan pembetulan/pembatalan PBB
+45;Kecamatan Pantai Labu;1365;Permohonan Pendaftaran Baru PBB
+45;Kecamatan Pantai Labu;1373;Permohonan pengembalian kelebihan pembayaran PBB
+45;Kecamatan Pantai Labu;1371;Permohonan penghapusan/pengurangan sanksi administrasi/denda PBB
+45;Kecamatan Pantai Labu;1372;Permohonan pengurangan ketetapan PBB
+45;Kecamatan Pantai Labu;1368;Permohonan salinan SPPT PBB
+45;Kecamatan Pantai Labu;1369;Permohonan surat keterangan NJOP PBB
+45;Kecamatan Pantai Labu;1358;Rekomendasi izin kegiatan sosial dan/atau komersial didalam gedung dan/atau di tempat terbuka dalam wilayah kecamatan
+45;Kecamatan Pantai Labu;1359;Rekomendasi pemanfaatan penggunaan jalan kabupaten untuk kegiatan sosial dan/atau komersial tidak lebih dari 1 (satu) hari
+45;Kecamatan Pantai Labu;1357;Rekomendasi pembentukan kelembagaan Perkumpulan Petani Pemakai Air (P3A)
+45;Kecamatan Pantai Labu;233;Surat Izin Penggunaan Fasilitas Umum
+45;Kecamatan Pantai Labu;399;Surat keterangan domisili usaha
+45;Kecamatan Pantai Labu;398;Surat Keterangan tidak mampu
+45;Kecamatan Pantai Labu;396;Surat Rekomendasi izin kegiatan sosial dan / atau komersial
+45;Kecamatan Pantai Labu;397;Surat Rekomendasi pemanfaatan penggunaan jalan.
+46;Kecamatan Beringin;412;1. Pelayanan Kartu Keluarga bagi penduduk WNI
+46;Kecamatan Beringin;732;10. Pelayanan Surat Pindah Antar Kecamatan
+46;Kecamatan Beringin;733;11. Izin Penggunaan Fasilitas Umum (aset daerah yang dikelola kecamatan)
+46;Kecamatan Beringin;734;12. Rekomendasi pembentukan kelembagaan Perkumpulan Petani Pemakai Air (P3A)
+46;Kecamatan Beringin;735;13. Rekomendasi izin kegiatan sosial dan/atau komersial di dalam gedung dan /atau di tempat terbuka dalam wilayah kecamatan
+46;Kecamatan Beringin;736;14. Rekomendasi pemanfaatan penggunaan jalan Kabupaten untuk kegiatan sosial dan/atau komersial tidak lebih 1 (satu) hari
+46;Kecamatan Beringin;737;15. Penerbitan Surat Keterangan Domisili Usaha
+46;Kecamatan Beringin;591;"16.	Pendampingan pelayanan perizinan berusaha untuk penerbitan Nomor Induk Berusaha (NIB) melalui sistem Online Single Submission (OSS) berbasis risiko kepada pelaku Usaha Mikro Kecil (UMK);"
+46;Kecamatan Beringin;738;17. Pendampingan pelayanan pendaftaran perizinan dan non perizinan melalui sistem Seri Deli
+46;Kecamatan Beringin;739;18. Pendampingan Pembuatan Email dan akun Simbg
+46;Kecamatan Beringin;740;19. Pendampingan pendaftaran Persetujuan Bangunan Gedung (PBG) melalui http:/simbg.pu.go.id
+46;Kecamatan Beringin;729;2. Pelayanan Penerbitan KTP-el Pemula bagi Penduduk WNI
+46;Kecamatan Beringin;741;20. Permohonan Pendaftaran Baru PBB
+46;Kecamatan Beringin;742;21. Permohonan mutasi PBB
+46;Kecamatan Beringin;743;22. Permohonan pembetulan/pembatalan PBB
+46;Kecamatan Beringin;744;23. Permohonan salinan SPPT PBB
+46;Kecamatan Beringin;745;24. Permohonan surat keterangan NJOP PBB
+46;Kecamatan Beringin;746;25. Permohonan keberatan PBB
+46;Kecamatan Beringin;747;26. Permohonan penghapusan/pengurangan sanksi administrasi/denda PBB
+46;Kecamatan Beringin;748;27. Permohonan Pengurangan ketetapan PBB
+46;Kecamatan Beringin;749;28. Permohonan Pembayaran angsuran PBB
+46;Kecamatan Beringin;750;29. Permohonan pengembalian kelebihan pembayaran PBB
+46;Kecamatan Beringin;730;3. Pelayanan dan Penerbitan KTP-el hilang dan rusak bagi Penduduk WNI
+46;Kecamatan Beringin;589;"4.	Pelayanan  aktivasi Identitas Kependudukan Digital (IKD);"
+46;Kecamatan Beringin;731;5. Pelayanan Online Data
+46;Kecamatan Beringin;590;"6.	Pelayanan dan Penerbitan Kartu Identitas Anak (KIA) bagi penduduk WNI;"
+46;Kecamatan Beringin;587;"7.	Pelayanan dan Penerbitan Akta Kelahiran Anak usia 0-17 tahun;"
+46;Kecamatan Beringin;588;"8.	Pelayanan dan Penerbitan Akta Kematian (maksimal 3 [tiga] tahun dari tanggal kematian);"
+46;Kecamatan Beringin;415;9. Pelayanan surat pindah antar desa/Kelurahan bagi penduduk WNI
+47;Kecamatan Bangun Purba;710;IZIN PENGGUNAAN FASILITAS UMUM ( ASET DAERAH YANG DI KELOLA KECAMATAN)
+47;Kecamatan Bangun Purba;127;PELAYANAN AKTIVASI IDENTITAS KEPENDUDUKAN DIGITAL  (IKD)
+47;Kecamatan Bangun Purba;707;PELAYANAN DAN PENERBITAN AKTA KEMATIAN (MAKSIMAL 3 TAHUN DARI TANGGAL KEMATIAN)
+47;Kecamatan Bangun Purba;706;PELAYANAN DAN PENERBITAN AKTE LAHIR ANAK USIA 0-17 TAHUN
+47;Kecamatan Bangun Purba;131;PELAYANAN DAN PENERBITAN KARTU KELUARGA BAGI PENDUDUK WNI
+47;Kecamatan Bangun Purba;128;PELAYANAN DAN PENGAJUAN KTP-EL HILANG DAN RUSAK BAGI PENDUDUK WNI
+47;Kecamatan Bangun Purba;129;PELAYANAN DAN PENGAJUAN KTP-EL PEMULA BAGI PENDUDUK WNI
+47;Kecamatan Bangun Purba;705;PELAYANAN DAN PENGAJUAN PENERBITAN KARTU IDENTITAS ANAK (KIA) BAGI PENDUDUK WNI
+47;Kecamatan Bangun Purba;704;PELAYANAN ONLINE DATA
+47;Kecamatan Bangun Purba;708;PELAYANAN SURAT PINDAH ANTAR DESA DALAM SATU KECAMATAN BAGI PENDUDUK WNI
+47;Kecamatan Bangun Purba;716;PENDAMPINGAN PELAYANAN PENDAFTARAN PERIZINAN DAN NON PERIZINAN MELALUI SISTEM SERI DELI
+47;Kecamatan Bangun Purba;715;PENDAMPINGAN PELAYANAN PERIZINAN BERUSAHA UNTUK PENERBITAN NOMOR INDUK BERUSAHA (NIB) MELALUI SISTEM OSS  BERBASIS RESIKO KEPADA PELAKU USAHA MIKRO KECIL (UMK)
+47;Kecamatan Bangun Purba;717;PENDAMPINGAN PEMBUATAN EMAIL DAN AKUN SIMBG
+47;Kecamatan Bangun Purba;718;PENDAMPINGAN PENDAFTARAN PERSETUJUAN BANGUNAN GEDUNG (PBG) MELALUI http://simbg.pu.go.id
+47;Kecamatan Bangun Purba;714;PENERBITAN SURAT KETERANGAN DOMISILI USAHA
+47;Kecamatan Bangun Purba;709;PENERBITAN SURAT PINDAH ANTAR KECAMATAN
+47;Kecamatan Bangun Purba;724;PENGANTAR PERMOHONAN KEBERATAN PBB
+47;Kecamatan Bangun Purba;720;PENGANTAR PERMOHONAN MUTASI PBB
+47;Kecamatan Bangun Purba;721;PENGANTAR PERMOHONAN PEMBETULAN / PEMABATALAN PBB
+47;Kecamatan Bangun Purba;728;PENGANTAR PERMOHONAN PENGEMBALIAN KELEBIHAN PEMBAYARAN PBB
+47;Kecamatan Bangun Purba;726;PENGANTAR PERMOHONAN PENGURANGAN KETETAPAN PBB
+47;Kecamatan Bangun Purba;722;PENGANTAR PERMOHONAN SALINAN SPPT PBB
+47;Kecamatan Bangun Purba;723;PENGANTAR PERMOHONAN SURAT KETERANGAN NJOP PBB
+47;Kecamatan Bangun Purba;727;PERMOHONAN PEMBAYARAN ANGURAN PBB
+47;Kecamatan Bangun Purba;719;permohonan pengantar Pendaftaran baru PBB
+47;Kecamatan Bangun Purba;725;PERMOHONAN PENGHAPUSAN /PENGURANGAN SANKSI ADMINISTRASI / DENDA PBB
+47;Kecamatan Bangun Purba;712;REKOMENDASI IZIN KEGIATAN SOSIAL DAN/ATAU KOMERSIAL DI DALAM GEDUNG DAN /ATAU DI TEMPAT TERBUKA DALAM WILAYAH KECAMATAN
+47;Kecamatan Bangun Purba;713;REKOMENDASI PEMANFAATAN PENGGUNAAN JALAN KABUPATEN UNTUK KEGIATAN SOSIAL DAN/ATAU KOMERSIAL TIDAK LEBIH DARI 1 (SATU) HARI
+47;Kecamatan Bangun Purba;711;REKOMENDASI PEMBENTUKAN KELEMBAGAAN PERKUMPULAN PETANI PEMAKAI AIR (P3A)
+48;Kecamatan Pagar Merbau;1292;IZIN PENGGUNAAN FASILITAS UMUM (ASET DAERAH YANG DIKELOLA KECAMATAN)
+48;Kecamatan Pagar Merbau;370;PELAYANAN AHLI WARIS
+48;Kecamatan Pagar Merbau;1289;PELAYANAN DAN PENERBITAN AKTA KELAHIRAN ANAK USIA 0-17 TAHUN
+48;Kecamatan Pagar Merbau;1290;PELAYANAN DAN PENERBITAN AKTA KEMATIAN (MAKS 3 TAHUN DARI TANGGAL KEMATIAN)
+48;Kecamatan Pagar Merbau;367;PELAYANAN DAN PENERBITAN KARTU KELUARGA BAGI PENDUDUK WNI
+48;Kecamatan Pagar Merbau;368;PELAYANAN DAN PENERBITAN KIA (KARTU INDONESIA ANAK) BAGI PENDUDUK WNI
+48;Kecamatan Pagar Merbau;1286;PELAYANAN DAN PENERBITAN KTP ELEKTRONIK (HILANG DAN RUSAK) BAGI PENDUDUK WNI
+48;Kecamatan Pagar Merbau;1287;PELAYANAN IKD (IDENTITAS KEPENDUDUKAN DIGITAL)
+48;Kecamatan Pagar Merbau;1288;PELAYANAN ONLINE DATA
+48;Kecamatan Pagar Merbau;1297;PELAYANAN PENDAMPINGAN PENDAFTARAN PERIZINAN DAN NON PERIZINAN MELALUI SISTEM SERI DELI
+48;Kecamatan Pagar Merbau;364;PELAYANAN SURAT PINDAH ANTAR DESA/KELURAHAN BAGI PENDUDUK WNI
+48;Kecamatan Pagar Merbau;1291;PELAYANAN SURAT PINDAH ANTAR DESA/KELURAHAN DALAM SATU KECAMATAN BAGI PENDUDUK WNI
+48;Kecamatan Pagar Merbau;369;PELAYANAN SURAT PINDAH ANTAR KECAMATAN BAGI PENDUDUK WNI
+48;Kecamatan Pagar Merbau;1296;PENDAMPINGAN PELAYANAN PERIZINAN BERUSAHA UNTUK PENERBITAN NIB (NOMOR INDUK BERUSAHA) MELALUI OSS KEPADA PELAKU USAHA MIKRO KECIL (UMK)
+48;Kecamatan Pagar Merbau;1298;PENDAMPINGAN PEMBUATAN EMAIL DAN AKUN SIMBG
+48;Kecamatan Pagar Merbau;1299;PENDAMPINGAN PERSETUJUAN BANGUNAN GEDUNG (PBG)
+48;Kecamatan Pagar Merbau;366;PENERBITAN SURAT KETERANGAN DOMISILI USAHA
+48;Kecamatan Pagar Merbau;365;PENERBITAN SURAT KETERANGAN TIDAK MAMPU
+48;Kecamatan Pagar Merbau;234;PEREKAMAN KTP ELEKTRONIK (PEMULA) BAGI PENDUDUK WNI
+48;Kecamatan Pagar Merbau;1305;PERMOHONAN KEBERATAN KETETAPAN PBB
+48;Kecamatan Pagar Merbau;1301;PERMOHONAN MUTASI SPPT PBB
+48;Kecamatan Pagar Merbau;1308;PERMOHONAN PEMBAYARAN ANGSURAN PBB
+48;Kecamatan Pagar Merbau;1302;PERMOHONAN PEMBETULAN/PEMBATALAN SPPT PBB
+48;Kecamatan Pagar Merbau;1300;PERMOHONAN PENDAFTARAN BARU SPPT PBB
+48;Kecamatan Pagar Merbau;1309;PERMOHONAN PENGEMBALIAN KELEBIHAN PEMBAYARAN PBB
+48;Kecamatan Pagar Merbau;1306;PERMOHONAN PENGHAPUSAN/PENGURANGAN SANKSI ADMINISTRASI/DENDA PBB
+48;Kecamatan Pagar Merbau;1307;PERMOHONAN PENGURANGAN KETETAPAN PBB
+48;Kecamatan Pagar Merbau;1303;PERMOHONAN SALINAN SPPT PBB
+48;Kecamatan Pagar Merbau;1304;PERMOHONAN SURAT KETERANGAN NJOP
+48;Kecamatan Pagar Merbau;1294;REKOMENDASI IZIN KEGIATAN SOSIAL/KOMERSIL DALAM GEDUNG DI TEMPAT ATAU TERBUKA DALAM WILAYAH KECAMATAN
+48;Kecamatan Pagar Merbau;1295;REKOMENDASI PEMANFATAAN PENGGUNAAN JALAN KABUPATEN UNTUK KEGIATAN SOSIAL/KOMERSIAL TIDAK LEBIH DARI 1 HARI
+48;Kecamatan Pagar Merbau;1293;REKOMENDASI PEMBENTUKAN KELEMBAGAAN PERKUMPULAN PETANI PEMAKAI AIR (P3A)
+49;Kecamatan Galang;255;Izin Penggunaan Fasilitas Umum (aset daerah yang dikelola Kecamatan)
+49;Kecamatan Galang;260;Pelayanan dan Penerbitan  KIA (Karu Identitas Anak) Bagi Penduduk WNI
+49;Kecamatan Galang;259;Pelayanan dan Penerbitan Akta Kelahiran Anak Usia 0-17 Tahun
+49;Kecamatan Galang;258;Pelayanan dan Penerbitan Akta Kematian (maksimal 3 (tiga) tahun dari tanggal kematian)
+49;Kecamatan Galang;496;Pelayanan dan Penerbitan Kartu Keluarga bagi Penduduk WNI
+49;Kecamatan Galang;263;Pelayanan dan Penerbitan KTP-el hilang dan rusak bagi penduduk WNI
+49;Kecamatan Galang;264;Pelayanan dan Penerbitan KTP-el Pemula bagi Penduduk WNI
+49;Kecamatan Galang;262;Pelayanan Identitas Kependudukan Digital (IKD)
+49;Kecamatan Galang;1463;Pelayanan Online Data
+49;Kecamatan Galang;236;Pelayanan Pendampingan Pendfatran Perizinan dan Non Perizinanan memalui system Seri Deli
+49;Kecamatan Galang;257;Pelayanan Surat Pindah antar Desa/ Kelurahan dalam satu Kecamatan bagi Penduduk WNI
+49;Kecamatan Galang;251;Pendampingan Pelayanan Perizinan berusaha untuk Penerbitan Nomor Induk Berusaha (NIB) melalui system Online Single Submission (OSS) berbasis risiko kepada pelaku Usaha Mikro Kecil (UMK)
+49;Kecamatan Galang;193;Pendampingan pembuatan email dan akun Simbg
+49;Kecamatan Galang;1435;Pendampingan Pendaftaran Persetujuan Bangunan Gedung (PBG) melaui http://simbg.pu.go.id
+49;Kecamatan Galang;256;Penerbitan Surat Pindah antar Kecamatan
+49;Kecamatan Galang;1441;Permohonan Keberatan
+49;Kecamatan Galang;1437;Permohonan Mutasi
+49;Kecamatan Galang;1444;Permohonan Pembayaran Angsuran
+49;Kecamatan Galang;1438;Permohonan Pembetulan/ Pembatalan
+49;Kecamatan Galang;1436;Permohonan Pendaftaran Baru
+49;Kecamatan Galang;1445;Permohonan Pengembalian Kelebihan Pembayaran
+49;Kecamatan Galang;1442;Permohonan Penghapusan/ Pengurangan sanksi Administrasi/ denda 
+49;Kecamatan Galang;1443;Permohonan Pengurangan Ketetapan
+49;Kecamatan Galang;1439;Permohonan Salinan SPPT
+49;Kecamatan Galang;1440;Permohonan Surat Keterangan NJOP
+49;Kecamatan Galang;253;Rekomendasi Izin Kegiatan Sosial dan/atau Komersial didalam Gedung dan/atau ditempat terbuka dalam wilayah Kecamatan
+49;Kecamatan Galang;252;Rekomendasi Pemanfaatan Pengguna Jalan Kabupaten untuk kegiatan sosial dan/atau Komersial tidak lebih dari 1 (satu) hari
+49;Kecamatan Galang;254;Rekomendasi Pembentukan Kelembagaan Perkumpulan Petani Pemakai Air (P3A)
+50;Kecamatan Lubuk Pakam;852;Izin penggunaan fasilitas umum( aset daerah yang dikelola Kecamatan)
+50;Kecamatan Lubuk Pakam;856;Pelayanan dan penerbitan akta kelahiran 0- 17 tahun
+50;Kecamatan Lubuk Pakam;855;Pelayanan dan penerbitan akta kematian maksimal 3 (tiga)  tahun dari tanggal kematian
+50;Kecamatan Lubuk Pakam;857;Pelayanan dan penerbitan kartu identitas anak (KIA) bagi penduduk WNI
+50;Kecamatan Lubuk Pakam;862;Pelayanan dan penerbitan kartu keluarga bagi penduduk WNI
+50;Kecamatan Lubuk Pakam;861;Pelayanan dan penerbitan ktp-el pemula bagi penduduk WNI
+50;Kecamatan Lubuk Pakam;860;Pelayanan dan tapan penerbitan KTP-el hilang dan rusak bagi penduduk WNI
+50;Kecamatan Lubuk Pakam;859;Pelayanan identitas kependudukan digital (IKD)
+50;Kecamatan Lubuk Pakam;858;Pelayanan online data
+50;Kecamatan Lubuk Pakam;847;Pelayanan pendampingan pendaftaran perizinan dan non perizinan melalui sistem seri Deli
+50;Kecamatan Lubuk Pakam;854;Pelayanan surat pindah antar Desa /Kelurahan dalam satu Kecamatan bagi penduduk WNI
+50;Kecamatan Lubuk Pakam;848;Pendampingan pelayanan perizinan berusaha untuk penertiban nomor induk berusaha (NIB) melalui sistem online single submission (OSS) berbasis resiko kepada pelaku usaha mikro kecil (UMKM) 
+50;Kecamatan Lubuk Pakam;846;Pendampingan pembuatan email dan akun SIMBG
+50;Kecamatan Lubuk Pakam;845;Pendampingan pendaftaran persetujuan bangunan gedung (PBG) melalui http://simbg.pu.go.id
+50;Kecamatan Lubuk Pakam;849;Penerbitan surat keterangan domisili usaha
+50;Kecamatan Lubuk Pakam;853;Penerbitan surat pindah antar Kecamatan
+50;Kecamatan Lubuk Pakam;839;Permohonan keberatan e-sppt PBB
+50;Kecamatan Lubuk Pakam;843;Permohonan mutasi e-sppt PBB
+50;Kecamatan Lubuk Pakam;836;Permohonan pembayaran angsuran SPPT PBB
+50;Kecamatan Lubuk Pakam;842;Permohonan pembetulan /pembatalan e-sppt PBB
+50;Kecamatan Lubuk Pakam;844;Permohonan pendaftaran baru e-sppt PBB
+50;Kecamatan Lubuk Pakam;835;Permohonan pengembalian kelebihan pembayaran SPPT PBB
+50;Kecamatan Lubuk Pakam;838;Permohonan penghapusan/ pengurangan sanksi administrasi/ denda e-sppt PBB
+50;Kecamatan Lubuk Pakam;837;Permohonan pengurangan ketetapan SPPT PBB
+50;Kecamatan Lubuk Pakam;841;Permohonan salinan SPPT
+50;Kecamatan Lubuk Pakam;840;Permohonan surat keterangan NJOP
+50;Kecamatan Lubuk Pakam;850;Rekomendasi izin kegiatan sosial dan/ atau komersial di dalam gedung dan/ atau ditempat terbuka dalam wilayah kecamatan
+50;Kecamatan Lubuk Pakam;863;Rekomendasi pemanfaatan penggunaan Jalan Kabupaten untuk kegiatan sosial dan atau komersial tidak lebih dari  1 (satu) hari
+50;Kecamatan Lubuk Pakam;851;Rekomendasi pembentukan kelembagaan perkumpulan petani pemakai air (P3A)
+51;Kecamatan Tanjung Morawa;670;"1.	Pelayanan dan Penerbitan Kartu Keluarga bagi Penduduk WNI;"
+51;Kecamatan Tanjung Morawa;679;"10.	Penerbitan Surat Pindah Antar Kecamatan"
+51;Kecamatan Tanjung Morawa;680;"11.	Izin penggunaan fasilitas umum (aset daerah yang dikelola kecamatan);"
+51;Kecamatan Tanjung Morawa;681;"12.	Rekomendasi pembentukan kelembagaan Perkumpulan Petani Pemakai Air (P3A);"
+51;Kecamatan Tanjung Morawa;682;"13.	Rekomendasi izin kegiatan sosial dan/atau komersial didalam gedung dan/atau di tempat terbuka dalam wilayah kecamatan;"
+51;Kecamatan Tanjung Morawa;683;"14.	Rekomendasi pemanfaatan penggunaan jalan kabupaten untuk kegiatan sosial dan/atau komersial tidak lebih dari 1 (satu) hari;"
+51;Kecamatan Tanjung Morawa;684;"15.	Penerbitan Surat Keterangan Domisili Usaha;"
+51;Kecamatan Tanjung Morawa;685;"16.	Pendampingan pelayanan perizinan berusaha untuk penerbitan Nomor Induk Berusaha (NIB) melalui sistem Online Single Submission (OSS) berbasis risiko kepada pelaku Usaha Mikro Kecil (UMK);"
+51;Kecamatan Tanjung Morawa;686;"17.	Pendampingan pelayanan pendaftaran perizinan dan non perizinan melalui sistem Seri Deli;"
+51;Kecamatan Tanjung Morawa;687;"18.	Pendampingan Pembuatan Email dan Akun Simbg"
+51;Kecamatan Tanjung Morawa;688;"19.	Pendampingan pendaftaran Persetujuan Bangunan Gedung (PBG) melalui http://simbg.pu.go.id;"
+51;Kecamatan Tanjung Morawa;671;"2.	Pelayanan dan Penerbitan KTP-el Pemula bagi Penduduk WNI;"
+51;Kecamatan Tanjung Morawa;689;"20.	Permohonan Pendaftaran Baru PBB;"
+51;Kecamatan Tanjung Morawa;690;"21.	Permohonan Mutasi PBB;"
+51;Kecamatan Tanjung Morawa;691;"22.	Permohonan pembetulan/pembatalan PBB;"
+51;Kecamatan Tanjung Morawa;692;"23.	Permohonan salinan SPPT PBB;"
+51;Kecamatan Tanjung Morawa;693;"24.	Permohonan surat keterangan NJOP PBB;"
+51;Kecamatan Tanjung Morawa;694;"25.	Permohonan keberatan PBB;"
+51;Kecamatan Tanjung Morawa;695;"26.	Permohonan penghapusan/pengurangan sanksi administrasi/denda PBB;"
+51;Kecamatan Tanjung Morawa;696;"27.	Permohonan pengurangan ketetapan PBB;"
+51;Kecamatan Tanjung Morawa;697;"28.	Permohonan pembayaran angsuran PBB;"
+51;Kecamatan Tanjung Morawa;698;"29.	Permohonan pengembalian kelebihan pembayaran PBB;"
+51;Kecamatan Tanjung Morawa;672;"3.	Pelayanan dan Penerbitan KTP-el hilang dan rusak bagi Penduduk WNI;"
+51;Kecamatan Tanjung Morawa;673;"4.	Pelayanan  aktivasi Identitas Kependudukan Digital (IKD);"
+51;Kecamatan Tanjung Morawa;674;"5.	Pelayanan Online Data;"
+51;Kecamatan Tanjung Morawa;675;"6.	Pelayanan dan Penerbitan Kartu Identitas Anak (KIA) bagi penduduk WNI;"
+51;Kecamatan Tanjung Morawa;676;"7.	Pelayanan dan Penerbitan Akta Kelahiran Anak usia 0-17 tahun;"
+51;Kecamatan Tanjung Morawa;677;"8.	Pelayanan dan Penerbitan Akta Kematian (maksimal 3 [tiga] tahun dari tanggal kematian"
+51;Kecamatan Tanjung Morawa;678;"9.	Pelayanan Surat Pindah antar desa/kelurahan dalam satu kecamatan bagi penduduk WNI;"
+51;Kecamatan Tanjung Morawa;86;Pelayanan  Kartu  Keluarga  Hilang
+51;Kecamatan Tanjung Morawa;59;Pelayanan Ahli Waris
+51;Kecamatan Tanjung Morawa;61;Pelayanan SKBD
+51;Kecamatan Tanjung Morawa;58;Pelayanan Surat Keterangan Tidak Mampu (SKTM)
+51;Kecamatan Tanjung Morawa;84;Pencetakan KTP-el  Perubahan Data
+51;Kecamatan Tanjung Morawa;83;Pencetakan KTP-el  Pindah Alamat
+51;Kecamatan Tanjung Morawa;54;Perekaman Data KTP-el
+52;Kecamatan Batang Kuis;816;Izin Penggunaan Fasilitas Umum (aset daerah yang dikelola kecamatan)
+52;Kecamatan Batang Kuis;809;Pelayanan Aktivasi Identitas Kependudukan Digital (IKD)
+52;Kecamatan Batang Kuis;812;Pelayanan dan Penerbitan Akta Kelahiran Anak Usia 0-17 tahun
+52;Kecamatan Batang Kuis;813;Pelayanan dan Penerbitan Akta Kematian (maksimal 3 [tiga] tahun dari tanggal kematian)
+52;Kecamatan Batang Kuis;811;Pelayanan dan Penerbitan Kartu Identitas Anak (KIA) bagi Penduduk WNI
+52;Kecamatan Batang Kuis;806;Pelayanan dan Penerbitan Kartu Keluarga bagi Penduduk WNI
+52;Kecamatan Batang Kuis;808;Pelayanan dan Penerbitan KTP-el hilang dan rusak bagi Penduduk WNI
+52;Kecamatan Batang Kuis;807;Pelayanan dan Penerbitan KTP-el Pemula bagi Penduduk WNI
+52;Kecamatan Batang Kuis;810;Pelayanan Online Data
+52;Kecamatan Batang Kuis;814;Pelayanan Surat Pindah antar desa/kelurahan dalam satu kecamatan bagi penduduk WNI
+52;Kecamatan Batang Kuis;822;Pendampingan pelayanan pendaftaran perizinan dan non perizinan melalui sistem Seri Deli
+52;Kecamatan Batang Kuis;821;Pendampingan pelayanan perizinan berusaha untuk penerbitan Nomor Induk Berusaha (NIB) melalui sistem Online Single Submission (OSS) berbasis risiko kepada pelaku Usaha Mikro Kecil (UMK)
+52;Kecamatan Batang Kuis;823;Pendampingan Pembuatan Email dan Akun Simbg
+52;Kecamatan Batang Kuis;824;Pendampingan pendaftaran Persetujuan Bangunan Gedung (PBG) melalui http://simbg.pu.go.id
+52;Kecamatan Batang Kuis;820;Penerbitan Surat Keterangan Domisili Usaha
+52;Kecamatan Batang Kuis;815;Penerbitan Surat Pindah Antar Kecamatan
+52;Kecamatan Batang Kuis;830;Permohonan keberatan PBB
+52;Kecamatan Batang Kuis;826;Permohonan Mutasi PBB
+52;Kecamatan Batang Kuis;833;Permohonan pembayaran angsuran PBB
+52;Kecamatan Batang Kuis;827;Permohonan pembetulan/pembatalan PBB
+52;Kecamatan Batang Kuis;825;Permohonan Pendaftaran Baru PBB
+52;Kecamatan Batang Kuis;834;Permohonan pengembalian kelebihan pembayaran PBB
+52;Kecamatan Batang Kuis;831;Permohonan penghapusan /pengurangan sanksi administrasi/denda PBB
+52;Kecamatan Batang Kuis;832;Permohonan pengurangan ketetapan PBB
+52;Kecamatan Batang Kuis;828;Permohonan salinan SPPT PBB
+52;Kecamatan Batang Kuis;829;Permohonan surat keterangan NJOP PBB
+52;Kecamatan Batang Kuis;818;Rekomendasi izin kegiatan sosial dan/atau komersial di dalam gedung dan/atau di tempat terbuka dalam wilayah kecamatan
+52;Kecamatan Batang Kuis;819;Rekomendasi pemanfaatan penggunaan jalan kabupaten untuk kegiatan sosial dan/atau komersial tidak lebih 1 (satu) hari
+52;Kecamatan Batang Kuis;817;Rekomendasi pembentukan kelembagaan Perkumpulan Petani Pemakai Air (P3A)
+53;Kecamatan Hamparan Perak;237;"1.	Pelayanan dan Penerbitan Kartu Keluarga"
+53;Kecamatan Hamparan Perak;426;"10.	Pelayanan dan Penerbitan KTP-el hilang dan rusak bagi Penduduk WNI"
+53;Kecamatan Hamparan Perak;427;"11.	Izin penggunaan fasilitas umum (aset daerah yang dikelola kecamatan)"
+53;Kecamatan Hamparan Perak;428;12. Rekomendasi pembentukan kelembagaan Perkumpulan Petani Pemakai Air (P3A)
+53;Kecamatan Hamparan Perak;429;13. Rekomendasi izin kegiatan sosial dan/atau komersial didalam gedung dan/atau di tempat terbuka dalam wilayah kecamatan
+53;Kecamatan Hamparan Perak;430;"14.	Rekomendasi pemanfaatan penggunaan jalan kabupaten untuk kegiatan sosial dan/atau komersial tidak lebih dari 1 (satu) hari"
+53;Kecamatan Hamparan Perak;791;15. Penerbitan Surat Keterangan Domisili Usaha
+53;Kecamatan Hamparan Perak;792;"16.	Pendampingan pelayanan perizinan berusaha untuk penerbitan Nomor Induk Berusaha (NIB) melalui sistem Online Single Submission (OSS) berbasis risiko kepada pelaku Usaha Mikro Kecil (UMK)"
+53;Kecamatan Hamparan Perak;793;"17.	Pendampingan pelayanan pendaftaran perizinan dan non perizinan melalui sistem Seri Deli"
+53;Kecamatan Hamparan Perak;794;"18.	Pendampingan Pembuatan Email dan Akun Simbg"
+53;Kecamatan Hamparan Perak;795;"19.	Pendampingan pendaftaran Persetujuan Bangunan Gedung (PBG) melalui http://simbg.pu.go.id"
+53;Kecamatan Hamparan Perak;238;"2.	Pelayanan dan Penerbitan KTP-el Pemula bagi Penduduk WNI"
+53;Kecamatan Hamparan Perak;796;"20.	Permohonan Pendaftaran Baru PBB"
+53;Kecamatan Hamparan Perak;797;"21.	Permohonan Mutasi PBB"
+53;Kecamatan Hamparan Perak;798;"22.	Permohonan pembetulan/pembatalan PBB"
+53;Kecamatan Hamparan Perak;799;"23.	Permohonan salinan SPPT PBB"
+53;Kecamatan Hamparan Perak;800;"24.	Permohonan surat keterangan NJOP PBB"
+53;Kecamatan Hamparan Perak;801;"25.	Permohonan keberatan PBB"
+53;Kecamatan Hamparan Perak;802;"26.	Permohonan penghapusan/pengurangan sanksi administrasi/denda PBB"
+53;Kecamatan Hamparan Perak;803;"27.	Permohonan pengurangan ketetapan PBB"
+53;Kecamatan Hamparan Perak;804;"28.	Permohonan pembayaran angsuran PBB"
+53;Kecamatan Hamparan Perak;805;"29.	Permohonan pengembalian kelebihan pembayaran PBB"
+53;Kecamatan Hamparan Perak;239;"3.	Pelayanan Penerbitan Surat Pindah Antar Kecamatan"
+53;Kecamatan Hamparan Perak;240;"4.	Pelayanan  aktivasi Identitas Kependudukan Digital (IKD)"
+53;Kecamatan Hamparan Perak;248;"5.	Pelayanan Online Data"
+53;Kecamatan Hamparan Perak;249;"6.	Pelayanan dan Penerbitan Kartu Identitas Anak (KIA) bagi penduduk WNI"
+53;Kecamatan Hamparan Perak;247;"7.	Pelayanan dan Penerbitan Akta Kelahiran Anak usia 0-17 tahun"
+53;Kecamatan Hamparan Perak;250;"8.	Pelayanan dan Penerbitan Akta Kematian "
+53;Kecamatan Hamparan Perak;425;"9.	Pelayanan Surat Pindah antar desa/kelurahan dalam satu kecamatan bagi penduduk WNI"
+54;Kecamatan Sunggal;596;Aktivasi Identitas Kependudukan Digital (IKD)
+54;Kecamatan Sunggal;603;Izin Penggunaan Fasilitas Umum
+54;Kecamatan Sunggal;597;Online Data
+54;Kecamatan Sunggal;609;Pendampingan pelayanan pendaftaran perizinan dan non perizinan melalui SERI DELI
+54;Kecamatan Sunggal;608;Pendampingan pelayanan perizinan berusaha untuk penerbitan Nomor Induk Berusaha (NIB)
+54;Kecamatan Sunggal;610;Pendampingan pembuatan Email dan Akun SIMBG
+54;Kecamatan Sunggal;611;Pendampingan pendaftaran Persetujuan Bangunan Gedung (PBG)
+54;Kecamatan Sunggal;599;Penerbitan Akta Kelahiran Anak
+54;Kecamatan Sunggal;600;Penerbitan Akte Kematian
+54;Kecamatan Sunggal;593;Penerbitan Kartu Keluarga bagi WNI
+54;Kecamatan Sunggal;598;Penerbitan KIA bagi WNI
+54;Kecamatan Sunggal;594;Penerbitan KTP-el Baru/ Pemula bagi WNI
+54;Kecamatan Sunggal;595;Penerbitan KTP-el Hilang, Rusak  dan Peubahan Data bagi WNI
+54;Kecamatan Sunggal;607;Penerbitan Surat Keterangan Domisili Usaha
+54;Kecamatan Sunggal;601;Penerbitan Surat Pindah Antar Desa/ Kelurahan dalam satu Kecamatan bagi WNI
+54;Kecamatan Sunggal;602;Penerbitan Surat Pindah Antar Kecamatan
+54;Kecamatan Sunggal;617;Permohonan Keberatan PBB
+54;Kecamatan Sunggal;613;Permohonan Mutasi PBB
+54;Kecamatan Sunggal;620;Permohonan Pembayaran Angsuran PBB
+54;Kecamatan Sunggal;614;Permohonan Pembetulan/ Pembatalan PBB
+54;Kecamatan Sunggal;612;Permohonan Pendaftaran Baru PBB
+54;Kecamatan Sunggal;621;Permohonan Pengembalian Kelebihan pembayaran PBB
+54;Kecamatan Sunggal;618;Permohonan Penghapusan/ Pengurangan Sanksi Administrasi/ Denda PBB
+54;Kecamatan Sunggal;619;Permohonan Pengurangan Ketetapan PBB
+54;Kecamatan Sunggal;615;Permohonan Salinan SPPT PBB
+54;Kecamatan Sunggal;616;Permohonan Surat Keterangan NJOP PBB
+54;Kecamatan Sunggal;605;Rekomendasi izin kegiatan sosial/ komersial didalam gedung/ tempat terbuka dalam wilayah Kecamatan
+54;Kecamatan Sunggal;606;Rekomendasi pemanfaatan penggunaan jalan Kabupaten
+54;Kecamatan Sunggal;604;Rekomendasi pembentukan kelembagaan Perkumpulan Petani Pemakai Air (P3A)
+55;Kecamatan Labuhan Deli;287;pelayanan dan Penerbitan Kartu Keluarga bagi Penduduk WNI
+56;Kecamatan Percut Sei Tuan;1338; IZIN PENGGUNAAN FASILITAS UMUM (ASET DAERAH YANG DIKELOLA KECAMATAN)
+56;Kecamatan Percut Sei Tuan;1340; PELAYANAN DAN PENERBITAN AKTA KEMATIAN (MAKS 3 TAHUN DARI TANGGAL KEMATIAN)
+56;Kecamatan Percut Sei Tuan;1344; PELAYANAN DAN PENERBITAN KTP ELEKTRONIK (HILANG DAN RUSAK) BAGI PENDUDUK WNI
+56;Kecamatan Percut Sei Tuan;1343; PELAYANAN IKD (IDENTITAS KEPENDUDUKAN DIGITAL)
+56;Kecamatan Percut Sei Tuan;1333; PELAYANAN PENDAMPINGAN PENDAFTARAN PERIZINAN DAN NON PERIZINAN MELALUI SISTEM SERI DELI
+56;Kecamatan Percut Sei Tuan;1339; PELAYANAN SURAT PINDAH ANTAR DESA/KELURAHAN DALAM SATU KECAMATAN BAGI PENDUDUK WNI
+56;Kecamatan Percut Sei Tuan;1346; PELAYANAN SURAT PINDAH ANTAR KECAMATAN BAGI PENDUDUK WNI
+56;Kecamatan Percut Sei Tuan;1352; PEREKAMAN KTP ELEKTRONIK (PEMULA) BAGI PENDUDUK WNI
+56;Kecamatan Percut Sei Tuan;1328; PERMOHONAN PEMBETULAN/PEMBATALAN SPPT PBB
+56;Kecamatan Percut Sei Tuan;1330; PERMOHONAN PENDAFTARAN BARU SPPT PBB
+56;Kecamatan Percut Sei Tuan;284; PERMOHONAN PENGHAPUSAN/PENGURANGAN SANKSI ADMINISTRASI/DENDA PBB
+56;Kecamatan Percut Sei Tuan;295; PERMOHONAN PENGURANGAN KETETAPAN PBB
+56;Kecamatan Percut Sei Tuan;1327; PERMOHONAN SALINAN SPPT PBB
+56;Kecamatan Percut Sei Tuan;1326; PERMOHONAN SURAT KETERANGAN NJOP
+56;Kecamatan Percut Sei Tuan;1335; REKOMENDASI PEMANFATAAN PENGGUNAAN JALAN KABUPATEN UNTUK KEGIATAN SOSIAL/KOMERSIAL TIDAK LEBIH DARI 1 HARI
+56;Kecamatan Percut Sei Tuan;1337; REKOMENDASI PEMBENTUKAN KELEMBAGAAN PERKUMPULAN PETANI PEMAKAI AIR (P3A)
+56;Kecamatan Percut Sei Tuan;1341;PELAYANAN DAN PENERBITAN AKTA KELAHIRAN ANAK USIA 0-17 TAHUN
+56;Kecamatan Percut Sei Tuan;1348;PELAYANAN DAN PENERBITAN KARTU KELUARGA BAGI PENDUDUK WNI
+56;Kecamatan Percut Sei Tuan;1347;PELAYANAN DAN PENERBITAN KIA (KARTU INDONESIA ANAK) BAGI PENDUDUK WNI
+56;Kecamatan Percut Sei Tuan;1342;PELAYANAN ONLINE DATA
+56;Kecamatan Percut Sei Tuan;1334;PENDAMPINGAN PELAYANAN PERIZINAN BERUSAHA UNTUK PENERBITAN NIB (NOMOR INDUK BERUSAHA) MELALUI OSS KEPADA PELAKU USAHA MIKRO KECIL (UMK)
+56;Kecamatan Percut Sei Tuan;1332;PENDAMPINGAN PEMBUATAN EMAIL DAN AKUN SIMBG
+56;Kecamatan Percut Sei Tuan;1331;PENDAMPINGAN PERSETUJUAN BANGUNAN GEDUNG (PBG)
+56;Kecamatan Percut Sei Tuan;1349;PENERBITAN SURAT KETERANGAN DOMISILI USAHA
+56;Kecamatan Percut Sei Tuan;282;PERMOHONAN KEBERATAN KETETAPAN PBB
+56;Kecamatan Percut Sei Tuan;1329;PERMOHONAN MUTASI SPPT PBB
+56;Kecamatan Percut Sei Tuan;296;PERMOHONAN PEMBAYARAN ANGSURAN PBB
+56;Kecamatan Percut Sei Tuan;1325;PERMOHONAN PENGEMBALIAN KELEBIHAN PEMBAYARAN PBB
+56;Kecamatan Percut Sei Tuan;1336;REKOMENDASI IZIN KEGIATAN SOSIAL/KOMERSIL DALAM GEDUNG DI TEMPAT ATAU TERBUKA DALAM WILAYAH KECAMATAN
+57;Kecamatan Sibolangit;490;Akta Kelahiran
+57;Kecamatan Sibolangit;489;Akta Kematian
+57;Kecamatan Sibolangit;483;Kartu Tanda Penduduk Elektronik Bagi WNI
+57;Kecamatan Sibolangit;482;Pembuaatan Surat Tanah
+57;Kecamatan Sibolangit;484;Pembuatan Surat Ahli Waris
+57;Kecamatan Sibolangit;491;Pengesahan Surat Keterangan Tidak Mampu
+57;Kecamatan Sibolangit;485;Perombakan Kartu Keluarga
+57;Kecamatan Sibolangit;486;Surat Pindah Antar Desa
+57;Kecamatan Sibolangit;488;Surat Pindah Antar Kabupaten dan Provinsi
+57;Kecamatan Sibolangit;487;Surat Pindah Antar Kecamatan
+58;Kecamatan Pancur Batu;50;"1.	Pelayanan Penerbitan Kartu Keluarga"
+58;Kecamatan Pancur Batu;771;10. Penerbitan surat pindah antar kecamatan
+58;Kecamatan Pancur Batu;772;11. Izin Penggunaan Fasilitas Umum
+58;Kecamatan Pancur Batu;773;12. Rekomendasi Pembentukan Kelembagaan Perkumpulan Petani Pemakai Air (P3A)
+58;Kecamatan Pancur Batu;774;13. Rekomendasi Izin Kegiatan Sosial dalam gedung atau tempat terbuka
+58;Kecamatan Pancur Batu;775;14. Rekomendasi pemanfaatan penggunaan jalan untuk kegiatan sosial
+58;Kecamatan Pancur Batu;776;15. Penerbitan Surat Keterangan Domisili Usaha
+58;Kecamatan Pancur Batu;777;16. Pendampingan Pelayanan Penerbitan Nomor Induk Berusaha (NIB) melalui sistem Online Singel Submission (OSS)
+58;Kecamatan Pancur Batu;778;17. Pendampingan Pelayanan Pendaftaran Perizinan dan Non Perizinan melalui sistem Seri Deli
+58;Kecamatan Pancur Batu;779;18. Pendampingan Pembuatan Email dan Akun Simbg
+58;Kecamatan Pancur Batu;780;19. Pendampingan Pendaftaran Persetujuan Bangunan Gedung (PBG) melalui https://simbg.pu.go.id
+58;Kecamatan Pancur Batu;51;"2.	Pelayanan Penerbitan KTP -el Pemula"
+58;Kecamatan Pancur Batu;781;20. Permohonan Pendaftaran Baru PBB
+58;Kecamatan Pancur Batu;782;21. Permohonan Mutasi PBB
+58;Kecamatan Pancur Batu;783;22. Permohonan Pembetulan/Pembatalan PBB
+58;Kecamatan Pancur Batu;784;23. Permohonan salinan SPPT PBB
+58;Kecamatan Pancur Batu;785;24. Permohonan surat keterangan NJOP PBB
+58;Kecamatan Pancur Batu;786;25. Permohonan Keberatan PBB
+58;Kecamatan Pancur Batu;787;26. Permohonan Penghapusan/Pengurangan sanksi administrasi/denda PBB
+58;Kecamatan Pancur Batu;788;27. Permohonan Pengurangan ketetapan PBB
+58;Kecamatan Pancur Batu;789;28. Permohonan Pembayaran Angsuran PBB
+58;Kecamatan Pancur Batu;790;29. Permohonan Pengembalian Kelebihan Pembayaran PBB
+58;Kecamatan Pancur Batu;52;"3.	Pelayanan Penerbitan KTP-el Hilang"
+58;Kecamatan Pancur Batu;53;4. Pelayanan Aktivasi Identitas Kependudukan Digital (IKD)
+58;Kecamatan Pancur Batu;563;5. Pelayanan Online Data
+58;Kecamatan Pancur Batu;767;6. Pelayanan Penerbitan Kartu Identitas Anak (KIA)
+58;Kecamatan Pancur Batu;768;7. Pelayanan Penerbitan Akta Kelahiran Anak usia 0-17 tahun
+58;Kecamatan Pancur Batu;769;8. Pelayanan Penerbitan Akta Kematian maksimal 3 tahun dari tanggal kematian
+58;Kecamatan Pancur Batu;770;9. Pelayanan surat pindah antar desa/kelurahan dalam satu kecamatan
+59;Kecamatan Deli Tua;382;Pelayanan pembuatan Kartu Keluarga
+60;Kecamatan Namorambe;385;1. Pelayanan Dokumen Kependudukan
+60;Kecamatan Namorambe;386;2. Pelayanan Persampahan
+60;Kecamatan Namorambe;387;3. Pelayanan Penerbitan surat ahli waris
+60;Kecamatan Namorambe;388;4. Pelayanan SKTM 
+60;Kecamatan Namorambe;389;5. Pelayanan Pertanahan
+61;Kecamatan Patumbak;293;Pelayanan Dokumen Kependudukan
+61;Kecamatan Patumbak;294;Pelayanan Kebersihan Persampajan
+61;Kecamatan Patumbak;431;Pengurusan Surat Keterangan Miskin
+61;Kecamatan Patumbak;292;SKTM
+61;Kecamatan Patumbak;291;Surat Keterangan Ahli Waris
+62;Kecamatan Birubiru;516;Pelayanan Dokumen Kependudukan
+62;Kecamatan Birubiru;521;Pelayanan Surat Keterangan Ahli Waris 
+62;Kecamatan Birubiru;519;Pelayanan Surat keterangan Tidak Mampu (SKTM)
+62;Kecamatan Birubiru;525;Penyajian Data terkait Pelayanan Kebersihan Persampahan
+63;Kecamatan Kutalimbaru;640;Izin Penggunaan Fasilitas Umum (Aset Daerah Yang Dikelola Kecamatan)
+63;Kecamatan Kutalimbaru;636;Pelayanan dan Penerbitan Akta Kelahiran Anak Usia 0-17 Tahun
+63;Kecamatan Kutalimbaru;637;Pelayanan dan Penerbitan Akta Kematian (maksimal 3 (tiga) tahun dari tanggal kematian)
+63;Kecamatan Kutalimbaru;635;Pelayanan dan Penerbitan Kartu Identitas Anak (KIA)
+63;Kecamatan Kutalimbaru;512;Pelayanan dan Penerbitan Kartu Kelurga Bagi Penduduk WNI
+63;Kecamatan Kutalimbaru;378;Pelayanan dan Penerbitan KTP-El Hilang dan Rusak Bagi Penduduk WNI
+63;Kecamatan Kutalimbaru;511;Pelayanan dan Penerbitan KTP-El Pemula Bagi Penduduk WNI
+63;Kecamatan Kutalimbaru;377;Pelayanan Identitas Kependudukan Digital (IKD)
+63;Kecamatan Kutalimbaru;376;Pelayanan Online Data
+63;Kecamatan Kutalimbaru;638;Pelayanan Surat Pindah Antar Desa/Kelurahan Dalam Satu Kecamatan Bagi Penduduk WNI
+63;Kecamatan Kutalimbaru;646;Pendampingan pelayanan pendaftaran perizinan dan non perizinan melalui sistem Seri Deli
+63;Kecamatan Kutalimbaru;645;Pendampingan pelayanan perizinan berusaha untuk penerbitan Nomor Induk Berusaha (NIB) melalui sistem Online Single Submission (OSS) berbasis risiko kepada pelaku Usaha Mikro Kecil (UMK)
+63;Kecamatan Kutalimbaru;647;Pendampingan Pembuatan Email dan Akun Simbg
+63;Kecamatan Kutalimbaru;648;Pendampingan pendaftaran Persetujuan Bangunan Gedung (PBG) melalui http://simbg.pu.go.id
+63;Kecamatan Kutalimbaru;644;Penerbitan Surat Keterangan Domisili Usaha
+63;Kecamatan Kutalimbaru;639;Penerbitan Surat Pindah Antar Kecamatan
+63;Kecamatan Kutalimbaru;654;Permohonan keberatan PBB
+63;Kecamatan Kutalimbaru;650;Permohonan Mutasi PBB
+63;Kecamatan Kutalimbaru;657;Permohonan pembayaran angsuran PBB
+63;Kecamatan Kutalimbaru;651;Permohonan pembetulan/pembatalan PBB
+63;Kecamatan Kutalimbaru;649;Permohonan Pendaftaran Baru PBB
+63;Kecamatan Kutalimbaru;658;Permohonan pengembalian kelebihan pembayaran PBB
+63;Kecamatan Kutalimbaru;655;Permohonan penghapusan/pengurangan sanksi administrasi/denda PBB
+63;Kecamatan Kutalimbaru;656;Permohonan pengurangan ketetapan PBB
+63;Kecamatan Kutalimbaru;652;Permohonan salinan SPPT PBB
+63;Kecamatan Kutalimbaru;653;Permohonan surat keterangan NJOP PBB
+63;Kecamatan Kutalimbaru;642;Rekomendasi izin kegiatan sosial dan/atau komersial didalam gedung dan/atau di tempat terbuka dalam wilayah kecamatan
+63;Kecamatan Kutalimbaru;643;Rekomendasi pemanfaatan penggunaan jalan kabupaten untuk kegiatan sosial dan/atau komersial tidak lebih dari 1 (satu) hari
+63;Kecamatan Kutalimbaru;641;Rekomendasi pembentukan kelembagaan Perkumpulan Petani Pemakai Air (P3A)
+64;Kecamatan Gunung Meriah;62;Izin mendirikan bangunan dengan luas bangunan maksimum 100 M2
+64;Kecamatan Gunung Meriah;65;Izin penggunaan fasilitas umum (aset daerah yang dikelola kecamatan)
+64;Kecamatan Gunung Meriah;63;Izin Reklame Isidental
+64;Kecamatan Gunung Meriah;73;Pelayanaan Kartu Keluarga bagi penduduk WNI
+64;Kecamatan Gunung Meriah;75;Pelayanaan KIA (Karti Identitas Anak) bagi penduduk WNI
+64;Kecamatan Gunung Meriah;74;Pelayanaan KTP-EL bagi penduduk WNI
+64;Kecamatan Gunung Meriah;78;Pelayanaan surat pindah antar kabupaten/provinsi bagi penduduk WNI
+64;Kecamatan Gunung Meriah;82;Pelayanan Akta Perceraian
+64;Kecamatan Gunung Meriah;79;Pelayanan Akte Kelahiran
+64;Kecamatan Gunung Meriah;80;Pelayanan Akte Kematian
+64;Kecamatan Gunung Meriah;76;Pelayanan surat pindah antar desa/kelurahan dalam satu kecamatan bagi penduduk WNI
+64;Kecamatan Gunung Meriah;77;Pelayanan surat pindah antar kecamatan dalam kabupaten bagi penduduk WNI
+64;Kecamatan Gunung Meriah;72;Penerbitan surat keterangan domisili usaha
+64;Kecamatan Gunung Meriah;71;Penerbitan surat keterangan tidak mampu
+64;Kecamatan Gunung Meriah;64;Penerbitan tanda daftar usaha pariwisata yang dikelola pemerintah desa dan/atau kelompok penggerak pariwisata
+64;Kecamatan Gunung Meriah;69;Rekomendasi izin kegiatan sosial dan/atau komersial di dalam gedung dan atau ditempat terbuka dalam wilayah kecamatan
+64;Kecamatan Gunung Meriah;67;Rekomendasi izin mendirikan bangunan kecuali bangunan rumah tempat tinggal dengan luas bangunan maksimum 100 M2
+64;Kecamatan Gunung Meriah;66;Rekomendasi izin peruntukan penggunaan tanah
+64;Kecamatan Gunung Meriah;70;Rekomendasi pemanfaatan penggunaan jalan kabupaten untuk kegiatan sosial  dan atau komersial tidak lebih dari 1 (satu) hari
+64;Kecamatan Gunung Meriah;68;Rekomendasi pembentukan kelembagaan perkumpulan petani pemakai air (P3A)
+65;RSUD Pancur Batu;699;Farmasi
+65;RSUD Pancur Batu;700;Gizi
+65;RSUD Pancur Batu;533;Pelayanan Fisioterapi
+65;RSUD Pancur Batu;531;Pelayanan ICU
+65;RSUD Pancur Batu;528;Pelayanan IGD
+65;RSUD Pancur Batu;529;Pelayanan Lab
+65;RSUD Pancur Batu;989;Pelayanan Pendaftaran dan Admisi
+65;RSUD Pancur Batu;530;Pelayanan PONEK
+65;RSUD Pancur Batu;532;Pelayanan Radiologi
+65;RSUD Pancur Batu;526;Pelayanan Rawat Inap
+65;RSUD Pancur Batu;527;Pelayanan Rawat Jalan
+66;RSUD Bangun Purba;871;PELAYANAN AMBULANCE
+66;RSUD Bangun Purba;867;PELAYANAN INSTALASI FARMASI
+66;RSUD Bangun Purba;865;PELAYANAN INSTALASI GAWAT DARURAT (IGD)
+66;RSUD Bangun Purba;870;PELAYANAN INSTALASI GIZI
+66;RSUD Bangun Purba;869;PELAYANAN INSTALASI LABORATORIUM
+66;RSUD Bangun Purba;866;PELAYANAN INSTALASI RAWAT INAP
+66;RSUD Bangun Purba;868;PELAYANAN INSTALASI RAWAT JALAN
+66;RSUD Bangun Purba;864;PELAYANAN PENDAFTARAN
+70;UPTD Puskesmas Gunung Meriah;1124;RUANG ADMINISTRASI
+70;UPTD Puskesmas Gunung Meriah;1103;RUANG FARMASI
+70;UPTD Puskesmas Gunung Meriah;1090;RUANG KESEHATAN GIGI DAN MULUT
+70;UPTD Puskesmas Gunung Meriah;1070;RUANG KIA, KB DAN IMUNISASI
+70;UPTD Puskesmas Gunung Meriah;1097;RUANG KOMUNIKASI DAN EDUKASI
+70;UPTD Puskesmas Gunung Meriah;1118;RUANG LABORATORIUM
+70;UPTD Puskesmas Gunung Meriah;1082;RUANG PEMERIKSAAN KHUSUS
+70;UPTD Puskesmas Gunung Meriah;1044;RUANG PEMERIKSAAN UMUM
+70;UPTD Puskesmas Gunung Meriah;929;RUANG PENDAFTARAN DAN REKAM MEDIS
+70;UPTD Puskesmas Gunung Meriah;1106;RUANG PERSALINAN
+70;UPTD Puskesmas Gunung Meriah;1131;RUANG RAWAT INAP
+70;UPTD Puskesmas Gunung Meriah;1112;RUANG RAWAT PASCA PERSALINAN NORMAL
+70;UPTD Puskesmas Gunung Meriah;1058;RUANG TINDAKAN DAN GAWAT DARURAT
+71;UPTD Puskesmas Tiga Juhar;881;RUANG KLASTER 3
+72;UPTD Puskesmas Sibolangit;1126;RUANG ADMINISTRASI
+72;UPTD Puskesmas Sibolangit;1096;RUANG FARMASI
+72;UPTD Puskesmas Sibolangit;1068;RUANG KESEHATAN GIGI DAN MULUT
+72;UPTD Puskesmas Sibolangit;1053;RUANG KIA, KB, DAN IMUNISASI
+72;UPTD Puskesmas Sibolangit;1074;RUANG KOMUNIKASI DAN EDUKASI KIE
+72;UPTD Puskesmas Sibolangit;1141;RUANG LABORATORIUM
+72;UPTD Puskesmas Sibolangit;1059;RUANG PEMERIKSAAN KHUSUS
+72;UPTD Puskesmas Sibolangit;1037;RUANG PEMERIKSAAN UMUM
+72;UPTD Puskesmas Sibolangit;1026;RUANG PENDAFTARAN DAN REKAM MEDIS
+72;UPTD Puskesmas Sibolangit;1105;RUANG PERSALINAN
+72;UPTD Puskesmas Sibolangit;1116;RUANG RAWAT INAP
+72;UPTD Puskesmas Sibolangit;1110;RUANG RAWAT PASCA PERSALINAN NORMAL
+72;UPTD Puskesmas Sibolangit;1047;RUANG TINDAKAN DAN GAWAT DARURAT
+73;UPTD Puskesmas Bandar Baru;876;Farmasi
+73;UPTD Puskesmas Bandar Baru;872;Klaster 1 : Pendaftaran
+73;UPTD Puskesmas Bandar Baru;927;Klaster 1 : Tata Usaha
+73;UPTD Puskesmas Bandar Baru;873;Klaster 2 : Kesehatan Ibu dan Anak
+73;UPTD Puskesmas Bandar Baru;1208;Klaster 2 : R. Persalinan
+73;UPTD Puskesmas Bandar Baru;874;Klaster 3 : R. Pemeriksaan umum/Lansia
+73;UPTD Puskesmas Bandar Baru;1209;Klaster 3 : R. TB
+73;UPTD Puskesmas Bandar Baru;875;Laboratorium
+73;UPTD Puskesmas Bandar Baru;1204;Lintas Klaster : R. Pemeriksaan Gigi dan Mulut
+73;UPTD Puskesmas Bandar Baru;1205;Lintas Klaster : RTGD
+73;UPTD Puskesmas Bandar Baru;1210;Pengkajian Pasien
+74;UPTD Puskesmas Kutalimbaru;1149;Pelayanan Klaster II : Pelayanan Anak dan Remaja
+74;UPTD Puskesmas Kutalimbaru;1148;Pelayanan Klaster II : Pelayanan Bayi dan Balita
+74;UPTD Puskesmas Kutalimbaru;1145;Pelayanan Klaster II : Pelayanan Ibu hamil, bersalin dan nifas
+74;UPTD Puskesmas Kutalimbaru;1159;Pelayanan Klaster III : Dewasa
+74;UPTD Puskesmas Kutalimbaru;1166;Pelayanan Klaster III : Lansia
+74;UPTD Puskesmas Kutalimbaru;1397;Pelayanan Klaster IV
+74;UPTD Puskesmas Kutalimbaru;1174;Pelayanan Lintas Klaster : Gigi dan Mulut
+74;UPTD Puskesmas Kutalimbaru;1395;Pelayanan Lintas Klaster : Kefarmasian
+74;UPTD Puskesmas Kutalimbaru;1170;Pelayanan Lintas Klaster : Kegawatdaruratan/tindakan
+74;UPTD Puskesmas Kutalimbaru;1178;Pelayanan Lintas Klaster : Laboratorium
+74;UPTD Puskesmas Kutalimbaru;1396;Pelayanan Lintas Klaster : Rawat Inap
+74;UPTD Puskesmas Kutalimbaru;877;Ruang Pendaftaran dan Rekam Medis
+75;UPTD Puskesmas Tuntungan;928;Klaser II  Ibu dan Anak
+75;UPTD Puskesmas Tuntungan;887;Klaster I   Manajemen dan ke Tatausahaan
+76;UPTD Puskesmas Gunung Tinggi;1262;Apotik
+76;UPTD Puskesmas Gunung Tinggi;1264;Klaster 3 catin 
+76;UPTD Puskesmas Gunung Tinggi;1265;Klaster 3 dewasa
+76;UPTD Puskesmas Gunung Tinggi;1266;Klaster 3 KB
+76;UPTD Puskesmas Gunung Tinggi;1272;Kluster 1 administrasi dan manajemen
+76;UPTD Puskesmas Gunung Tinggi;1263;Kluster 2 anak
+76;UPTD Puskesmas Gunung Tinggi;1267;Kluster 3 usia lanjut
+76;UPTD Puskesmas Gunung Tinggi;1268;Kluster 3 usia produktif
+76;UPTD Puskesmas Gunung Tinggi;1269;Lintas kluster gigi dan mulut
+76;UPTD Puskesmas Gunung Tinggi;1270;Lintas kluster laboratorium
+76;UPTD Puskesmas Gunung Tinggi;1271;Lintas kluster RTGD
+76;UPTD Puskesmas Gunung Tinggi;1161;Pelayanan pendaftaran 
+77;UPTD Puskesmas Namorambe;1252;Klaster I : Administrasi
+77;UPTD Puskesmas Namorambe;1247;Klaster I :Sistem Informasi, Pelayanan Pendaftaran dan Rekam Medis 
+77;UPTD Puskesmas Namorambe;1693;Klaster II : Bayi dan Anak
+77;UPTD Puskesmas Namorambe;1251;Klaster II : Imunisasi
+77;UPTD Puskesmas Namorambe;1250;Klaster II : Pelayanan Gizi
+77;UPTD Puskesmas Namorambe;1249;Klaster II : Pelayanan KIA dan KB ( Kehamilan, Persalinan,nifas )
+77;UPTD Puskesmas Namorambe;1692;Klaster III : Pelayanan Catin
+77;UPTD Puskesmas Namorambe;1248;Klaster III : Pelayanan Usia Dewasa 
+77;UPTD Puskesmas Namorambe;1691;Klaster III : Pelayanan usia Lansia
+77;UPTD Puskesmas Namorambe;1253;Klaster IV : Pencegahan Penyakit Menular dan Pelayanan Kesling
+77;UPTD Puskesmas Namorambe;1257;Lintas Klaster : Pelayanan Kefarmasian
+77;UPTD Puskesmas Namorambe;1254;Lintas Klaster : Pelayanan Kesahatan Gigi dan Mulut
+77;UPTD Puskesmas Namorambe;1255;Lintas Klaster : Pelayanan Laboratorium
+77;UPTD Puskesmas Namorambe;1256;Lintas Klaster : RTGD ( Ruang Tindakan Gawat Darurat )
+79;UPTD Puskesmas Talun Kenas;892;Pendaftaran dan Rekam Medis
+79;UPTD Puskesmas Talun Kenas;1085;Ruang Administrasi
+79;UPTD Puskesmas Talun Kenas;1036;Ruang Farmasi
+79;UPTD Puskesmas Talun Kenas;1015;Ruang Kesehatan Anak dan Imunisasi
+79;UPTD Puskesmas Talun Kenas;1022;Ruang Kesehatan Gigi dan Mulut
+79;UPTD Puskesmas Talun Kenas;1014;Ruang Kesehatan Ibu dan KB
+79;UPTD Puskesmas Talun Kenas;1030;Ruang Komunikasi dan Edukasi (KIE)
+79;UPTD Puskesmas Talun Kenas;1076;Ruang Laboratorium
+79;UPTD Puskesmas Talun Kenas;1018;Ruang Pemeriksaan Khusus
+79;UPTD Puskesmas Talun Kenas;1003;Ruang Pemeriksaan Umum
+79;UPTD Puskesmas Talun Kenas;1041;Ruang Persalinan
+79;UPTD Puskesmas Talun Kenas;1060;Ruang Rawat Inap
+79;UPTD Puskesmas Talun Kenas;1054;Ruang Rawat Pasca Persalinan Normal
+79;UPTD Puskesmas Talun Kenas;1011;Ruang Tindakan dan Gawat Darurat
+80;UPTD Puskesmas Sialang;933;Pelayanan Informasi, Pendaftaran dan Rekam Medis
+80;UPTD Puskesmas Sialang;1108;Pelayanan Ruang Administrasi
+80;UPTD Puskesmas Sialang;1077;Pelayanan Ruang Farmasi
+80;UPTD Puskesmas Sialang;1051;Pelayanan Ruang Kesehatan gigi dan mulut
+80;UPTD Puskesmas Sialang;1034;Pelayanan Ruang KIA, KB dan imunisasi
+80;UPTD Puskesmas Sialang;1063;Pelayanan Ruang komunikasi dan edukasi (KIE)
+80;UPTD Puskesmas Sialang;1104;Pelayanan Ruang laboratorium
+80;UPTD Puskesmas Sialang;1043;Pelayanan Ruang pemeriksaan khusus
+80;UPTD Puskesmas Sialang;1023;Pelayanan Ruang Pemeriksaan Umum
+80;UPTD Puskesmas Sialang;1088;Pelayanan Ruang persalinan
+80;UPTD Puskesmas Sialang;1095;Pelayanan Ruang rawat pasca persalinan normal.
+80;UPTD Puskesmas Sialang;1028;Pelayanan Ruang tindakan dan gawatdarurat
+81;UPTD Puskesmas Galang;1202;Administrasi
+81;UPTD Puskesmas Galang;1101;Farmasi
+81;UPTD Puskesmas Galang;1113;Kesehatan Anak dan Imunisasi
+81;UPTD Puskesmas Galang;1120;Kesehatan Gigi dan Mulut
+81;UPTD Puskesmas Galang;1152;Kesehatan Ibu dan KB
+81;UPTD Puskesmas Galang;1179;Laboratorium
+81;UPTD Puskesmas Galang;1183;Pemeriksaan Umum
+81;UPTD Puskesmas Galang;1185;Pendaftaran dan Rekam Medis
+81;UPTD Puskesmas Galang;1193;Persalinan
+81;UPTD Puskesmas Galang;1195;Rawat Inap
+81;UPTD Puskesmas Galang;1197;Tindakan Gawat Darurat
+82;UPTD Puskesmas Petumbukan;914;Pelayanan Administrasi
+82;UPTD Puskesmas Petumbukan;958;Pelayanan Rawat Jalan
+83;UPTD Puskesmas Tanjung Morawa;1406;Pelayanan Klaster 2 Ibu Hamil , Bersalin, Nifas, Bayi dan Balita
+83;UPTD Puskesmas Tanjung Morawa;984;Ruang Pelayanan Klaster 3 Dewasa dan Lansia
+83;UPTD Puskesmas Tanjung Morawa;1389;Ruang Pelayanan Klaster 4
+83;UPTD Puskesmas Tanjung Morawa;1024;Ruang Pelayanan Lintas Klaster Kefarmasian
+83;UPTD Puskesmas Tanjung Morawa;1019;Ruang Pelayanan Lintas Klaster Pemeriksaan Gigi dan Mulut
+83;UPTD Puskesmas Tanjung Morawa;988;Ruang Pelayanan Lintas Klaster Tindakan dan Gawat Darurat
+83;UPTD Puskesmas Tanjung Morawa;1042;Ruang Pelayanan Listas Klaster Laboratorium
+83;UPTD Puskesmas Tanjung Morawa;1412;Ruang Pelayanan PONED
+83;UPTD Puskesmas Tanjung Morawa;979;Ruang Pendaftaran dan Rekam Medis
+84;UPTD Puskesmas Dalu Sepuluh;916;Klaster 2 Ruang Pelayanan Kesehatan Anak
+84;UPTD Puskesmas Dalu Sepuluh;901;Klaster 2 Ruang Pelayanan Kesehatan Ibu
+84;UPTD Puskesmas Dalu Sepuluh;922;Klaster 3 Pelayanan Kesehatan Usia Produktif dan Lansia
+84;UPTD Puskesmas Dalu Sepuluh;952;Lintas Klaster- Laboratorium
+84;UPTD Puskesmas Dalu Sepuluh;945;Lintas Klaster-Ruang Farmasi
+84;UPTD Puskesmas Dalu Sepuluh;937;Lintas Klaster-Ruang Pelayanan Kesehatan Gigi
+84;UPTD Puskesmas Dalu Sepuluh;891;Pendaftaran
+85;UPTD Puskesmas Patumbak;1284;Ruang Administrasi
+85;UPTD Puskesmas Patumbak;1279;Ruang Farmasi
+85;UPTD Puskesmas Patumbak;1285;Ruang Infeksius (TB/HIV)
+85;UPTD Puskesmas Patumbak;1277;Ruang Kesehatan Anak dan Imunisasi
+85;UPTD Puskesmas Patumbak;1278;Ruang Kesehatan Gigi dan Mulut
+85;UPTD Puskesmas Patumbak;1276;Ruang Kesehatan Ibu dan KB
+85;UPTD Puskesmas Patumbak;1283;Ruang Laboratorium
+85;UPTD Puskesmas Patumbak;1274;Ruang Pemeriksaan Umum
+85;UPTD Puskesmas Patumbak;1273;Ruang Pendaftaran dan Rekam Medis,Rujukan
+85;UPTD Puskesmas Patumbak;1280;Ruang Persalinan
+85;UPTD Puskesmas Patumbak;1282;Ruang Rawat Inap
+85;UPTD Puskesmas Patumbak;1281;Ruang Rawat Pasca Persalinan Normal
+85;UPTD Puskesmas Patumbak;1275;Ruang Tindakan dan Gawat Darurat
+86;UPTD Puskesmas Deli Tua;1458;Ruang Administrasi
+86;UPTD Puskesmas Deli Tua;1451;Ruang Farmasi
+86;UPTD Puskesmas Deli Tua;1449;Ruang Kesehatan Anak dan Imunisasi
+86;UPTD Puskesmas Deli Tua;1452;Ruang Kesehatan Gigi dan Mulut
+86;UPTD Puskesmas Deli Tua;1450;Ruang Kesehatan Ibu dan KB
+86;UPTD Puskesmas Deli Tua;1456;Ruang Komunikasi daan Edukasi
+86;UPTD Puskesmas Deli Tua;1453;Ruang Laboratorium
+86;UPTD Puskesmas Deli Tua;1455;Ruang Pemeriksaan Khusus
+86;UPTD Puskesmas Deli Tua;1447;Ruang Pemeriksaan Umum
+86;UPTD Puskesmas Deli Tua;1446;Ruang pendaftran dan Rekam Medis
+86;UPTD Puskesmas Deli Tua;1454;Ruang Persalinan
+86;UPTD Puskesmas Deli Tua;1457;Ruang Poned
+86;UPTD Puskesmas Deli Tua;1459;Ruang Rawat Pascapersalinan Normal
+86;UPTD Puskesmas Deli Tua;1448;Ruang Tindakan dan Gawat Darurat 
+87;UPTD Puskesmas Sei Mencirim;1150;Informasi
+87;UPTD Puskesmas Sei Mencirim;1160;Pcare
+87;UPTD Puskesmas Sei Mencirim;1218;Pelayanan KB
+87;UPTD Puskesmas Sei Mencirim;1694;Pelayanan RTGD
+87;UPTD Puskesmas Sei Mencirim;1142;Pendaftaran
+87;UPTD Puskesmas Sei Mencirim;1212;Poli Anak
+87;UPTD Puskesmas Sei Mencirim;1226;Poli Gigi
+87;UPTD Puskesmas Sei Mencirim;1213;Poli KIA
+87;UPTD Puskesmas Sei Mencirim;1168;Poli Umum
+87;UPTD Puskesmas Sei Mencirim;1232;Ruang Farmasi
+87;UPTD Puskesmas Sei Mencirim;1229;Ruang Laboratorium
+87;UPTD Puskesmas Sei Mencirim;1233;Ruang TB
+88;UPTD Puskesmas Mulyorejo;1200;Pojok Tensi / Pengkajian Awal
+88;UPTD Puskesmas Mulyorejo;1216;Ruang Apotik
+88;UPTD Puskesmas Mulyorejo;1704;Ruang Farmasi
+88;UPTD Puskesmas Mulyorejo;1231;Ruang Informasi dan Pendaftaran/SIMPUS
+88;UPTD Puskesmas Mulyorejo;1221;Ruang Kesehatan Gigi dan Mulut
+88;UPTD Puskesmas Mulyorejo;1219;Ruang Kesehatan Ibu dan Anak (KIA)
+88;UPTD Puskesmas Mulyorejo;1223;Ruang Klaster Kesehatan Dewasa (Ruang Pelayanan Umum)
+88;UPTD Puskesmas Mulyorejo;1222;Ruang Klaster Kesehatan Lanjut Usia (Ruang Pelayanan Umum)
+88;UPTD Puskesmas Mulyorejo;1706;Ruang Klaster Penanggulangan Penyakit Menular Dan Kesehatan Lingkungan
+88;UPTD Puskesmas Mulyorejo;1154;Ruang Laboratorium Medis
+88;UPTD Puskesmas Mulyorejo;1201;Ruang P.care
+88;UPTD Puskesmas Mulyorejo;1217;Ruang Pelayanan Kesehatan Anak dan Remaja
+88;UPTD Puskesmas Mulyorejo;1708;Ruang Pelayanan Konseling Gizi dan Promkes
+88;UPTD Puskesmas Mulyorejo;1199;Ruang Pemeriksaan Khusus (HIV/VCT, IMS) dan Ruang KB
+88;UPTD Puskesmas Mulyorejo;1705;Ruang Pemeriksaan Khusus TB
+88;UPTD Puskesmas Mulyorejo;1220;Ruang Persalinan / PONED
+88;UPTD Puskesmas Mulyorejo;1707;Ruang Pojok ASI
+88;UPTD Puskesmas Mulyorejo;1225;Ruang Rekam Medik
+88;UPTD Puskesmas Mulyorejo;1224;Ruang Tindakan Gawat Darurat / RTGD
+89;UPTD Puskesmas Sei Semayang;1020;Pelayanan Infeksius 
+89;UPTD Puskesmas Sei Semayang;987;Pelayanan Klaster 2 Bayi, Balita, dan Anak
+89;UPTD Puskesmas Sei Semayang;993;Pelayanan Klaster 2 Ibu Hamil, Bersalin dan Nifas
+89;UPTD Puskesmas Sei Semayang;982;Pelayanan Klaster 3 Dewasa / Lansia
+89;UPTD Puskesmas Sei Semayang;1138;Pelayanan Lintas Klaster Gigi dan Mulut
+89;UPTD Puskesmas Sei Semayang;1146;Pelayanan Lintas Klaster Kefarmasian
+89;UPTD Puskesmas Sei Semayang;1032;Pelayanan Lintas Klaster Kegawatdaruratan / Tindakan
+89;UPTD Puskesmas Sei Semayang;1143;Pelayanan Lintas Klaster Laboraturium
+89;UPTD Puskesmas Sei Semayang;890;Ruang Pendaftaran  dan Rekam Medis 
+90;UPTD Puskesmas Hamparan Perak;1093;Klaster 2 Bayi dan Balita
+90;UPTD Puskesmas Hamparan Perak;1129;Pelayanan  Lintas Klaster  Laboratorium
+90;UPTD Puskesmas Hamparan Perak;996;Pelayanan Anak dan Remaja
+90;UPTD Puskesmas Hamparan Perak;1005;Pelayanan Infeksius
+90;UPTD Puskesmas Hamparan Perak;1132;Pelayanan Klaster 2 Ibu Hamil, Bersalin dan Nifas
+90;UPTD Puskesmas Hamparan Perak;1084;Pelayanan Klaster 3 Dewasa
+90;UPTD Puskesmas Hamparan Perak;1025;Pelayanan Klaster 3 Lansia
+90;UPTD Puskesmas Hamparan Perak;1069;Pelayanan Lintas Klaster Gigi dan Mulut
+90;UPTD Puskesmas Hamparan Perak;1079;Pelayanan Lintas Klaster Kefarmasian
+90;UPTD Puskesmas Hamparan Perak;1000;Pelayanan Lintas Klaster Kegawatdaruratan/ Tindakan
+90;UPTD Puskesmas Hamparan Perak;1099;Pelayanan Lintas Klaster Rawat Inap
+90;UPTD Puskesmas Hamparan Perak;1008;Pelayanan PONED
+90;UPTD Puskesmas Hamparan Perak;992;Ruang Pendaftaran dan Rekam Medis
+91;UPTD Puskesmas Kota Datar;1111;Ruang administrasi
+91;UPTD Puskesmas Kota Datar;1083;Ruang Farmasi
+91;UPTD Puskesmas Kota Datar;1064;Ruang Kesehatan gigi dan mulut
+91;UPTD Puskesmas Kota Datar;963;Ruang KIA, KB dan imunisasi
+91;UPTD Puskesmas Kota Datar;1071;Ruang komunikasi dan edukasi (KIE)
+91;UPTD Puskesmas Kota Datar;1098;Ruang laboratorium
+91;UPTD Puskesmas Kota Datar;1001;Ruang pemeriksaan khusus
+91;UPTD Puskesmas Kota Datar;931;Ruang pemeriksaan umum
+91;UPTD Puskesmas Kota Datar;911;Ruang pendaftaran dan rekammedis
+91;UPTD Puskesmas Kota Datar;1109;Ruang persalinan
+91;UPTD Puskesmas Kota Datar;1091;Ruang rawat pasca persalinan normal.
+91;UPTD Puskesmas Kota Datar;941;Ruang tindakan dan gawat darurat 
+92;UPTD Puskesmas Pematang Johar;1470;Pelayanan Infeksius
+92;UPTD Puskesmas Pematang Johar;1467;Pelayanan Klaster 2 Bayi dan Balita
+92;UPTD Puskesmas Pematang Johar;1466;Pelayanan Klaster 2 Ibu Hamil,Bersalin dan Nifas
+92;UPTD Puskesmas Pematang Johar;1468;Pelayanan Klaster 3 Dewasa
+92;UPTD Puskesmas Pematang Johar;1469;Pelayanan Klaster 3 Lansia
+92;UPTD Puskesmas Pematang Johar;1477;Pelayanan Klaster 4
+92;UPTD Puskesmas Pematang Johar;1472;Pelayanan Lintas Klaster Gigi dan Mulut
+92;UPTD Puskesmas Pematang Johar;1474;Pelayanan Lintas Klaster Kefarmasian
+92;UPTD Puskesmas Pematang Johar;1471;Pelayanan Lintas Klaster Kegawatdaruratan/Tindakan
+92;UPTD Puskesmas Pematang Johar;1473;Pelayanan Lintas Klaster Laboratorium
+92;UPTD Puskesmas Pematang Johar;1475;Pelayanan Lintas Klaster Rawat Inap
+92;UPTD Puskesmas Pematang Johar;1476;Pelayanan PONED
+92;UPTD Puskesmas Pematang Johar;1478;Pelayanana Anak dan Remaja
+92;UPTD Puskesmas Pematang Johar;1465;Ruang pendaftaran dan Rekam medis
+93;UPTD Puskesmas Labuhan Deli;1215;Apotik
+93;UPTD Puskesmas Labuhan Deli;1164;Informasi
+93;UPTD Puskesmas Labuhan Deli;1172;P.Care
+93;UPTD Puskesmas Labuhan Deli;1157;Pendaftaran
+93;UPTD Puskesmas Labuhan Deli;1181;Poli Anak
+93;UPTD Puskesmas Labuhan Deli;1186;Poli Gigi
+93;UPTD Puskesmas Labuhan Deli;1214;Poli KIA
+93;UPTD Puskesmas Labuhan Deli;1190;Poli Lansia
+93;UPTD Puskesmas Labuhan Deli;1175;Poli Umum
+93;UPTD Puskesmas Labuhan Deli;1230;Ruang Laboratorium
+93;UPTD Puskesmas Labuhan Deli;1228;Ruang TB
+95;UPTD Puskesmas Tanjung Rejo;1066;Ruang Administrasi
+95;UPTD Puskesmas Tanjung Rejo;953;Ruang Farmasi
+95;UPTD Puskesmas Tanjung Rejo;936;Ruang Kesehatan Anak dan Imunisasi
+95;UPTD Puskesmas Tanjung Rejo;955;Ruang Kesehatan Gigi dan Mulut
+95;UPTD Puskesmas Tanjung Rejo;946;Ruang Kesehatan Ibu dan KB
+95;UPTD Puskesmas Tanjung Rejo;1045;Ruang Komunikasi dan Edukasi (KIE)
+95;UPTD Puskesmas Tanjung Rejo;976;Ruang Laboratorium
+95;UPTD Puskesmas Tanjung Rejo;981;Ruang Pemeriksaan Khusus
+95;UPTD Puskesmas Tanjung Rejo;912;Ruang Pemeriksaan Umum
+95;UPTD Puskesmas Tanjung Rejo;878;Ruang Pendaftaran dan Rekam Medis
+95;UPTD Puskesmas Tanjung Rejo;978;Ruang Persalinan
+95;UPTD Puskesmas Tanjung Rejo;1052;Ruang Rawat Inap
+95;UPTD Puskesmas Tanjung Rejo;1102;Ruang Rawat Pascapersalinan Normal
+95;UPTD Puskesmas Tanjung Rejo;930;Ruang Tindakan dan Gawat Darurat
+97;UPTD Puskesmas Batang Kuis;956;Klaster 1 : Pelayanan Administrasi
+97;UPTD Puskesmas Batang Kuis;882;Klaster 1 : Pelayanan Pendaftaran / Rekam Medis
+97;UPTD Puskesmas Batang Kuis;964;Klaster 1 : Pelayanan Rujukan
+97;UPTD Puskesmas Batang Kuis;1002;Klaster 2 : Pelayanan Ibu dan Anak
+97;UPTD Puskesmas Batang Kuis;1013;Klaster 3 : Pelayanan Kesehatan Reproduksi (KB, IVA, Catin)
+97;UPTD Puskesmas Batang Kuis;1009;Klaster 3 : Pelayanan Usia Dewasa dan usia lanjut
+97;UPTD Puskesmas Batang Kuis;1027;Klaster 4 : Pelayanan Pencegahan Penyakit Menular (TB dan HIV)
+97;UPTD Puskesmas Batang Kuis;1040;Lintas Klaster : Pelayanan Farmasi
+97;UPTD Puskesmas Batang Kuis;1086;Lintas Klaster : Pelayanan Gigi
+97;UPTD Puskesmas Batang Kuis;1033;Lintas Klaster : Pelayanan Laboratorium
+97;UPTD Puskesmas Batang Kuis;1073;Lintas Klaster : Pelayanan Rawat Inap
+97;UPTD Puskesmas Batang Kuis;1065;Lintas Klaster : Pelayanan RTGD
+98;UPTD Puskesmas Pantai Labu;968;Klaster I ( Administrasi : Kasir )
+98;UPTD Puskesmas Pantai Labu;940;Klaster I ( Administrasi : Surat Menyurat / Rujukan )
+98;UPTD Puskesmas Pantai Labu;932;Klaster I ( Informasi dan Rekam Medis )
+98;UPTD Puskesmas Pantai Labu;1133;Klaster II ( Kesehatan Anak )
+98;UPTD Puskesmas Pantai Labu;1128;Klaster II ( Kesehatan Bayi dan Balita )
+98;UPTD Puskesmas Pantai Labu;1114;Klaster II ( Kesehatan Ibu Bersalin )
+98;UPTD Puskesmas Pantai Labu;980;Klaster II ( Kesehatan Ibu Hamil  )
+98;UPTD Puskesmas Pantai Labu;1119;Klaster II ( Kesehatan Imunisasi Anak )
+98;UPTD Puskesmas Pantai Labu;1122;Klaster II ( Kesehatan Remaja )
+98;UPTD Puskesmas Pantai Labu;1153;Klaster III ( Kesehatan Calon Pengantin )
+98;UPTD Puskesmas Pantai Labu;1177;Klaster III ( Kesehatan Reproduksi )
+98;UPTD Puskesmas Pantai Labu;1140;Klaster III ( Kesehatan Usia Dewasa )
+98;UPTD Puskesmas Pantai Labu;1171;Klaster III ( Kesehatan Usia Lansia )
+98;UPTD Puskesmas Pantai Labu;1188;Lintas Klaster ( Farmasi )
+98;UPTD Puskesmas Pantai Labu;1180;Lintas Klaster ( Kesehatan Gigi dan Mulut )
+98;UPTD Puskesmas Pantai Labu;1182;Lintas Klaster ( Laboratorium )
+98;UPTD Puskesmas Pantai Labu;1192;Lintas Klaster ( Rawat Inap )
+98;UPTD Puskesmas Pantai Labu;1184;Lintas Klaster ( RTGD )
+99;UPTD Puskesmas Karang Anyar;1191;Ruang Administrasi
+99;UPTD Puskesmas Karang Anyar;1165;Ruang Farmasi
+99;UPTD Puskesmas Karang Anyar;1144;Ruang Kesehatan Anak dan Imunisasi
+99;UPTD Puskesmas Karang Anyar;1151;Ruang Kesehatan Gigi dan Mulut
+99;UPTD Puskesmas Karang Anyar;1139;Ruang Kesehatan Ibu dan KB
+99;UPTD Puskesmas Karang Anyar;1162;Ruang Komunikasi dan Edukasi (KIE)
+99;UPTD Puskesmas Karang Anyar;1187;Ruang Laboratorium
+99;UPTD Puskesmas Karang Anyar;1147;Ruang Pemeriksaan Khusus
+99;UPTD Puskesmas Karang Anyar;1130;Ruang Pemeriksaan Umum
+99;UPTD Puskesmas Karang Anyar;1125;Ruang pendaftaran dan rekam medis
+99;UPTD Puskesmas Karang Anyar;1169;Ruang Persalinan
+99;UPTD Puskesmas Karang Anyar;1176;Ruang Rawat Paska Persalinan Normal
+99;UPTD Puskesmas Karang Anyar;1135;Ruang Tindakan Dan Gawat Darurat
+100;UPTD Puskesmas Lubuk Pakam;1404;Pelayanan Anak dan Remaja
+100;UPTD Puskesmas Lubuk Pakam;1387;Pelayanan Infeksius
+100;UPTD Puskesmas Lubuk Pakam;1401;Pelayanan Klaster 2 Bayi dan Balita
+100;UPTD Puskesmas Lubuk Pakam;1006;Pelayanan Klaster 2 Ibu Hamil,Bersalin dan Nifas
+100;UPTD Puskesmas Lubuk Pakam;994;Pelayanan Klaster 3 Dewasa
+100;UPTD Puskesmas Lubuk Pakam;1402;Pelayanan klaster 3 Lansia
+100;UPTD Puskesmas Lubuk Pakam;1403;Pelayanan Klaster 4
+100;UPTD Puskesmas Lubuk Pakam;1386;Pelayanan Lintas Klaster Gigi dan Mulut
+100;UPTD Puskesmas Lubuk Pakam;1385;Pelayanan Lintas Klaster Kefarmasian
+100;UPTD Puskesmas Lubuk Pakam;999;Pelayanan Lintas Klaster Kegawatdaruratan/Tindakan
+100;UPTD Puskesmas Lubuk Pakam;1388;Pelayanan Lintas Klaster Laboratorium
+100;UPTD Puskesmas Lubuk Pakam;985;Ruang Pendaftaran dan Rekam Medis
+101;UPTD Puskesmas Pagar Jati;1078;Klaster 1 / Pendaftaran, Simpus
+101;UPTD Puskesmas Pagar Jati;1055;Klaster 2 / Pemeriksaan Ibu hamil
+101;UPTD Puskesmas Pagar Jati;1048;Klaster 2 / Poli Anak
+101;UPTD Puskesmas Pagar Jati;1038;Klaster 3 / Pelayanan Catin
+101;UPTD Puskesmas Pagar Jati;1017;Klaster 3 / Pelayanan KB
+101;UPTD Puskesmas Pagar Jati;1012;Klaster 3 / Poli dewasa dan Lansia
+101;UPTD Puskesmas Pagar Jati;998;Lintas Klaster / Farmasi (Apotek)
+101;UPTD Puskesmas Pagar Jati;883;Lintas Klaster / Laboratorium
+101;UPTD Puskesmas Pagar Jati;967;Lintas Klaster / Poli Gigi dan Mulut
+101;UPTD Puskesmas Pagar Jati;900;Lintas KLaster / RTGD (Ruang Tindakan Gawat Darurat)
+101;UPTD Puskesmas Pagar Jati;1121;Pengkajian Awal / Skrinning (Pemeriksaa, Tinggi badan, Berat Badan, Tekanan Darah, Suhu Badan, Lingkar Pinggang)
+102;UPTD Puskesmas Pagar Merbau;1087;Ruang administrasi
+102;UPTD Puskesmas Pagar Merbau;1050;Ruang farmasi
+102;UPTD Puskesmas Pagar Merbau;1004;Ruang kesehatan anak dan imunisasi
+102;UPTD Puskesmas Pagar Merbau;1029;Ruang kesehatan gigi dan mulut
+102;UPTD Puskesmas Pagar Merbau;997;Ruang kesehatan ibu dan KB
+102;UPTD Puskesmas Pagar Merbau;1039;Ruang komunikasi dan edukasi (KIE)
+102;UPTD Puskesmas Pagar Merbau;1080;Ruang laboratorium
+102;UPTD Puskesmas Pagar Merbau;1007;Ruang pemeriksaan khusus
+102;UPTD Puskesmas Pagar Merbau;990;Ruang pemeriksaan umum
+102;UPTD Puskesmas Pagar Merbau;983;Ruang pendaftaran dan rekam medis
+102;UPTD Puskesmas Pagar Merbau;1056;Ruang persalinan
+102;UPTD Puskesmas Pagar Merbau;1072;Ruang rawat inap
+102;UPTD Puskesmas Pagar Merbau;1061;Ruang rawat pasca persalinan normal
+102;UPTD Puskesmas Pagar Merbau;995;Ruang tindakan dan gawat darurat
+103;UPTD Puskesmas Aras Kabu;1115;Klaster 1 - Meja Informasi
+103;UPTD Puskesmas Aras Kabu;1075;Klaster 1 - Pcare dan Rujukan 
+103;UPTD Puskesmas Aras Kabu;1046;Klaster 1 - Pendaftaran 
+103;UPTD Puskesmas Aras Kabu;1021;Klaster 2 - Pelayanan Kesehatan Anak
+103;UPTD Puskesmas Aras Kabu;1016;Klaster 2 - Pelayanan Kesehatan Ibu Hamil, Persalinan dan Ibu Nifas
+103;UPTD Puskesmas Aras Kabu;1010;Klaster 3 - Pelayanan Catin dan KB
+103;UPTD Puskesmas Aras Kabu;991;Klaster 3 - Usia Dewasa dan Lansia
+103;UPTD Puskesmas Aras Kabu;962;Lintas Klaster - Laboratorium Kesehatan 
+103;UPTD Puskesmas Aras Kabu;974;Lintas Klaster - Pelayanan Kefarmasian 
+103;UPTD Puskesmas Aras Kabu;943;Lintas Klaster - Pelayanan Kesehatan Gigi dan Mulut 
+103;UPTD Puskesmas Aras Kabu;949;Lintas Klaster - RTGD
+103;UPTD Puskesmas Aras Kabu;1134;Pelayanan Khusus - Ruang Infeksius/ Ruang TB
+103;UPTD Puskesmas Aras Kabu;1107;Pengkajian Awal/ Skrining 
+104;Sekretariat DPRD;1390;PELAYANAN PENERIMAAN KUNJUNGAN KERJA LUAR DAERAH
+104;Sekretariat DPRD;1392;STANDAR PELAYANAN FASILITASI ASPIRASI, PENGADUAN DAN AUDENSI
+104;Sekretariat DPRD;1393;STANDAR PELAYANAN FASILITASI PELAKSANAAN RESES
+104;Sekretariat DPRD;1391;STANDAR PELAYANAN FASILITASI PENYELENGGARAAN RAPAT PARIPURNA
+104;Sekretariat DPRD;1394;STANDAR PELAYANAN FASILITASI PENYUSUNAN RANPERDA INISIATIF
+127;UPTD Pelayanan Pajak Wilayah I;1227;MENGELUARKAN REKOMENDASI PENDAPTARAN PBB BARU
+128;UPTD Pelayanan Pajak Wilayah II;898;PELAYANAN  DATA BARU PBB
+128;UPTD Pelayanan Pajak Wilayah II;972;PELAYANAN KEBERATAN PBB
+128;UPTD Pelayanan Pajak Wilayah II;942;PELAYANAN MUTASI/ GANTI NAMA PBB
+128;UPTD Pelayanan Pajak Wilayah II;1137;PELAYANAN PEMBAYARAN PBB
+128;UPTD Pelayanan Pajak Wilayah II;948;PELAYANAN PEMBETULAN PBB
+128;UPTD Pelayanan Pajak Wilayah II;957;PELAYANAN SALINAN PBB
+128;UPTD Pelayanan Pajak Wilayah II;969;PELAYANAN SURAT KETERANGAN NJOP PBB
+129;UPTD Pelayanan Pajak Wilayah III;1035;Pelayanan Pembayaran Pajak Bumi Dan Bangunan
+130;UPTD Pelayanan Pajak Wilayah IV;1260;Permohonan Mutasi (balik nama, pemecahan) SPPT PBB
+130;UPTD Pelayanan Pajak Wilayah IV;1261;Permohonan Pembetulan SPPT PBB
+130;UPTD Pelayanan Pajak Wilayah IV;1258;Permohonan Pendaftaran Baru SPPT PBB
+130;UPTD Pelayanan Pajak Wilayah IV;1259;Permohonan Salinan SPPT PBB
+131;UPTD Pelayanan Pajak Wilayah V;908;Loket Pembayaran PBB
+131;UPTD Pelayanan Pajak Wilayah V;904;Pelayanan Penerbitan PBB Data Baru
+131;UPTD Pelayanan Pajak Wilayah V;915;Rekomendasi Pembetulan Data SPPT
+131;UPTD Pelayanan Pajak Wilayah V;965;Rekomendasi Pemecahan 
+132;UPTD Pelayanan Pajak Wilayah VI;1234;Pelayanan Pembayaran PBB
+132;UPTD Pelayanan Pajak Wilayah VI;1067;Permohonan Surat Rekomendasi  Mutasi Objek/Subjek PBB
+132;UPTD Pelayanan Pajak Wilayah VI;1207;Permohonan Surat Rekomendasi Keberatan PBB
+132;UPTD Pelayanan Pajak Wilayah VI;1206;Permohonan Surat Rekomendasi Pembetulan SPPT PBB
+132;UPTD Pelayanan Pajak Wilayah VI;1094;Permohonan Surat Rekomendasi Pendaftaran Objek/Subjek PBB Baru
+133;UPTD Pelayanan Pajak Wilayah VII;920;Loket Pembayaran PBB
+133;UPTD Pelayanan Pajak Wilayah VII;926;Permohonan Mutasi PBB
+133;UPTD Pelayanan Pajak Wilayah VII;934;Permohonan Pembetulan PBB
+133;UPTD Pelayanan Pajak Wilayah VII;924;Permohonan Pendaftaran SPPT Baru (PBB)
+134;UPTD Pelayanan Pajak Wilayah VIII;1211;Permohonan Surat Rekomendasi SPPT PBB Baru
+135;UPTD Pelayanan Pajak Wilayah IX;1081;Loket Pembayaran PBB
+135;UPTD Pelayanan Pajak Wilayah IX;1100;Permohonan Mutasi PBB
+135;UPTD Pelayanan Pajak Wilayah IX;1092;Permohonan Pembetulan PBB
+135;UPTD Pelayanan Pajak Wilayah IX;1089;Permohonan Pendaftaran SPPT Baru (PBB)
+136;UPTD Pelayanan Pajak Wilayah X;1189;PELAYANAN PEMBAYARAN PAJAK BUMI DAN BANGUNAN
+136;UPTD Pelayanan Pajak Wilayah X;1194;PELAYANAN REKOMENDASI PEMBETULAN SPPT PBB
+136;UPTD Pelayanan Pajak Wilayah X;1196;PELAYANAN REKOMENDASI PEMECAHAN SPPT PBB
+136;UPTD Pelayanan Pajak Wilayah X;1198;PELAYANAN REKOMENDASI PENERBITAN DATA BARU SPPT PBB
+137;UPTD Pelayanan Pajak Wilayah XI;919;pelayanan loked pembayaran PBB
+137;UPTD Pelayanan Pajak Wilayah XI;910;pelayanan rekomendasi pembetulan
+137;UPTD Pelayanan Pajak Wilayah XI;886;pelayanan rekomendasi penerbitan data baru
+137;UPTD Pelayanan Pajak Wilayah XI;895;pelayananan rekomendasi pemecahan
+138;UPTD Pelayanan Pajak Wilayah XII;1203;Mengeluarkan rekomendasi mutasi objek/subjek PBB
+138;UPTD Pelayanan Pajak Wilayah XII;1123;Mengeluarkan surat rekomendasi penerbitan SPPT PBB Baru
+139;UPTD Pelayanan Pajak Wilayah XIII;1136;LOKET PEMBAYARAN PBB
+139;UPTD Pelayanan Pajak Wilayah XIII;1167;MENGELUARKAN REKOMENDASI PEMBETULAN PBB
+139;UPTD Pelayanan Pajak Wilayah XIII;1173;MENGELUARKAN REKOMENDASI PEMECAHAN PBB
+139;UPTD Pelayanan Pajak Wilayah XIII;1156;MENGELUARKAN REKOMENDASI PENDAFTARAN PBB BARU
+140;UPTD Pelayanan Pajak Wilayah XIV;905;LOKET PEMBAYARAN PBB
+140;UPTD Pelayanan Pajak Wilayah XIV;951;MENGELUARKAN REKOMENDASI PEMBETULAN PBB
+140;UPTD Pelayanan Pajak Wilayah XIV;938;MENGELUARKAN REKOMENDASI PENDAFTARAN PBB BARU
+140;UPTD Pelayanan Pajak Wilayah XIV;954;MNEGELUARKAN REKOMENDASI PEMECAHAN PBB
+141;UPTD Pelayanan Pajak Wilayah XV;903;LOKET PEMBAYARAN PBB
+141;UPTD Pelayanan Pajak Wilayah XV;947;MENGELUARKAN REKOMENDASI PEMBETULAN PBB
+141;UPTD Pelayanan Pajak Wilayah XV;959;MENGELUARKAN REKOMENDASI PEMECAHAN PBB
+141;UPTD Pelayanan Pajak Wilayah XV;921;MENGELUARKAN REKOMENDASI PENDAFTARAN PBB BARU
+142;UPTD Pelayanan Pajak Wilayah XVI;902;Pelayanan mutasi balik nama sppt pbb
+142;UPTD Pelayanan Pajak Wilayah XVI;935;Pelayanan Pembayaran Pajak Bumi Bangunan
+142;UPTD Pelayanan Pajak Wilayah XVI;893;Pelayanan Rekomendasi Pemecahan SPPT
+142;UPTD Pelayanan Pajak Wilayah XVI;880;Pelayanan Rekomendasi Penerbitan Data Baru
+143;UPTD Pelayanan Pajak Wilayah XVII;973;MENGELUARKAN REKOMENDASI PEMBETULAN PBB 
+143;UPTD Pelayanan Pajak Wilayah XVII;986;MENGELUARKAN REKOMENDASI PEMECAHAN  PBB
+143;UPTD Pelayanan Pajak Wilayah XVII;961;MENGELUARKAN REKOMENDASI PENDAPTARAN PBB BARU
+145;Mal Pelayanan Publik Kabupaten Deli Serdang;1601;Aktivasi Identitas Kependudukan Digital (IKD)
+145;Mal Pelayanan Publik Kabupaten Deli Serdang;1492;Apply Kartu Kredit
+145;Mal Pelayanan Publik Kabupaten Deli Serdang;1495;Buka Rekening Baru Bank Mandiri
+145;Mal Pelayanan Publik Kabupaten Deli Serdang;1593;Cek Status Kepesertaan BPJS Kesehatan
+145;Mal Pelayanan Publik Kabupaten Deli Serdang;1592;Cek Virtual Account BPJS Kesehatan
+145;Mal Pelayanan Publik Kabupaten Deli Serdang;1484;Fasilitasi legalitas usaha, foto produk, cek nilai gizi & desain kemasan
+145;Mal Pelayanan Publik Kabupaten Deli Serdang;1483;Fasilitasi pemasaran produk unggulan daerah
+145;Mal Pelayanan Publik Kabupaten Deli Serdang;1591;Informasi Program BPJS Ketenagakerjaan
+145;Mal Pelayanan Publik Kabupaten Deli Serdang;1515;Informasi Tata Ruang
+145;Mal Pelayanan Publik Kabupaten Deli Serdang;1640;Izin Kerja Elektromedis
+145;Mal Pelayanan Publik Kabupaten Deli Serdang;1638;Izin Kerja Fisioterapis
+145;Mal Pelayanan Publik Kabupaten Deli Serdang;1637;Izin Kerja Nutrisionis
+145;Mal Pelayanan Publik Kabupaten Deli Serdang;1620;Izin Kerja Ortodotis Prostetis
+145;Mal Pelayanan Publik Kabupaten Deli Serdang;1636;Izin Kerja Perekam Medis dan Informasi Kesehatan
+145;Mal Pelayanan Publik Kabupaten Deli Serdang;1635;Izin Kerja Radiologis Optisien
+145;Mal Pelayanan Publik Kabupaten Deli Serdang;1634;Izin Kerja Sanitasi
+145;Mal Pelayanan Publik Kabupaten Deli Serdang;1633;Izin Kerja Tenaga Kesehatan Masyarakat
+145;Mal Pelayanan Publik Kabupaten Deli Serdang;1631;Izin Kerja Tenaga Teknis Kefarmasian
+145;Mal Pelayanan Publik Kabupaten Deli Serdang;1628;Izin Kerja Terapis Gigi dan Mulut
+145;Mal Pelayanan Publik Kabupaten Deli Serdang;1629;Izin Kerja Terapis Wicara
+145;Mal Pelayanan Publik Kabupaten Deli Serdang;1608;Izin Operasional Lembaga Kesejahteraan Sosial Anak
+145;Mal Pelayanan Publik Kabupaten Deli Serdang;1667;Izin Pendirian Satuan Pendidikan Formal Sekolah Dasar (SD)
+145;Mal Pelayanan Publik Kabupaten Deli Serdang;1666;Izin Pendirian Satuan Pendidikan Formal Sekolah Menengah Pertama (SMP)
+145;Mal Pelayanan Publik Kabupaten Deli Serdang;1668;Izin Pendirian Satuan Pendidikan Formal Taman Kanak Kanak (TK)
+145;Mal Pelayanan Publik Kabupaten Deli Serdang;1665;Izin Pendirian Satuan Pendidikan Non Formal Kelompok Bermain (KB)
+145;Mal Pelayanan Publik Kabupaten Deli Serdang;1661;Izin Pendirian Satuan Pendidikan Non Formal Lembaga Kursus dan Pelatihan (LKP)
+145;Mal Pelayanan Publik Kabupaten Deli Serdang;1662;Izin Pendirian Satuan Pendidikan Non Formal Pusat Kegiatan Belajar Masyarakat (PKBM)
+145;Mal Pelayanan Publik Kabupaten Deli Serdang;1663;Izin Pendirian Satuan Pendidikan Non Formal Satuan Pendidikan Anak Usia Dini (SPS)
+145;Mal Pelayanan Publik Kabupaten Deli Serdang;1660;Izin Pendirian Satuan Pendidikan Non Formal Taman Bacaan Masyarakat (TBM)
+145;Mal Pelayanan Publik Kabupaten Deli Serdang;1664;Izin Pendirian Satuan Pendidikan Non Formal Tempat Penitipan Anak (TPA)
+145;Mal Pelayanan Publik Kabupaten Deli Serdang;1580;Izin Pengelolaan Limbah B3 (Tidak Digital)
+145;Mal Pelayanan Publik Kabupaten Deli Serdang;1609;Izin Praktek Dokter Hewan
+145;Mal Pelayanan Publik Kabupaten Deli Serdang;1479;Izin Praktek Dokter Mandiri
+145;Mal Pelayanan Publik Kabupaten Deli Serdang;1641;Izin Praktik Ahli Teknologi Laboratorium Medik
+145;Mal Pelayanan Publik Kabupaten Deli Serdang;1615;Izin Praktik Akupuntur Terapis
+145;Mal Pelayanan Publik Kabupaten Deli Serdang;1646;Izin Praktik Apoteker
+145;Mal Pelayanan Publik Kabupaten Deli Serdang;1652;Izin Praktik Bidan di Sarana Kesehatan
+145;Mal Pelayanan Publik Kabupaten Deli Serdang;1651;Izin Praktik Bidan Mandiri
+145;Mal Pelayanan Publik Kabupaten Deli Serdang;1655;Izin Praktik Dokter Gigi di Sarana Kesehatan
+145;Mal Pelayanan Publik Kabupaten Deli Serdang;1654;Izin Praktik Dokter Gigi Mandiri
+145;Mal Pelayanan Publik Kabupaten Deli Serdang;1653;Izin Praktik Dokter Internship
+145;Mal Pelayanan Publik Kabupaten Deli Serdang;1626;Izin Praktik Dokter Residen
+145;Mal Pelayanan Publik Kabupaten Deli Serdang;1657;Izin Praktik Dokter Spesialis di Sarana Kesehatan
+145;Mal Pelayanan Publik Kabupaten Deli Serdang;1624;Izin Praktik Dokter Spesialis Gigi di Sarana Kesehatan
+145;Mal Pelayanan Publik Kabupaten Deli Serdang;1623;Izin Praktik Dokter Spesialis Gigi Mandiri
+145;Mal Pelayanan Publik Kabupaten Deli Serdang;1656;Izin Praktik Dokter Spesialis Mandiri
+145;Mal Pelayanan Publik Kabupaten Deli Serdang;1659;Izin Praktik Dokter Umum di Sarana Kesehatan
+145;Mal Pelayanan Publik Kabupaten Deli Serdang;1658;Izin Praktik Dokter Umum Mandiri
+145;Mal Pelayanan Publik Kabupaten Deli Serdang;1645;Izin Praktik Fisioterapi
+145;Mal Pelayanan Publik Kabupaten Deli Serdang;1614;Izin Praktik Laboratorium Kesehatan
+145;Mal Pelayanan Publik Kabupaten Deli Serdang;1622;Izin Praktik Ortodotis Prostetis
+145;Mal Pelayanan Publik Kabupaten Deli Serdang;1650;Izin Praktik Perawat di Sarana Kesehatan
+145;Mal Pelayanan Publik Kabupaten Deli Serdang;1648;Izin Praktik Perawat Mandiri
+145;Mal Pelayanan Publik Kabupaten Deli Serdang;1619;Izin Praktik Psikolog Klinis Mandiri
+145;Mal Pelayanan Publik Kabupaten Deli Serdang;1644;Izin Praktik Psikologis Klinis
+145;Mal Pelayanan Publik Kabupaten Deli Serdang;1616;Izin Praktik Teknisi Transfusi Darah
+145;Mal Pelayanan Publik Kabupaten Deli Serdang;1647;Izin Praktik Tenaga Medis di Sarana Kesehatan
+145;Mal Pelayanan Publik Kabupaten Deli Serdang;1642;Izin Praktik Terapis Gigi dan Mulut
+145;Mal Pelayanan Publik Kabupaten Deli Serdang;1617;Izin Praktik Terapis Wicara Mandiri
+145;Mal Pelayanan Publik Kabupaten Deli Serdang;1627;Izin Praktik Tukang Gigi
+145;Mal Pelayanan Publik Kabupaten Deli Serdang;1611;Izin Reklame
+145;Mal Pelayanan Publik Kabupaten Deli Serdang;1669;Izin Rekomendasi Pendirian Madrasah Baru
+145;Mal Pelayanan Publik Kabupaten Deli Serdang;1613;Izin Usaha Lahan Tempat Usaha (SIPTTA)
+145;Mal Pelayanan Publik Kabupaten Deli Serdang;1612;Izin Usaha Pengelolaan Pasar Rakyat (UPPR)
+145;Mal Pelayanan Publik Kabupaten Deli Serdang;1523;Keterangan Rencana Kota (KRK)
+145;Mal Pelayanan Publik Kabupaten Deli Serdang;1563;Layanan Aplikasi SIMPATIKA dan Data EMIS bagi Guru Madrasah
+145;Mal Pelayanan Publik Kabupaten Deli Serdang;1551;Layanan aplikasi SIMPATIKA Guru Agama Katolik
+145;Mal Pelayanan Publik Kabupaten Deli Serdang;1554;Layanan bantuan rohaniawan dalam rangka pengambilan sumpah jabatan dan penyuluhan agama Kristen
+145;Mal Pelayanan Publik Kabupaten Deli Serdang;1480;Layanan OSS
+145;Mal Pelayanan Publik Kabupaten Deli Serdang;1503;Layanan Pembuatan E-BKP (Buku Kapal Perikanan Elektronik)
+145;Mal Pelayanan Publik Kabupaten Deli Serdang;1555;layanan SIMPATIKA pada Guru PAK dan Tunjangan Profesi Guru PAK PNS/Non PNS
+145;Mal Pelayanan Publik Kabupaten Deli Serdang;1482;Layanan tera dan tera ulang UTTP (alat ukur, timbang, takar)
+145;Mal Pelayanan Publik Kabupaten Deli Serdang;1550;Legalisir Surat Kawin Umat Katolik
+145;Mal Pelayanan Publik Kabupaten Deli Serdang;1571;Melayani Keluhan Nasabah
+145;Mal Pelayanan Publik Kabupaten Deli Serdang;1558;Memberikan pelayanan, bimbingan teknis, dan supervisi Kepala KUA penyalur zakat dan wakaf
+145;Mal Pelayanan Publik Kabupaten Deli Serdang;1559;Mengelola sistem informasi zakat dan wakaf serta mengumpulkan dan mengelola data terkait
+145;Mal Pelayanan Publik Kabupaten Deli Serdang;1557;Mengeluarkan Surat Rekomendasi Gereja
+145;Mal Pelayanan Publik Kabupaten Deli Serdang;1556;Mengeluarkan Surat Tanda Lapor dari Gereja
+145;Mal Pelayanan Publik Kabupaten Deli Serdang;1507;Pelaporan Pajak Daerah Bulanan
+145;Mal Pelayanan Publik Kabupaten Deli Serdang;1562;Pelayanan Administrasi dan Teknis Bimas Islam seperti Pelayanan Pencatatan Pernikahan di KUA
+145;Mal Pelayanan Publik Kabupaten Deli Serdang;1501;Pelayanan Bantuan Benih Ikan
+145;Mal Pelayanan Publik Kabupaten Deli Serdang;1552;Pelayanan bantuan rohaniawan dalam rangka pengambilan sumpah jabatan dan penyuluhan agama Katolik
+145;Mal Pelayanan Publik Kabupaten Deli Serdang;1577;Pelayanan Hukum Gratis
+145;Mal Pelayanan Publik Kabupaten Deli Serdang;1540;Pelayanan izin pendirian baru dan perpanjangan izin MDT & LPQ
+145;Mal Pelayanan Publik Kabupaten Deli Serdang;1541;Pelayanan izin pendirian baru dan perpanjangan izin Pondok Pesantren
+145;Mal Pelayanan Publik Kabupaten Deli Serdang;1561;Pelayanan Kebijakan dan Bimbingan Teknis
+145;Mal Pelayanan Publik Kabupaten Deli Serdang;1500;Pelayanan Kesehatan Ikan
+145;Mal Pelayanan Publik Kabupaten Deli Serdang;1502;Pelayanan Magang (Praktek Kerja Lapangan) dan Penelitian
+145;Mal Pelayanan Publik Kabupaten Deli Serdang;1537;Pelayanan Pelatihan Berbasis Kompetensi
+145;Mal Pelayanan Publik Kabupaten Deli Serdang;1534;Pelayanan Pemberian Rekomendasi Bagi Lembaga Pelatihan Kerja Swasta Balai Latihan Kerja Komunitas
+145;Mal Pelayanan Publik Kabupaten Deli Serdang;1498;Pelayanan Pemberian Rekomendasi Izin Usaha Perikanan
+145;Mal Pelayanan Publik Kabupaten Deli Serdang;1536;Pelayanan Pemberian Surat Persetujuan Penyelenggaraan Pemagangan Dalam Negeri
+145;Mal Pelayanan Publik Kabupaten Deli Serdang;1649;Pelayanan Pemberian Surat Persetujuan Penyelenggaraan Pemagangan Luar Negeri
+145;Mal Pelayanan Publik Kabupaten Deli Serdang;1499;Pelayanan Pembuatan KUSUKA (Kartu Pelaku Usaha Kelautan dan Perikanan)
+145;Mal Pelayanan Publik Kabupaten Deli Serdang;1505;Pelayanan Pencatatan Lembaga Kerja Sama Bipartit (LKS Bipartit)
+145;Mal Pelayanan Publik Kabupaten Deli Serdang;1632;Pelayanan Penerbitan Kartu Tanda Bukti Pendaftaran Pencari Kerja
+145;Mal Pelayanan Publik Kabupaten Deli Serdang;1539;Pelayanan penerbitan rekomendasi kuliah ke Timur Tengah
+145;Mal Pelayanan Publik Kabupaten Deli Serdang;1639;Pelayanan Penerbitan Rekomendasi Paspor Calon Pekerja Migran Indonesia
+145;Mal Pelayanan Publik Kabupaten Deli Serdang;1506;Pelayanan Penerbitan Rekomendasi Paspor Calon Pekerja Migran Indonesia (CPMI)
+145;Mal Pelayanan Publik Kabupaten Deli Serdang;1524;Pelayanan Penerbitan Surat Rekomendasi Pembelian BBM Bersubsidi
+145;Mal Pelayanan Publik Kabupaten Deli Serdang;1643;Pelayanan Penerbitan Surat Tanda Daftar Bursa Kerja Khusus
+145;Mal Pelayanan Publik Kabupaten Deli Serdang;1504;Pelayanan Pengesahan Peraturan Perusahaan (PP)
+145;Mal Pelayanan Publik Kabupaten Deli Serdang;1630;Pelayanan Penyelesaian Perselisihan Hubungan Industrial
+145;Mal Pelayanan Publik Kabupaten Deli Serdang;1553;Pelayanan Sertifikasi Guru Agama Katolik PNS/Non PNS
+145;Mal Pelayanan Publik Kabupaten Deli Serdang;1497;Pelayanan Surat Keterangan Anak Pelaku Usaha Perikanan (Melanjutkan Usaha Perikanan)
+145;Mal Pelayanan Publik Kabupaten Deli Serdang;1538;Pelayanan Surat Keterangan Tinggal Sementara bagi santri luar negeri
+145;Mal Pelayanan Publik Kabupaten Deli Serdang;1542;Pelayanan Tunjangan Profesi Guru PAI PNS/Non PNS pada Sekolah
+145;Mal Pelayanan Publik Kabupaten Deli Serdang;1568;Pelimpahan Porsi Haji Reguler
+145;Mal Pelayanan Publik Kabupaten Deli Serdang;1569;Pembatalan Haji Reguler
+145;Mal Pelayanan Publik Kabupaten Deli Serdang;1573;Pembayaran Pajak dan Retribusi Daerah
+145;Mal Pelayanan Publik Kabupaten Deli Serdang;1494;Pembayaran Tagihan Air PDAM
+145;Mal Pelayanan Publik Kabupaten Deli Serdang;1530;Pemberian Bantuan Korban Bencana
+145;Mal Pelayanan Publik Kabupaten Deli Serdang;1533;Pemberian Tanda Daftar Bagi Balai Latihan Kerja Pemerintah, Lembaga Pelatihan Kerja, Perusahaan
+145;Mal Pelayanan Publik Kabupaten Deli Serdang;1543;Pembinaan dan pelayanan kepada pengurus rumah ibadah dan lembaga keagamaan Buddha
+145;Mal Pelayanan Publik Kabupaten Deli Serdang;1574;Pembuatan Mesin ATM dan Mobile Banking Bank SUMUT
+145;Mal Pelayanan Publik Kabupaten Deli Serdang;1575;Pembukaan Rekening Baru Bank SUMUT
+145;Mal Pelayanan Publik Kabupaten Deli Serdang;1597;Penambahan Anggota Keluarga BPJS Kesehatan
+145;Mal Pelayanan Publik Kabupaten Deli Serdang;1625;Pencatatan Perjanjian Kerja Waktu Tertentu
+145;Mal Pelayanan Publik Kabupaten Deli Serdang;1618;Pencatatan Serikat Pekerja/Serikat Buruh
+145;Mal Pelayanan Publik Kabupaten Deli Serdang;1605;Pencetakan KTP-elektronik
+145;Mal Pelayanan Publik Kabupaten Deli Serdang;1496;Pendafaran Baru PDAM
+145;Mal Pelayanan Publik Kabupaten Deli Serdang;1598;Pendaftaran Baru BPJS Kesehatan
+145;Mal Pelayanan Publik Kabupaten Deli Serdang;1570;Pendaftaran Jamaah Haji Reguler
+145;Mal Pelayanan Publik Kabupaten Deli Serdang;1508;Pendaftaran Pajak Daerah Wajib Pajak Baru
+145;Mal Pelayanan Publik Kabupaten Deli Serdang;1621;Pendaftaran Perjanjian Kerja Bersama
+145;Mal Pelayanan Publik Kabupaten Deli Serdang;1590;Pendaftaran Peserta BPJS Ketenagakerjaan
+145;Mal Pelayanan Publik Kabupaten Deli Serdang;1481;Pendaftaran Registrasi PSAT-PDUK
+145;Mal Pelayanan Publik Kabupaten Deli Serdang;1603;Penerbitan Kartu Identitas Anak (KIA)
+145;Mal Pelayanan Publik Kabupaten Deli Serdang;1535;Penerbitan Kartu Tanda Bukti Pendaftaran Pencari Kerja (AK-1)
+145;Mal Pelayanan Publik Kabupaten Deli Serdang;1526;Penerbitan Surat Keterangan Data Tunggal Sosial Ekonomi Nasional (DTSEN)
+145;Mal Pelayanan Publik Kabupaten Deli Serdang;1485;Penerbitan Surat Keterangan IKM Binaan (untuk pengurusan HAKI)
+145;Mal Pelayanan Publik Kabupaten Deli Serdang;1527;Penerbitan Surat Keterangan Tidak Mampu (SKTM)
+145;Mal Pelayanan Publik Kabupaten Deli Serdang;1528;Penerbitan Surat Rekomendasi Program Layanan Kesehatan Pasien Unregister dan lain-lain (Paspula)
+145;Mal Pelayanan Publik Kabupaten Deli Serdang;1532;Penerbitan Tanda Daftar Bursa Kerja Khusus
+145;Mal Pelayanan Publik Kabupaten Deli Serdang;1579;Pengaduan dan/atau Perusakan Lingkungan Hidup (Tidak Digital)
+145;Mal Pelayanan Publik Kabupaten Deli Serdang;1493;Pengaduan Pelanggan PDAM
+145;Mal Pelayanan Publik Kabupaten Deli Serdang;1529;Pengaduan Program Keluarga Harapan (PKH) dan Bantuan Pangan Non Tunai (BPNT)
+145;Mal Pelayanan Publik Kabupaten Deli Serdang;1491;Pengajuan KPR
+145;Mal Pelayanan Publik Kabupaten Deli Serdang;1490;Pengajuan Kredit Kenderaan Bermotor
+145;Mal Pelayanan Publik Kabupaten Deli Serdang;1596;Pengaktifan Kembali Status Kepesertaan BPJS Kesehatan
+145;Mal Pelayanan Publik Kabupaten Deli Serdang;1544;Pengurusan Sertifikasi Guru Agama Buddha PNS/Non PNS
+145;Mal Pelayanan Publik Kabupaten Deli Serdang;1576;Pengurusan Surat Keterangan Catatan Kepolisian (SKCK)
+145;Mal Pelayanan Publik Kabupaten Deli Serdang;1548;Pengurusan Tanda Daftar Rumah Ibadah
+145;Mal Pelayanan Publik Kabupaten Deli Serdang;1546;Pengurusan Tanda Daftar Sekolah Minggu Buddha
+145;Mal Pelayanan Publik Kabupaten Deli Serdang;1545;Pengurusan Tanda Daftar Vihara Dhammasekha
+145;Mal Pelayanan Publik Kabupaten Deli Serdang;1547;Pengurusan Tanda Daftar Yayasan dan Lembaga Keagamaan Buddha
+145;Mal Pelayanan Publik Kabupaten Deli Serdang;1560;Penugasan Rohaniawan untuk Pembacaan Doa pada Pelantikan Pejabat
+145;Mal Pelayanan Publik Kabupaten Deli Serdang;1572;Penyetoran dan Penarikan Uang Tunai
+145;Mal Pelayanan Publik Kabupaten Deli Serdang;1610;Perekaman KTP-elektronik
+145;Mal Pelayanan Publik Kabupaten Deli Serdang;1549;Perizinan Pendirian Rumah Ibadah Katolik
+145;Mal Pelayanan Publik Kabupaten Deli Serdang;1509;Permohonan BPHTB Pemberian Hak Baru, PTSL
+145;Mal Pelayanan Publik Kabupaten Deli Serdang;1510;Permohonan BPHTB Pemindahan Hak melalui Waris, Lelang, Mohon Hak Baru, dll
+145;Mal Pelayanan Publik Kabupaten Deli Serdang;1514;Permohonan Keberatan Ketetapan PBB
+145;Mal Pelayanan Publik Kabupaten Deli Serdang;1520;Permohonan Mutasi SPPT PBB
+145;Mal Pelayanan Publik Kabupaten Deli Serdang;1511;Permohonan Pembayaran Angsuran PBB
+145;Mal Pelayanan Publik Kabupaten Deli Serdang;1517;Permohonan Pembetulan / Pembatalan SPPT PBB
+145;Mal Pelayanan Publik Kabupaten Deli Serdang;1587;Permohonan Pemeriksaan Formulir Kerangka Acuan (KA) (Tidak Digital)
+145;Mal Pelayanan Publik Kabupaten Deli Serdang;1588;Permohonan Pemeriksaan Formulir UKL-UPL (Tidak Digital)
+145;Mal Pelayanan Publik Kabupaten Deli Serdang;1522;Permohonan Pendaftaran Baru SPPT PBB
+145;Mal Pelayanan Publik Kabupaten Deli Serdang;1513;Permohonan Penghapusan / Pengurangan Sanksi Administrasi / Denda PBB
+145;Mal Pelayanan Publik Kabupaten Deli Serdang;1512;Permohonan Pengurangan Ketetapan PBB
+145;Mal Pelayanan Publik Kabupaten Deli Serdang;1586;Permohonan Penilaian Andal dan RKL-RPL (Tidak Digital)
+145;Mal Pelayanan Publik Kabupaten Deli Serdang;1585;Permohonan Persetujuan Dokumen Evaluasi Lingkungan Hidup (DELH) (Tidak Digital)
+145;Mal Pelayanan Publik Kabupaten Deli Serdang;1584;Permohonan Persetujuan Dokumen Pengelolaan Lingkungan Hidup (DPLH) (Tidak Digital)
+145;Mal Pelayanan Publik Kabupaten Deli Serdang;1519;Permohonan Salinan SPPT PBB
+145;Mal Pelayanan Publik Kabupaten Deli Serdang;1589;Permohonan Surat Arahan Penapisan Penyusunan Dokumen Lingkungan (Tidak Digital)
+145;Mal Pelayanan Publik Kabupaten Deli Serdang;1516;Permohonan Surat Keterangan NJOP
+145;Mal Pelayanan Publik Kabupaten Deli Serdang;1521;Persetujuan Bangunan Gedung (PBG)
+145;Mal Pelayanan Publik Kabupaten Deli Serdang;1518;Persetujuan Kesesuaian Kegiatan Pemanfaatan Ruang (PKKPR)
+145;Mal Pelayanan Publik Kabupaten Deli Serdang;1599;Persetujuan Kesesuaian Kegiatan Pemanfaatan Ruang (PKKPR) Non Berusaha
+145;Mal Pelayanan Publik Kabupaten Deli Serdang;1583;Persetujuan Teknis Pembuangan Baku Mutu Air Limbah (Tidak Digital)
+145;Mal Pelayanan Publik Kabupaten Deli Serdang;1582;Persetujuan Teknis Pemenuhan Baku Mutu Air Limbah (Tidak Digital)
+145;Mal Pelayanan Publik Kabupaten Deli Serdang;1581;Persetujuan Teknis Pemenuhan Baku Mutu Emisi (Tidak Digital)
+145;Mal Pelayanan Publik Kabupaten Deli Serdang;1594;Perubahan Faskes
+145;Mal Pelayanan Publik Kabupaten Deli Serdang;1595;Perubahan/Perbaikan Data BPJS Kesehatan
+145;Mal Pelayanan Publik Kabupaten Deli Serdang;1531;Program Pembiayaan Gotong Royong
+145;Mal Pelayanan Publik Kabupaten Deli Serdang;1487;Registrasi akun SIINas dan pengisian data usaha
+145;Mal Pelayanan Publik Kabupaten Deli Serdang;1680;Rekomendasi Izin Kerja Tenaga Kesehatan Lainnya
+145;Mal Pelayanan Publik Kabupaten Deli Serdang;1489;Rekomendasi Izin Pengelolaan Pasar Tradisional (IUPPT)
+145;Mal Pelayanan Publik Kabupaten Deli Serdang;1681;Rekomendasi Izin Praktek Tenaga Medis/Tenaga Kesehatan
+145;Mal Pelayanan Publik Kabupaten Deli Serdang;1567;Rekomendasi Perpanjangan SIOP RA/MI/MTS/MA
+145;Mal Pelayanan Publik Kabupaten Deli Serdang;1679;Rekomendasi Surat Terdaftar Penyehat Tradisional
+145;Mal Pelayanan Publik Kabupaten Deli Serdang;1565;Sertifikasi Tunjangan Profesi Guru Madrasah
+145;Mal Pelayanan Publik Kabupaten Deli Serdang;1525;Sertifikat Laik Hygiene Sanitasi (SLHS)
+145;Mal Pelayanan Publik Kabupaten Deli Serdang;1578;Surat Keterangan Hasil Pemeriksaan Narkotika (SKHPN)
+145;Mal Pelayanan Publik Kabupaten Deli Serdang;1607;Surat Terdaftar Penyehat Tradisional
+145;Mal Pelayanan Publik Kabupaten Deli Serdang;1606;Tanda Daftar Panti Asuhan
+145;Mal Pelayanan Publik Kabupaten Deli Serdang;1604;Tanda Daftar Panti Jompo
+145;Mal Pelayanan Publik Kabupaten Deli Serdang;1600;Tanda Daftar Pelayanan Rehabilitasi Narkoba
+145;Mal Pelayanan Publik Kabupaten Deli Serdang;1602;Tanda Daftar Pelayanan Tuna Netra
+145;Mal Pelayanan Publik Kabupaten Deli Serdang;1566;Validasi Perpindahan guru/Pindah Satminkal
+145;Mal Pelayanan Publik Kabupaten Deli Serdang;1564;Validasi/Mutasi Perpindahan Siswa
+145;Mal Pelayanan Publik Kabupaten Deli Serdang;1486;Verifikasi perizinan berusaha sektor industri (OSS)
+145;Mal Pelayanan Publik Kabupaten Deli Serdang;1488;Verifikasi Tanda Daftar Gudang (TGD)

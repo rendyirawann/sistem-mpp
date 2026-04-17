@@ -199,7 +199,6 @@ class SkmController extends Controller
         ]);
     }
 
-    // 3. Simpan Survey & Tutup Antrian
     // public function store(Request $request)
     // {
     //     $request->validate([
@@ -315,9 +314,10 @@ class SkmController extends Controller
     //         // CATAT LOG ERROR ASLINYA
     //         Log::error("SKM STORE ERROR: " . $e->getMessage() . " | Line: " . $e->getLine());
 
-    //         // TAMPILKAN ERROR ASLI KE LAYAR (UNTUK DEBUGGING)
-    //         return redirect()->back()->with('error', 'Gagal: ' . $e->getMessage());
-    //     }
+    //             'external_id' => $externalId,
+    //         ],
+    //         'services' => $daftarLayanan
+    //     ]);
     // }
 
     public function store(Request $request)
@@ -325,7 +325,6 @@ class SkmController extends Controller
         $request->validate([
             'antrian_id'   => 'required|exists:antrians,id',
             'umur'         => 'required|numeric',
-            // 'jk'           => 'required|in:L,P',
             'pendidikan'   => 'required|string',
             'pekerjaan'    => 'required|string',
             'disabilitas'  => 'required|in:YA,TIDAK',
@@ -345,16 +344,14 @@ class SkmController extends Controller
             'kritik_saran'      => 'nullable|string'
         ]);
 
-        // $antrian = Antrian::with('skpd')->findOrFail($request->antrian_id);
         $antrian = Antrian::with(['skpd', 'customer'])->findOrFail($request->antrian_id);
-        // Default ID 18 jika tidak ada di database
         $externalIdSkpd = $antrian->skpd->external_id_sukma ?? 18;
         $jenisKelamin = $antrian->customer->jk ?? 'L';
 
         DB::beginTransaction();
         try {
-            // 1. Simpan ke Database Lokal
-            Skm::create([
+            // 1. Simpan ke Database Lokal (Default is_synced = 0)
+            $skm = Skm::create([
                 'antrian_id' => $request->antrian_id,
                 'nilai'      => round($request->u1 + $request->u2 + $request->u3 + $request->u4 + $request->u5 + $request->u6 + $request->u7 + $request->u8 + $request->u9),
                 'umur'       => $request->umur,
@@ -375,7 +372,8 @@ class SkmController extends Controller
                 'is_pungli'         => $request->is_pungli,
                 'pungli_kontak'     => $request->pungli_kontak,
                 'pungli_keterangan' => $request->pungli_keterangan,
-                'kritik_saran'      => $request->kritik_saran
+                'kritik_saran'      => $request->kritik_saran,
+                'is_synced'         => 0 // Default 0 sebelum kirim API
             ]);
 
             // 2. Update Status Antrian
@@ -404,29 +402,28 @@ class SkmController extends Controller
                 "u9" => (int)$request->u9
             ];
 
-            // [PENTING] Tetap gunakan verify false untuk menangani SSL Intranet
-            $response = Http::withOptions(['verify' => false])
-                ->withHeaders(['X-API-TOKEN' => $token])
-                ->timeout(10) // Timeout standar
-                ->post($url_api, $payload);
+            try {
+                $response = Http::withOptions(['verify' => false])
+                    ->withHeaders(['X-API-TOKEN' => $token])
+                    ->timeout(8)
+                    ->post($url_api, $payload);
 
-            // Log jika API Pusat menolak data (untuk admin saja, user tidak perlu tahu detailnya)
-            if ($response->failed()) {
-                Log::error("GAGAL KIRIM SUKMADELI: " . $response->body());
+                if ($response->successful()) {
+                    $skm->update(['is_synced' => 1]);
+                } else {
+                    Log::error("GAGAL KIRIM SUKMADELI (Respon Error): " . $response->body());
+                }
+            } catch (\Exception $apiEx) {
+                Log::error("API SUKMA TIMEOUT/DOWN: " . $apiEx->getMessage());
+                // Biarkan is_synced tetap 0 agar nanti bisa disinkronisasi manual
             }
 
             DB::commit();
-
-            // Respon bersih tanpa 'api_debug'
             return redirect()->back()->with('success', 'Terima kasih, penilaian Anda telah tersimpan!');
         } catch (\Exception $e) {
             DB::rollBack();
-
-            // Catat error asli di Log file server (storage/logs/laravel.log)
-            Log::error("SKM SYSTEM ERROR: " . $e->getMessage() . " | Line: " . $e->getLine());
-
-            // Tampilkan pesan umum ke User (Clean)
-            return redirect()->back()->with('error', 'Terjadi kesalahan sistem. Silakan coba lagi atau hubungi petugas.');
+            Log::error("SKM SYSTEM ERROR: " . $e->getMessage());
+            return redirect()->back()->with('error', 'Terjadi kesalahan sistem. Silakan coba lagi.');
         }
     }
 }

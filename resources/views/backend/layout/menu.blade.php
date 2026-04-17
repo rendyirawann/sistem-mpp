@@ -138,6 +138,36 @@
                 </div>
                 <!--end:Menu item-->
                 @endcan
+
+                @can('layanan_skm.list')
+                <!--begin:Menu item-->
+                <div class="menu-item {{ request()->routeIs('layanan-skm.index') ? 'here show ' : '' }}">
+                    <!--begin:Menu link-->
+                    <a class="menu-link py-3" href="{{ route('layanan-skm.index') }}">
+                        <span class="menu-icon">
+                            <i class="ki-outline ki-setting-2 fs-2"></i>
+                        </span>
+                        <span class="menu-title">Layanan SKM</span>
+                    </a>
+                    <!--end:Menu link-->
+                </div>
+                <!--end:Menu item-->
+                @endcan
+
+                @can('skm.list')
+                <!--begin:Menu item-->
+                <div class="menu-item {{ request()->routeIs('master.skm.index') ? 'here show ' : '' }}">
+                    <!--begin:Menu link-->
+                    <a class="menu-link py-3 " href="{{ route('master.skm.index') }}">
+                        <span class="menu-icon">
+                            <i class="ki-outline ki-chart-line-star fs-2"></i>
+                        </span>
+                        <span class="menu-title">Manajemen SKM</span>
+                    </a>
+                    <!--end:Menu link-->
+                </div>
+                <!--end:Menu item-->
+                @endcan
             </div>
             <!--end:Menu sub-->
         </div>

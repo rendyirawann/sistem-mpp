@@ -34,6 +34,7 @@ use App\Http\Controllers\FrontController;
 use App\Http\Controllers\Backend\Loket\LoketController;
 // SKPD
 use App\Http\Controllers\Backend\Skpd\SkpdController;
+use App\Http\Controllers\Backend\Master\LayananSkmController;
 use App\Http\Controllers\SkmController;
 
 //Route::get('/', function () {
@@ -184,6 +185,22 @@ Route::middleware('auth')->group(function () {
     Route::get('/get/master/satuan/data', [SatuanController::class, 'getData'])->name('get.master.satuan.data');
     Route::post('/satuan/mass-delete', [SatuanController::class, 'massDelete'])->name('satuan.mass-delete');
     Route::get('/select/satuan', [SatuanController::class, 'select'])->name('satuan.select');
+
+    Route::resource('master/layanan-skm', LayananSkmController::class);
+    Route::get('/get/master/layanan-skm/data', [LayananSkmController::class, 'getData'])->name('get.master.layanan-skm.data');
+    Route::post('/layanan-skm/mass-delete', [LayananSkmController::class, 'massDelete'])->name('layanan-skm.mass-delete');
+
+    //MANAJEMEN SKM (HASIL SURVEY)
+    Route::resource('master/skm', \App\Http\Controllers\Backend\Master\SkmController::class)
+        ->except(['destroy', 'create', 'store'])
+        ->names([
+            'index' => 'master.skm.index',
+            'edit' => 'master.skm.edit',
+            'update' => 'master.skm.update',
+            'show' => 'master.skm.show',
+        ]);
+    Route::get('/get/master/skm/data', [\App\Http\Controllers\Backend\Master\SkmController::class, 'getData'])->name('master.skm.getData');
+    Route::post('/skm/sync', [\App\Http\Controllers\Backend\Master\SkmController::class, 'syncData'])->name('master.skm.sync');
 
     //SELECT WILAYAH
     Route::get('/wilayah_provinsi', [WilayahProvinsiController::class, 'select'])->name('wilayahprovinsi.select');
