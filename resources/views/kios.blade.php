@@ -1,518 +1,415 @@
 <!DOCTYPE html>
 <html lang="id">
-
 <head>
     <meta charset="UTF-8">
-    <title>Aplikasi Antrian MPP - Kabupaten Deli Serdang | Deli Serdang Sehat</title>
-    <meta name="description" content="Aplikasi Antrian MPP - Kabupaten Deli Serdang | Deli Serdang Sehat">
+    <title>Sistem Antrian Terpadu</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="csrf-token" content="{{ csrf_token() }}">
 
-    {{-- 1. ASSET METRONIC --}}
     <link href="{{ asset('assets/plugins/global/plugins.bundle.css') }}" rel="stylesheet" type="text/css" />
     <link href="{{ asset('assets/css/style.bundle.css') }}" rel="stylesheet" type="text/css" />
-    <link rel="shortcut icon" href="{{ asset('assets/media/logos/logo_deliserdang.png') }}" />
+    <link rel="shortcut icon" href="{{ asset('assets/media/logos/mpp_logo_premium.png') }}" />
+    
+    {{-- Phosphor Icons --}}
+    <script src="https://unpkg.com/@phosphor-icons/web"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
 
-    {{-- Font Awesome --}}
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" rel="stylesheet">
-
-    {{-- Google Fonts --}}
-    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap"
-        rel="stylesheet">
-
-    {{-- 🔥 HAPUS SCRIPT RECTA YANG ERROR --}}
-    {{-- <script src="{{ asset('assets/js/recta.js') }}"></script> --}}
-
-    {{-- Load Vite --}}
     @vite(['resources/css/app.css', 'resources/js/app.js'])
 
     <style>
+        :root {
+            --surface-color: #ffffff;
+            --background-color: #f8f9fc;
+            --text-primary: #111827;
+            --text-secondary: #6b7280;
+            --accent-color: #4f46e5;
+            --accent-light: #e0e7ff;
+            --radius-lg: 24px;
+            --shadow-soft: 0 10px 40px -10px rgba(0,0,0,0.08);
+        }
+
         body {
-            font-family: 'Plus Jakarta Sans', sans-serif;
-            background-color: #f5f8fa;
+            font-family: 'Outfit', sans-serif;
+            background-color: var(--background-color);
+            color: var(--text-primary);
+            overflow-x: hidden;
         }
 
-        /* Gradient Sidebar */
-        .sidebar-gradient {
-            background: linear-gradient(135deg, #009ef7 0%, #0069d9 100%);
+        /* Top Header */
+        .kiosk-header {
+            background: var(--surface-color);
+            padding: 24px 40px;
+            border-bottom: 1px solid rgba(0,0,0,0.05);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: sticky;
+            top: 0;
+            z-index: 100;
         }
 
-        .blink {
-            animation: blinker 1s linear infinite;
+        .brand-section {
+            display: flex;
+            align-items: center;
+            gap: 20px;
         }
 
-        @keyframes blinker {
-            50% {
-                opacity: 0;
-            }
+        .brand-logo {
+            height: 56px;
+            width: 56px;
+            object-fit: contain;
+            background: #fff;
+            border-radius: 16px;
+            padding: 8px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.05);
         }
 
-        .card-service {
-            transition: all 0.2s ease;
+        /* Status Bar */
+        .status-showcase {
+            background: linear-gradient(135deg, #1e1b4b 0%, #4338ca 100%);
+            margin: 32px 40px;
+            border-radius: 32px;
+            padding: 40px;
+            color: white;
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr;
+            gap: 32px;
+            box-shadow: 0 20px 25px -5px rgba(67, 56, 202, 0.4);
+        }
+
+        .status-box {
+            background: rgba(255,255,255,0.1);
+            backdrop-filter: blur(12px);
+            border-radius: 24px;
+            padding: 32px;
+            border: 1px solid rgba(255,255,255,0.2);
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .status-box.active-call {
+            background: rgba(255,255,255,0.15);
+            border-color: #38bdf8;
+            box-shadow: 0 0 40px rgba(56, 189, 248, 0.3);
+        }
+
+        .status-label {
+            font-size: 0.875rem;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            font-weight: 600;
+            color: rgba(255,255,255,0.8);
+            margin-bottom: 16px;
+            display: block;
+        }
+
+        .status-value {
+            font-size: 4rem;
+            font-weight: 800;
+            line-height: 1;
+            margin-bottom: 12px;
+        }
+
+        .clock-display {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .clock-time {
+            font-size: 4.5rem;
+            font-weight: 700;
+            letter-spacing: -2px;
+        }
+
+        /* Grid Section */
+        .grid-container {
+            padding: 0 40px 60px;
+        }
+
+        .grid-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-end;
+            margin-bottom: 32px;
+        }
+
+        .clean-card {
+            background: var(--surface-color);
+            border-radius: var(--radius-lg);
+            border: 1px solid rgba(0,0,0,0.04);
+            transition: all 0.3s cubic-bezier(0.2, 0.8, 0.2, 1);
+            box-shadow: 0 4px 6px -1px rgba(0,0,0,0.02);
             cursor: pointer;
+            height: 100%;
         }
 
-        .card-service:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1) !important;
-            border-color: #009ef7 !important;
+        .clean-card:hover {
+            transform: translateY(-8px);
+            box-shadow: var(--shadow-soft);
+            border-color: var(--accent-light);
         }
 
-        .card-service:hover .icon-wrapper {
-            background-color: #009ef7 !important;
-            color: #fff !important;
+        .icon-box {
+            width: 80px;
+            height: 80px;
+            border-radius: 20px;
+            background: var(--accent-light);
+            color: var(--accent-color);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2.5rem;
+            margin-bottom: 24px;
+            transition: all 0.3s ease;
         }
 
-        /* Scrollbar Halus */
-        .scroll-smooth::-webkit-scrollbar {
-            width: 4px;
+        .clean-card:hover .icon-box {
+            background: var(--accent-color);
+            color: white;
+            transform: scale(1.05);
         }
 
-        .scroll-smooth::-webkit-scrollbar-track {
-            background: #f1f1f1;
+        .card-title {
+            font-size: 1.25rem;
+            font-weight: 700;
+            color: var(--text-primary);
+            line-height: 1.4;
         }
 
-        .scroll-smooth::-webkit-scrollbar-thumb {
-            background: #c1c1c1;
-            border-radius: 4px;
+        .action-button {
+            background: var(--surface-color);
+            border: 1px solid rgba(0,0,0,0.1);
+            color: var(--text-primary);
+            border-radius: 100px;
+            padding: 12px 24px;
+            font-weight: 600;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            transition: all 0.2s;
         }
 
-        .glass-card {
-            background: rgba(255, 255, 255, 0.1);
-            backdrop-filter: blur(5px);
-            border: 1px solid rgba(255, 255, 255, 0.2);
+        .action-button:hover {
+            background: var(--background-color);
         }
 
-        /* RESPONSIVE LAYOUT */
-        @media (min-width: 992px) {
-            .h-lg-100vh {
-                height: 100vh !important;
-            }
-
-            .w-lg-compact {
-                width: 280px !important;
-                flex: 0 0 280px !important;
-            }
-
-            .overflow-lg-hidden {
-                overflow: hidden !important;
-            }
+        /* Modal Clean Style */
+        .modal-clean .modal-content {
+            border-radius: 32px;
+            border: none;
+            box-shadow: 0 25px 50px -12px rgba(0,0,0,0.25);
+            overflow: hidden;
+        }
+        .modal-clean .modal-header {
+            border-bottom: 1px solid rgba(0,0,0,0.05);
+            padding: 32px 40px 24px;
+            background: #fff;
+        }
+        .modal-clean .modal-body {
+            padding: 40px;
+            background: #f8f9fc;
         }
 
-        @media (max-width: 991px) {
-            .sidebar-gradient {
-                border-radius: 0 0 1.5rem 1.5rem;
-                margin-bottom: 1.5rem;
-                padding: 1.25rem !important;
-            }
-
-            #panggilanNo {
-                font-size: 3rem !important;
-            }
-
-            #nextNo {
-                font-size: 2rem !important;
-            }
+        .custom-input {
+            background: #fff;
+            border: 2px solid transparent;
+            border-radius: 16px;
+            padding: 16px 24px;
+            font-size: 1.1rem;
+            font-weight: 500;
+            color: var(--text-primary);
+            box-shadow: 0 2px 10px rgba(0,0,0,0.02);
+            transition: all 0.2s;
+        }
+        .custom-input:focus {
+            border-color: var(--accent-color);
+            box-shadow: 0 0 0 4px var(--accent-light);
         }
 
-        /* =========================================
-           🔥 CSS KHUSUS PRINT (POS 58mm)
-           ========================================= */
         @media print {
-
-            /* Sembunyikan UI Website */
-            body * {
-                visibility: hidden;
-                height: 0;
-                overflow: hidden;
-            }
-
-            /* Setting Halaman Browser ke 80mm */
-            @page {
-                size: 80mm auto;
-                /* Lebar 80mm, Tinggi Auto */
-                margin: 0mm;
-                /* Hilangkan margin browser */
-            }
-
-            /* Tampilkan Area Struk */
-            #area-struk,
-            #area-struk * {
-                visibility: visible;
-                height: auto;
-                overflow: visible;
-            }
-
-            #area-struk {
-                position: absolute;
-                left: 0;
-                top: 0;
-                width: 79mm;
-                /* Gunakan 79mm (Safe Area) agar tidak terpotong */
-                padding: 2mm 0;
-                margin: 0;
-                background-color: white;
-            }
-        }
-
-        /* Geser Modal ke Atas (10% dari atas layar) */
-        .modal-pos-top {
-            margin-top: 10vh !important;
+            body * { visibility: hidden; }
+            #area-struk, #area-struk * { visibility: visible; }
+            #area-struk { position: absolute; left: 0; top: 0; width: 79mm; padding: 2mm 0; background: white; color: black; }
         }
     </style>
 </head>
 
-<body class="bg-body d-flex flex-column flex-lg-row h-lg-100vh overflow-lg-hidden">
+<body>
 
-    {{-- ================= WRAPPER UTAMA ================= --}}
-    <div class="d-flex flex-column flex-lg-row vh-100 overflow-hidden bg-light">
-
-        {{-- ================= KIRI: SIDEBAR INFORMASI (RESPONSIVE) ================= --}}
-        <div class="sidebar-gradient text-white shadow-lg d-flex flex-column z-index-2"
-            style="width: 100%; max-height: 100vh; flex: 0 0 auto;">
-
-            <style>
-                @media (min-width: 992px) {
-                    .sidebar-gradient {
-                        width: 350px !important;
-                    }
-                }
-
-                .glass-card {
-                    background: rgba(255, 255, 255, 0.1);
-                    backdrop-filter: blur(10px);
-                    border: 1px solid rgba(255, 255, 255, 0.2);
-                }
-            </style>
-
-            <div class="p-6 p-lg-8 d-flex flex-column justify-content-between h-100 overflow-y-auto">
-
-                {{-- HEADER: LOGO DI ATAS TENGAH (SESUAI FIGMA) --}}
-                <div class="text-center mb-8">
-                    <div class="symbol symbol-50px symbol-lg-70px mb-4">
-                        <img src="{{ asset('images/logo_pemda.png') }}" alt="Logo"
-                            style="filter: drop-shadow(0 4px 6px rgba(0,0,0,0.3));">
-                    </div>
-                    <div class="mb-2">
-                        <h1 class="fw-bolder text-white fs-4 fs-lg-3 mb-0 text-uppercase lh-sm">Mall Pelayanan Publik
-                        </h1>
-                        <span class="text-white opacity-75 fs-9 fw-bold ls-3 text-uppercase">Kabupaten Deli
-                            Serdang</span>
-                    </div>
-
-                    {{-- JAM DIGITAL --}}
-                    <div class="glass-card rounded-4 p-4 mt-5">
-                        <div class="d-flex justify-content-center align-items-center gap-2">
-                            <h1 class="fs-2hx fs-lg-3hx fw-bolder text-white mb-0" id="jam-jam">00</h1>
-                            <span class="fs-1 fw-bold text-white blink">:</span>
-                            <h1 class="fs-2hx fs-lg-3hx fw-bolder text-white mb-0" id="jam-menit">00</h1>
-                            <div class="d-flex flex-column align-items-start">
-                                <span class="fs-3 fw-bold text-warning lh-1" id="jam-detik">00</span>
-                            </div>
-                        </div>
-                        <div class="separator border-white opacity-20 my-2 w-50 mx-auto"></div>
-                        <span id="jam-tanggal" class="fw-semibold fs-7 text-white opacity-90">Memuat Tanggal...</span>
-                    </div>
-                </div>
-
-                {{-- STATUS PANGGILAN --}}
-                <div class="d-flex flex-column gap-4 mb-8">
-                    {{-- CARD 1: SEDANG DIPANGGIL --}}
-                    <div id="notifikasiPanggilan"
-                        class="card border-0 shadow-sm bg-warning position-relative overflow-hidden">
-                        <div class="card-body p-5 text-center">
-                            <span
-                                class="badge badge-white text-white fw-bolder fs-9 px-3 py-2 mb-3 shadow-sm rounded-pill">
-                                <i class="fa fa-volume-high text-white me-1 animate-pulse"></i> SEDANG MEMANGGIL
-                            </span>
-                            <h1 id="panggilanNo" class="fs-4hx fw-black text-white mb-0 lh-1">---</h1>
-                            <div class="fw-bold text-white fs-6 text-uppercase my-2 text-truncate px-2"
-                                id="panggilanSkpd">Menunggu...</div>
-                            <div class="bg-dark bg-opacity-10 rounded-pill px-4 py-2 mt-2">
-                                <span id="panggilanLoket" class="fw-bolder text-white fs-8 text-uppercase">ANTRIAN
-                                    KOSONG</span>
-                            </div>
-                        </div>
-                    </div>
-
-                    {{-- CARD 2: GILIRAN BERIKUTNYA --}}
-                    <div class="card border-0 shadow-sm bg-dark position-relative overflow-hidden">
-                        <div class="card-body p-4 text-center">
-                            <span class="text-gray-500 fw-bold fs-9 text-uppercase ls-2">BERIKUTNYA</span>
-                            <h1 id="nextNo" class="fs-1 fw-black text-white mb-1">---</h1>
-                            <div class="fw-semibold text-gray-500 fs-9 text-uppercase text-truncate" id="nextSkpd">
-                                TIDAK ADA ANTRIAN</div>
-                        </div>
-                    </div>
-                </div>
-
-                {{-- FOOTER INFO: HARI & JAM OPERASIONAL --}}
-                <div class="mt-auto">
-                    <div class="glass-card rounded-3 p-4 mb-4">
-                        <div class="d-flex align-items-start gap-3">
-                            <div class="symbol symbol-30px">
-                                <div class="symbol-label bg-white bg-opacity-20 text-white">
-                                    <i class="fa fa-clock fs-6"></i>
-                                </div>
-                            </div>
-                            <div class="d-flex flex-column">
-                                <span class="fs-10 fw-bold text-white opacity-75 text-uppercase mb-1">Jam
-                                    Operasional</span>
-                                <div class="d-flex flex-column gap-1">
-                                    <div class="d-flex justify-content-between align-items-center gap-4">
-                                        <span class="fs-8 fw-bold text-white">Senin - Kamis</span>
-                                        <span class="fs-8 fw-bolder text-white">08.00 - 15.00</span>
-                                    </div>
-                                    <div class="d-flex justify-content-between align-items-center gap-4">
-                                        <span class="fs-8 fw-bold text-white">Jumat</span>
-                                        <span class="fs-8 fw-bolder text-white">08.00 - 15.30</span>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="text-center">
-                        <span class="text-white opacity-50 fs-10">&copy; {{ date('Y') }} MPP DELI SERDANG</span>
-                    </div>
-                </div>
+    <header class="kiosk-header">
+        <div class="brand-section">
+            <img src="{{ asset('assets/media/logos/mpp_logo_premium.png') }}" alt="Logo" class="brand-logo">
+            <div>
+                <h1 class="fs-2 fw-black mb-0 text-gray-900" style="letter-spacing: -0.5px;">Pusat Layanan</h1>
+                <span class="fs-6 fw-medium text-gray-500">Sistem Antrian Terpadu</span>
             </div>
         </div>
+        <div class="d-flex gap-4">
+            <button class="action-button" onclick="window.location.reload();">
+                <i class="ph ph-arrows-clockwise fs-4"></i> Segarkan
+            </button>
+            <button class="action-button" data-bs-toggle="modal" data-bs-target="#modalLokasi">
+                <i class="ph ph-map-pin fs-4"></i> Peta Lokasi
+            </button>
+        </div>
+    </header>
 
-        {{-- ================= KANAN: MENU UTAMA (FLEX GROW) ================= --}}
-        <div class="d-flex flex-column flex-row-fluid overflow-hidden">
-
-            {{-- Header Kanan --}}
-            <div class="d-flex flex-stack px-8 py-6 bg-white shadow-sm z-index-1">
-                <div class="d-flex align-items-center gap-4">
-                    {{-- Tombol Refresh Rendy --}}
-                    <button type="button" class="btn btn-icon btn-light-info btn-md rounded-circle shadow-sm"
-                        onclick="window.location.reload();" title="Refresh">
-                        <i class="fa fa-rotate-right fs-4"></i>
-                    </button>
-                    <div class="d-flex flex-column">
-                        <h1 class="text-dark fw-bolder fs-2 mb-0">Daftar Layanan MPP</h1>
-                        <span class="text-muted fw-bold fs-7">Silakan pilih Instansi tujuan Anda</span>
-                    </div>
-                </div>
-
-                <div class="d-flex align-items-center gap-3">
-                    <button type="button" class="btn btn-flex btn-light-primary px-5 rounded-pill"
-                        data-bs-toggle="modal" data-bs-target="#modalLokasi">
-                        <i class="fa fa-map-location-dot me-2"></i>
-                        <span class="fw-bold fs-8">Peta Lokasi</span>
-                    </button>
-                    <div
-                        class="d-flex align-items-center bg-light-success rounded-pill px-4 py-2 border border-success border-dashed">
-                        <span class="bullet bullet-dot bg-success h-8px w-8px me-2 animation-blink"></span>
-                        <span class="text-success fw-bold fs-8">Sistem Online</span>
-                    </div>
-                </div>
+    <div class="status-showcase">
+        <div class="status-box active-call" id="notifikasiPanggilan">
+            <div class="d-flex justify-content-between align-items-start mb-4">
+                <span class="status-label text-info"><i class="ph-fill ph-speaker-high me-2"></i> Panggilan Aktif</span>
+                <span class="badge bg-white text-primary rounded-pill px-3 py-2 fw-bold" id="panggilanLoket">LOKET -</span>
             </div>
+            <div class="status-value text-white" id="panggilanNo">---</div>
+            <div class="fs-5 fw-medium text-white opacity-75 text-truncate" id="panggilanSkpd">Menunggu Antrian...</div>
+        </div>
 
-            {{-- Grid SKPD --}}
-            <div class="p-6 p-lg-10 scroll-smooth overflow-auto flex-grow-1 bg-gray-100">
-                <div class="row g-6" id="gridSkpdContainer">
-                    {{-- @foreach ($skpd as $item)
-                        <div class="col-6 col-md-4 col-xl-3">
-                            <div class="card card-flush h-100 border-0 shadow-sm card-service cursor-pointer"
-                                onclick="openLayanan('{{ $item->id }}')">
-                                <div
-                                    class="card-body d-flex flex-column justify-content-center align-items-center text-center p-6">
-                                    <div
-                                        class="symbol symbol-60px symbol-circle bg-light-primary mb-5 d-flex justify-content-center align-items-center transition-all">
-                                        <div class="symbol-label fs-2hx fw-bold text-primary bg-light-primary">
-                                            <i
-                                                class="fa {{ $item->logo_skpd ? 'fa-building-columns' : 'fa-building' }} fs-1 text-primary"></i>
-                                        </div>
-                                    </div>
-                                    <h3 class="text-gray-800 fw-bolder fs-6 mb-0 lh-sm line-clamp-2 px-2">
-                                        {{ $item->nama_skpd }}</h3>
-                                </div>
-                            </div>
-                        </div>
-                    @endforeach --}}
+        <div class="status-box">
+            <span class="status-label"><i class="ph-fill ph-queue me-2"></i> Giliran Berikutnya</span>
+            <div class="status-value text-white opacity-75" id="nextNo">---</div>
+            <div class="fs-5 fw-medium text-white opacity-50 text-truncate" id="nextSkpd">Belum Ada Antrian</div>
+        </div>
 
-                    @include('kios_grid')
-                </div>
-                {{-- Spacer Bawah agar tidak mepet --}}
-                <div class="h-50px"></div>
+        <div class="status-box clock-display">
+            <div class="clock-time d-flex align-items-center gap-2">
+                <span id="jam-jam">00</span><span class="opacity-50">:</span><span id="jam-menit">00</span>
+            </div>
+            <div class="fs-5 fw-medium mt-4 text-info" id="jam-tanggal">Memuat...</div>
+            <div class="mt-4 px-4 py-2 rounded-pill bg-white bg-opacity-10 fs-7 fw-bold">
+                <i class="ph-fill ph-check-circle text-success me-1"></i> Sistem Online
             </div>
         </div>
     </div>
 
-    {{-- ================= MODALS ================= --}}
+    <main class="grid-container">
+        <div class="grid-header">
+            <div>
+                <h2 class="fs-1 fw-bold text-gray-900 mb-2">Pilih Layanan</h2>
+                <p class="fs-5 text-gray-500 mb-0">Sentuh instansi yang ingin Anda tuju untuk mengambil nomor.</p>
+            </div>
+        </div>
 
-    {{-- 1. Modal Daftar Layanan --}}
-    <div class="modal fade" id="modalLayanan" tabindex="-1" aria-hidden="true">
-        <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
-            <div class="modal-content rounded-4">
-                <div class="modal-header bg-primary py-3">
-                    <h3 class="modal-title fw-bolder text-white fs-5" id="judulSkpd">Pilih Layanan</h3>
-                    <div class="btn btn-icon btn-sm btn-active-light-primary ms-2" data-bs-dismiss="modal">
-                        <i class="ki-outline ki-cross fs-2 text-white"></i>
+        <div class="row g-6" id="gridSkpdContainer">
+            @include('kios_grid')
+        </div>
+    </main>
+
+    <div class="modal fade modal-clean" id="modalLayanan" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered modal-lg modal-dialog-scrollable">
+            <div class="modal-content">
+                <div class="modal-header d-flex justify-content-between align-items-center">
+                    <div>
+                        <h3 class="fw-black fs-2 mb-1" id="judulSkpd">Nama Instansi</h3>
+                        <span class="text-gray-500">Pilih jenis layanan yang tersedia</span>
                     </div>
+                    <button class="btn btn-icon btn-light rounded-circle" data-bs-dismiss="modal">
+                        <i class="ph ph-x fs-3"></i>
+                    </button>
                 </div>
-                <div class="modal-body px-4 py-4" id="daftarLayanan"></div>
+                <div class="modal-body" id="daftarLayanan"></div>
             </div>
         </div>
     </div>
 
-    {{-- 2. Modal Form Input --}}
-    {{-- <div class="modal fade" id="modalForm" tabindex="-1" aria-hidden="true">
-        <div class="modal-dialog modal-dialog-centered">
-            <div class="modal-content rounded-4">
-                <div class="modal-header bg-primary py-3">
-                    <h3 class="modal-title fw-bolder text-white fs-5" id="judulLayanan">Isi Data Diri</h3>
-                    <div class="btn btn-icon btn-sm btn-active-light-primary ms-2" onclick="backToLayanan()">
-                        <i class="fa fa-arrow-left fs-2 text-white"></i>
+    <div class="modal fade modal-clean" id="modalForm" tabindex="-1" data-bs-backdrop="static" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered modal-lg">
+            <div class="modal-content">
+                <div class="modal-header d-flex align-items-center gap-4">
+                    <button class="btn btn-icon btn-light rounded-circle" onclick="backToLayanan()">
+                        <i class="ph ph-arrow-left fs-3"></i>
+                    </button>
+                    <div>
+                        <h3 class="fw-black fs-2 mb-1" id="judulLayanan">Lengkapi Data</h3>
+                        <span class="text-gray-500">Informasi ini diperlukan untuk pencetakan tiket</span>
                     </div>
                 </div>
-                <div class="modal-body px-5 py-5">
-                    <form id="formAmbilAntrian" method="POST">
-                        @csrf
-                        <input type="hidden" name="skpd_id" id="inputSkpd">
-                        <input type="hidden" name="loket_id" id="inputLoket">
-
-                        <div class="fv-row mb-3">
-                            <label class="required form-label fw-bold fs-7">NIK (Sesuai KTP)</label>
-                            <input type="number" maxlength="16" name="nik" required
-                                class="form-control form-control-solid" placeholder="16 digit NIK" />
-                        </div>
-
-                        <div class="fv-row mb-3">
-                            <label class="required form-label fw-bold fs-7">Nama Lengkap</label>
-                            <input type="text" name="nama" required class="form-control form-control-solid"
-                                placeholder="Nama Lengkap" />
-                        </div>
-
-                        <div class="fv-row mb-5">
-                            <label class="required form-label fw-bold fs-7">No. HP / WhatsApp</label>
-                            <input type="number" maxlength="12" name="no_hp" required
-                                class="form-control form-control-solid" placeholder="0812..." />
-                        </div>
-
-                        <button type="submit" id="btnCetak" class="btn btn-primary w-100">
-                            <span id="btnText"><i class="fa fa-print me-2"></i> CETAK TIKET</span>
-                            <span id="btnLoading" class="d-none">
-                                <span class="spinner-border spinner-border-sm align-middle me-2"></span> Memproses...
-                            </span>
-                        </button>
-                    </form>
-                </div>
-            </div>
-        </div>
-    </div> --}}
-    {{-- 2. Modal Form Input (Updated) --}}
-    <div class="modal fade" id="modalForm" tabindex="-1" data-bs-backdrop="static" data-bs-keyboard="false"
-        aria-hidden="true">
-        {{-- Hapus 'modal-dialog-centered', ganti dengan 'modal-pos-top' --}}
-        <div class="modal-dialog modal-pos-top">
-            <div class="modal-content rounded-4 shadow-lg">
-                <div class="modal-header bg-primary py-3">
-                    <h3 class="modal-title fw-bolder text-white fs-5" id="judulLayanan">Isi Data Diri</h3>
-                    <div class="btn btn-icon btn-sm btn-active-light-primary ms-2" onclick="backToLayanan()">
-                        <i class="fa fa-arrow-left fs-2 text-white"></i>
-                    </div>
-                </div>
-                <div class="modal-body px-5 py-5">
+                <div class="modal-body">
                     <form id="formAmbilAntrian" method="POST" autocomplete="off">
                         @csrf
                         <input type="hidden" name="skpd_id" id="inputSkpd">
                         <input type="hidden" name="loket_id" id="inputLoket">
 
-                        <div class="fv-row mb-4">
-                            <label class="required form-label fw-bold fs-7">NIK (Sesuai KTP)</label>
-                            <input type="text" name="nik" id="inputNik"
-                                class="form-control form-control-solid fw-bolder text-dark"
-                                placeholder="16 Digit Angka" maxlength="16" inputmode="numeric"
-                                oninput="this.value = this.value.replace(/[^0-9]/g, '')" />
-                            {{-- Tempat Pesan Error --}}
-                            <div class="invalid-feedback fw-bold fs-7" id="error-nik"></div>
-                        </div>
-
-                        <div class="fv-row mb-4">
-                            <label class="required form-label fw-bold fs-7">Nama Lengkap</label>
-                            <input type="text" name="nama" id="inputNama"
-                                class="form-control form-control-solid fw-bold text-uppercase"
-                                placeholder="NAMA LENGKAP" />
-                            <div class="invalid-feedback fw-bold fs-7" id="error-nama"></div>
-                        </div>
-
-                        <div class="fv-row mb-4">
-                            <label class="required form-label fw-bold fs-7">Jenis Kelamin</label>
-                            <div class="d-flex align-items-center mt-2">
-                                <label class="form-check form-check-custom form-check-solid me-10 cursor-pointer">
-                                    <input class="form-check-input" type="radio" name="jk" value="L"
-                                        required />
-                                    <span class="form-check-label fw-bold text-gray-700">Laki-laki</span>
-                                </label>
-
-                                <label class="form-check form-check-custom form-check-solid cursor-pointer">
-                                    <input class="form-check-input" type="radio" name="jk" value="P"
-                                        required />
-                                    <span class="form-check-label fw-bold text-gray-700">Perempuan</span>
-                                </label>
+                        <div class="row g-5">
+                            <div class="col-md-6">
+                                <label class="form-label fw-bold text-gray-700 ms-1">Nomor Induk Kependudukan (NIK)</label>
+                                <input type="text" name="nik" id="inputNik" class="form-control custom-input" placeholder="16 digit angka KTP" maxlength="16" oninput="this.value = this.value.replace(/[^0-9]/g, '')">
+                                <div class="invalid-feedback ms-1 mt-2 fw-medium" id="error-nik"></div>
                             </div>
-                            <div class="invalid-feedback fw-bold fs-7" id="error-jk" style="display: block;"></div>
+                            <div class="col-md-6">
+                                <label class="form-label fw-bold text-gray-700 ms-1">Nama Lengkap</label>
+                                <input type="text" name="nama" id="inputNama" class="form-control custom-input text-uppercase" placeholder="Sesuai identitas resmi">
+                                <div class="invalid-feedback ms-1 mt-2 fw-medium" id="error-nama"></div>
+                            </div>
+                            <div class="col-md-6">
+                                <label class="form-label fw-bold text-gray-700 ms-1">Jenis Kelamin</label>
+                                <div class="d-flex gap-4 mt-2">
+                                    <label class="d-flex align-items-center p-3 bg-white border rounded-3 cursor-pointer flex-fill transition-all hover-border-primary">
+                                        <input class="form-check-input me-3" type="radio" name="jk" value="L" required>
+                                        <span class="fw-bold">Laki-laki</span>
+                                    </label>
+                                    <label class="d-flex align-items-center p-3 bg-white border rounded-3 cursor-pointer flex-fill transition-all hover-border-primary">
+                                        <input class="form-check-input me-3" type="radio" name="jk" value="P" required>
+                                        <span class="fw-bold">Perempuan</span>
+                                    </label>
+                                </div>
+                                <div class="invalid-feedback ms-1 mt-2 fw-medium" id="error-jk" style="display: block;"></div>
+                            </div>
+                            <div class="col-md-6">
+                                <label class="form-label fw-bold text-gray-700 ms-1">Nomor WhatsApp / HP</label>
+                                <input type="text" name="no_hp" id="inputHp" class="form-control custom-input" placeholder="08..." maxlength="14" oninput="this.value = this.value.replace(/[^0-9]/g, '')">
+                                <div class="invalid-feedback ms-1 mt-2 fw-medium" id="error-no_hp"></div>
+                            </div>
                         </div>
 
-                        <div class="fv-row mb-5">
-                            <label class="required form-label fw-bold fs-7">No. HP / WhatsApp</label>
-                            <input type="text" name="no_hp" id="inputHp"
-                                class="form-control form-control-solid fw-bolder" placeholder="0812..."
-                                maxlength="14" inputmode="numeric"
-                                oninput="this.value = this.value.replace(/[^0-9]/g, '')" />
-                            <div class="invalid-feedback fw-bold fs-7" id="error-no_hp"></div>
+                        <div class="mt-10">
+                            <button type="submit" id="btnCetak" class="btn btn-primary w-100 py-4 rounded-4 fs-4 fw-bold shadow-sm" style="background: var(--accent-color); border:none;">
+                                <span id="btnText"><i class="ph-fill ph-printer me-2"></i> Cetak Tiket Antrian</span>
+                                <span id="btnLoading" class="d-none">
+                                    <span class="spinner-border spinner-border-sm align-middle me-2"></span> Memproses...
+                                </span>
+                            </button>
                         </div>
-
-                        <button type="submit" id="btnCetak" class="btn btn-primary w-100 py-3 fs-4 fw-bold">
-                            <span id="btnText"><i class="fa fa-print me-2"></i> CETAK TIKET</span>
-                            <span id="btnLoading" class="d-none">
-                                <span class="spinner-border spinner-border-sm align-middle me-2"></span> Memproses...
-                            </span>
-                        </button>
                     </form>
                 </div>
             </div>
         </div>
     </div>
 
-    {{-- 3. Modal Lokasi --}}
-    <div class="modal fade" id="modalLokasi" tabindex="-1" aria-hidden="true">
-        <div class="modal-dialog modal-dialog-centered modal-lg modal-dialog-scrollable">
-            <div class="modal-content rounded-4">
-                <div class="modal-header bg-dark py-3">
-                    <h3 class="modal-title fw-bolder text-white fs-5">Lokasi Stand</h3>
-                    <div class="btn btn-icon btn-sm btn-active-light-primary ms-2" data-bs-dismiss="modal">
-                        <i class="ki-outline ki-cross fs-2 text-white"></i>
+    <div class="modal fade modal-clean" id="modalLokasi" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered modal-xl modal-dialog-scrollable">
+            <div class="modal-content">
+                <div class="modal-header d-flex justify-content-between align-items-center">
+                    <div>
+                        <h3 class="fw-black fs-2 mb-1">Denah & Lokasi Stand</h3>
+                        <span class="text-gray-500">Temukan posisi instansi tujuan Anda</span>
                     </div>
+                    <button class="btn btn-icon btn-light rounded-circle" data-bs-dismiss="modal">
+                        <i class="ph ph-x fs-3"></i>
+                    </button>
                 </div>
-                <div class="modal-body px-4 py-4 bg-light">
-                    <div class="row g-3">
+                <div class="modal-body">
+                    <div class="row g-4">
                         @forelse ($skpd as $item)
                             @if (!empty($item->lokasi))
-                                <div class="col-12 col-md-6">
-                                    <div class="card border border-gray-300 shadow-sm h-100">
-                                        <div class="card-body d-flex align-items-center p-3">
-                                            <div class="symbol symbol-35px me-3">
-                                                <span class="symbol-label bg-light-primary text-primary">
-                                                    <i class="fa fa-building-user"></i>
-                                                </span>
-                                            </div>
-                                            <div class="d-flex flex-column">
-                                                <span
-                                                    class="text-gray-800 fw-bold fs-7 mb-1">{{ $item->nama_skpd }}</span>
-                                                <span class="text-muted fw-semibold fs-9">
-                                                    <i class="fa fa-map-pin text-danger me-1"></i> {{ $item->lokasi }}
-                                                </span>
-                                            </div>
+                                <div class="col-md-6 col-lg-4">
+                                    <div class="bg-white p-4 rounded-4 border shadow-sm d-flex align-items-center gap-4 h-100">
+                                        <div class="bg-light-primary text-primary p-3 rounded-3">
+                                            <i class="ph-fill ph-storefront fs-1"></i>
+                                        </div>
+                                        <div>
+                                            <h4 class="fs-6 fw-bold text-gray-900 mb-1 line-clamp-2">{{ $item->nama_skpd }}</h4>
+                                            <span class="badge bg-light-info text-info fw-bold"><i class="ph-fill ph-map-pin me-1"></i> {{ $item->lokasi }}</span>
                                         </div>
                                     </div>
                                 </div>
                             @endif
                         @empty
-                            <div class="col-12 text-center py-5">
-                                <div class="text-gray-500 fw-bold fs-7">Lokasi belum tersedia.</div>
+                            <div class="col-12 text-center py-10">
+                                <i class="ph ph-map-trifold fs-5x text-gray-300 mb-4 block"></i>
+                                <div class="text-gray-500 fw-bold fs-5">Informasi lokasi belum tersedia.</div>
                             </div>
                         @endforelse
                     </div>
@@ -521,52 +418,33 @@
         </div>
     </div>
 
-    {{-- 4. Modal Sukses --}}
-    <div class="modal fade" id="modalSukses" tabindex="-1" data-bs-backdrop="static" data-bs-keyboard="false"
-        aria-hidden="true">
+    <div class="modal fade modal-clean" id="modalSukses" tabindex="-1" data-bs-backdrop="static" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered modal-sm">
-            <div class="modal-content rounded-4 shadow-lg border-0">
-                <div class="modal-body text-center p-8">
-                    <div class="mb-4"><i class="ki-outline ki-check-circle fs-4x text-success"></i></div>
-                    <h1 class="fw-black text-primary fs-2x mb-2 border border-dashed border-primary rounded p-2 bg-light-primary"
-                        id="tiketBerhasil">---</h1>
-                    <div class="fw-bold text-gray-600 fs-7 mb-5">Silakan menunggu nomor antrian Anda dipanggil petugas.
-                    </div>
-                    <button type="button" class="btn btn-primary w-100" data-bs-dismiss="modal">SELESAI</button>
+            <div class="modal-content">
+                <div class="modal-body text-center p-10">
+                    <div class="mb-6"><i class="ph-fill ph-check-circle fs-5x text-success"></i></div>
+                    <h1 class="fw-black text-gray-900 fs-3x mb-4 py-4 border rounded-4 bg-light" id="tiketBerhasil">---</h1>
+                    <div class="fw-medium text-gray-500 fs-6 mb-8">Silakan menunggu nomor antrian Anda dipanggil petugas.</div>
+                    <button type="button" class="btn btn-primary w-100 py-3 rounded-pill fw-bold" data-bs-dismiss="modal" style="background: var(--accent-color); border:none;">SELESAI</button>
                 </div>
             </div>
         </div>
     </div>
 
-    {{-- =========================================
-         🔥 AREA PRINT STRUK (HIDDEN)
-         ========================================= --}}
-    {{-- =========================================
-         🔥 AREA PRINT STRUK (80mm)
-         ========================================= --}}
     <div id="area-struk" style="display: none;">
-        {{-- Font size dinaikkan sedikit (14px -> 16px) karena kertas lebih lebar --}}
-        <div
-            style="width: 100%; font-family: 'Courier New', monospace; text-align: center; font-size: 16px; font-weight: bold; line-height: 1.2;">
-
-            <div style="font-size: 18px;">MPP</div>
-            <div style="font-size: 16px;">KABUPATEN DELI SERDANG</div>
+        <div style="width: 100%; font-family: 'Courier New', monospace; text-align: center; font-size: 16px; font-weight: bold; line-height: 1.2;">
+            <div style="font-size: 18px;">ANTRIAN</div>
+            <div style="font-size: 16px;">MAL PELAYANAN PUBLIK</div>
             <div style="border-bottom: 2px dashed black; margin: 10px 0;"></div>
-
             <div style="margin-top: 10px; font-size: 14px;">NOMOR ANTRIAN</div>
-            {{-- Font Nomor Antrian diperbesar --}}
             <div id="struk-nomor" style="font-size: 64px; font-weight: 800; margin: 5px 0; line-height: 1;">---</div>
-
             <div style="margin-top: 10px; font-size: 14px;">LOKET</div>
             <div id="struk-layanan" style="font-size: 18px; text-transform: uppercase; padding: 0 5px;">---</div>
-
             <div style="border-bottom: 2px dashed black; margin: 10px 0;"></div>
             <div id="struk-waktu" style="font-size: 14px;">---</div>
             <div style="border-bottom: 2px dashed black; margin: 10px 0;"></div>
-
             <div style="margin-top: 15px; font-style: italic; font-size: 12px; font-weight: normal;">
-                Silakan menunggu dipanggil<br>
-                Terima Kasih
+                Silakan menunggu dipanggil<br>Terima Kasih
             </div>
             <br><br>.
         </div>
@@ -574,7 +452,6 @@
 
     <audio id="tingtung" src="{{ asset('assets/audio/tingtung.mp3') }}"></audio>
 
-    {{-- SCRIPTS --}}
     <script src="{{ asset('assets/plugins/global/plugins.bundle.js') }}"></script>
     <script src="{{ asset('assets/js/scripts.bundle.js') }}"></script>
 
@@ -583,32 +460,20 @@
         const bell = document.getElementById('tingtung');
         let speechQueue = [];
 
-        // ==========================================
-        // FUNGSI CETAK STRUK (WINDOW.PRINT)
-        // ==========================================
         window.cetakStruk = function(data) {
-            // 1. Isi data ke HTML Struk
             document.getElementById('struk-nomor').innerText = data.tiket;
             document.getElementById('struk-layanan').innerText = data.layanan.toUpperCase();
             document.getElementById('struk-waktu').innerText = 'Tgl : ' + data.tgl;
 
-            // 2. Tampilkan area struk (tapi CSS @media print yang akan handle sisanya)
             const areaStruk = document.getElementById('area-struk');
             areaStruk.style.display = 'block';
-
-            // 3. Eksekusi Print Browser
             window.print();
 
-            // 4. Sembunyikan lagi setelah print dialog tertutup/selesai
-            // Delay 1 detik agar proses spooling masuk
             setTimeout(() => {
                 areaStruk.style.display = 'none';
             }, 1000);
         }
 
-        // ==========================================
-        // FUNGSI REFRESH GRID SKPD TANPA RELOAD PAGE
-        // ==========================================
         function refreshGridSkpd() {
             fetch("{{ route('kios.grid') }}")
                 .then(res => res.text())
@@ -618,9 +483,6 @@
                 .catch(e => console.error("Gagal refresh grid", e));
         }
 
-        // ==========================================
-        // LOGIKA JAM & PENGECEKAN WAKTU OTOMATIS
-        // ==========================================
         function updateClock() {
             const now = new Date();
             const days = ['Minggu', 'Senin', 'Selasa', 'Rabu', 'Kamis', 'Jumat', 'Sabtu'];
@@ -628,12 +490,8 @@
 
             document.getElementById('jam-jam').innerText = String(now.getHours()).padStart(2, '0');
             document.getElementById('jam-menit').innerText = String(now.getMinutes()).padStart(2, '0');
-            document.getElementById('jam-detik').innerText = String(now.getSeconds()).padStart(2, '0');
-            document.getElementById('jam-tanggal').innerText =
-                `${days[now.getDay()]}, ${now.getDate()} ${months[now.getMonth()]} ${now.getFullYear()}`;
+            document.getElementById('jam-tanggal').innerText = `${days[now.getDay()]}, ${now.getDate()} ${months[now.getMonth()]} ${now.getFullYear()}`;
 
-            // PENTING: Refresh grid SKPD otomatis setiap pergantian menit (detik == 0)
-            // Ini menangani jam tutup layanan tanpa harus di-trigger dari server.
             if (now.getSeconds() === 0) {
                 refreshGridSkpd();
             }
@@ -641,9 +499,6 @@
         setInterval(updateClock, 1000);
         updateClock();
 
-        // ==========================================
-        // WEBSOCKET LISTENER (REVERB)
-        // ==========================================
         setTimeout(() => {
             if (window.Echo) {
                 window.Echo.channel('antrian-channel')
@@ -655,10 +510,10 @@
                     })
                     .listen('.antrian-baru', (e) => {
                         fetchAntrianData();
-                        refreshGridSkpd(); // Refresh grid karena kuota mungkin sudah habis
+                        refreshGridSkpd();
                     })
                     .listen('.status-tenant-updated', (e) => {
-                        refreshGridSkpd(); // Refresh grid karena Admin mengubah settingan
+                        refreshGridSkpd();
                     });
             }
         }, 1000);
@@ -673,7 +528,6 @@
                     if (data.next) {
                         document.getElementById('nextNo').innerText = data.next.no_antrian;
                         document.getElementById('nextSkpd').innerText = data.next.nama_skpd;
-                        // document.getElementById('nextLoket').innerText = data.next.nama_loket;
                     }
                 })
                 .catch(e => console.log("Fetch error", e));
@@ -684,8 +538,6 @@
             document.getElementById('panggilanNo').innerText = nomor;
             document.getElementById('panggilanLoket').innerText = loket;
             document.getElementById('panggilanSkpd').innerText = skpd;
-            const card = document.getElementById('notifikasiPanggilan');
-            card.classList.add('bg-warning');
         }
 
         function putarAudio(data) {
@@ -724,14 +576,12 @@
             container.innerHTML = '';
 
             if (skpd.lokets.length === 0) {
-                container.innerHTML = `<div class="text-center py-5 text-muted fw-bold">Belum ada layanan.</div>`;
+                container.innerHTML = `<div class="text-center py-10"><i class="ph ph-file-dashed fs-4x text-gray-300 mb-3 block"></i><div class="text-gray-500 fw-bold">Belum ada layanan tersedia.</div></div>`;
             }
             skpd.lokets.forEach(loket => {
                 const btn = document.createElement('button');
-                btn.className =
-                    'btn btn-outline btn-outline-dashed btn-outline-default p-3 w-100 mb-2 d-flex justify-content-between align-items-center';
-                btn.innerHTML =
-                    `<span class="fw-bold fs-7 text-gray-800">${loket.nama_loket}</span><i class="fa fa-chevron-right text-gray-400 fs-8"></i>`;
+                btn.className = 'btn btn-outline border-gray-200 text-gray-800 p-4 w-100 mb-3 d-flex justify-content-between align-items-center rounded-3 fs-5 bg-white shadow-sm';
+                btn.innerHTML = `<span class="fw-bold">${loket.nama_loket}</span><i class="ph ph-caret-right text-gray-400 fs-3"></i>`;
                 btn.onclick = () => window.openForm(skpd.id, loket.id, loket.nama_loket);
                 container.appendChild(btn);
             });
@@ -751,9 +601,6 @@
             new bootstrap.Modal(document.getElementById('modalLayanan')).show();
         }
 
-        // ==========================================
-        // SUBMIT FORM (AJAX)
-        // ==========================================
         const form = document.getElementById('formAmbilAntrian');
         form.addEventListener('submit', async function(e) {
             e.preventDefault();
@@ -762,7 +609,6 @@
             document.querySelectorAll('.is-invalid').forEach(el => el.classList.remove('is-invalid'));
             document.querySelectorAll('.invalid-feedback').forEach(el => el.innerText = '');
 
-            // Loading State
             btn.disabled = true;
             document.getElementById('btnText').classList.add('d-none');
             document.getElementById('btnLoading').classList.remove('d-none');
@@ -779,34 +625,22 @@
                 const result = await response.json();
 
                 if (response.ok && result.success) {
-                    // 1. Tutup Modal Form
                     bootstrap.Modal.getInstance(document.getElementById('modalForm'))?.hide();
-
-                    // 2. Tampilkan Modal Sukses
                     document.getElementById('tiketBerhasil').innerText = result.tiket;
                     new bootstrap.Modal(document.getElementById('modalSukses')).show();
-
-                    // 3. Reset Form
                     form.reset();
-
-                    // 4. 🔥 EKSEKUSI CETAK WINDOW.PRINT 🔥
                     window.cetakStruk(result);
-
                 } else {
-                    // GAGAL VALIDASI
                     if (result.errors) {
-                        // Loop error dari Controller dan tempel ke field masing-masing
                         for (const [field, messages] of Object.entries(result.errors)) {
                             const inputField = document.querySelector(`[name="${field}"]`);
                             const errorDiv = document.getElementById(`error-${field}`);
-
                             if (inputField && errorDiv) {
-                                inputField.classList.add('is-invalid'); // Tambah border merah
-                                errorDiv.innerText = messages[0]; // Tampilkan pesan error pertama
+                                inputField.classList.add('is-invalid');
+                                errorDiv.innerText = messages[0];
                             }
                         }
                     } else {
-                        // Error umum lain (misal server error)
                         Swal.fire("Gagal", result.message || "Terjadi kesalahan", "error");
                     }
                 }
@@ -814,7 +648,6 @@
                 console.error(error);
                 Swal.fire("Error", "Gagal menghubungi server", "error");
             } finally {
-                // Reset Button State
                 btn.disabled = false;
                 document.getElementById('btnText').classList.remove('d-none');
                 document.getElementById('btnLoading').classList.add('d-none');
@@ -826,10 +659,7 @@
                 bell.pause();
                 bell.currentTime = 0;
             }).catch(() => {});
-        }, {
-            once: true
-        });
+        }, { once: true });
     </script>
 </body>
-
 </html>

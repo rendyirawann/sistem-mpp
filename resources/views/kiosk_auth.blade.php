@@ -3,7 +3,7 @@
 
 <head>
     <meta charset="UTF-8">
-    <title>Unlock Kiosk - MPP Deli Serdang</title>
+    <title>Unlock Kiosk - Sistem MPP Terpadu</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link href="{{ asset('assets/plugins/global/plugins.bundle.css') }}" rel="stylesheet" type="text/css" />
     <link href="{{ asset('assets/css/style.bundle.css') }}" rel="stylesheet" type="text/css" />
@@ -54,8 +54,8 @@
 
 <body>
     <div class="auth-card">
-        <img src="{{ asset('images/logo_pemda.png') }}" alt="Logo" class="logo">
-        <h2 class="fw-bolder text-dark mb-2">Kiosk Authorized</h2>
+        <img src="{{ asset('assets/media/logos/mpp_logo_premium.png') }}" alt="Logo" class="logo">
+        <h2 class="fw-bolder text-dark mb-2">Akses Kiosk MPP</h2>
         <p class="text-muted fs-7 mb-8">Perangkat ini belum terverifikasi. Masukkan Kode Rahasia untuk membuka layanan Kiosk Antrian.</p>
 
         @if(session('error'))

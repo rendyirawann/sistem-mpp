@@ -1,671 +1,439 @@
 <!DOCTYPE html>
 <html lang="id">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Survey Kepuasan Masyarakat</title>
 
-    {{-- 1. ASSET METRONIC (Mandatory) --}}
     <link href="{{ asset('assets/plugins/global/plugins.bundle.css') }}" rel="stylesheet" type="text/css" />
     <link href="{{ asset('assets/css/style.bundle.css') }}" rel="stylesheet" type="text/css" />
-    <link rel="shortcut icon" href="{{ asset('assets/media/logos/logo_deliserdang.png') }}" />
+    <link rel="shortcut icon" href="{{ asset('assets/media/logos/mpp_logo_premium.png') }}" />
 
-    {{-- Font --}}
-    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap"
-        rel="stylesheet">
+    {{-- Phosphor Icons & Fonts --}}
+    <script src="https://unpkg.com/@phosphor-icons/web"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
 
     <style>
+        :root {
+            --surface: #ffffff;
+            --background: #fdfdfd;
+            --primary: #111827;
+            --secondary: #6b7280;
+            --accent: #4f46e5;
+            --accent-light: #e0e7ff;
+            --radius-lg: 32px;
+            --shadow-soft: 0 20px 40px -20px rgba(0,0,0,0.08);
+        }
+
         body {
-            font-family: 'Plus Jakarta Sans', sans-serif;
-            background-color: #f5f8fa;
-            /* Background Metronic Default */
+            font-family: 'Outfit', sans-serif;
+            background-color: var(--background);
+            background-image: radial-gradient(circle at 50% 0%, rgba(79, 70, 229, 0.05) 0%, transparent 70%);
+            min-height: 100vh;
+            color: var(--primary);
+            display: flex;
+            align-items: center;
+            justify-content: center;
         }
 
-        /* Animasi Transisi Sederhana */
-        .step-content {
-            display: none;
-        }
-
-        .step-content.active {
-            display: block;
-            animation: fadeIn 0.5s;
-        }
+        .step-content { display: none; }
+        .step-content.active { display: block; animation: fadeIn 0.5s ease-out; }
 
         @keyframes fadeIn {
-            from {
-                opacity: 0;
-                transform: translateY(10px);
-            }
-
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
         }
 
-        /* Custom untuk Radio Button agar terlihat seperti Card tombol */
-        .btn-check:checked+.btn.btn-outline.btn-outline-dashed {
-            background-color: #f1faff;
-            /* Light Blue */
-            border-color: #009ef7;
-            /* Primary */
-            color: #009ef7;
+        .main-card {
+            background: var(--surface);
+            border-radius: var(--radius-lg);
+            box-shadow: var(--shadow-soft);
+            border: 1px solid rgba(0,0,0,0.04);
+            width: 100%;
+            max-width: 800px;
+            overflow: hidden;
         }
+
+        .header-section {
+            padding: 48px;
+            text-align: center;
+            border-bottom: 1px solid rgba(0,0,0,0.05);
+        }
+
+        .brand-logo {
+            height: 64px;
+            width: 64px;
+            object-fit: contain;
+            border-radius: 16px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+            margin-bottom: 24px;
+        }
+
+        .custom-input {
+            background: var(--background);
+            border: 2px solid transparent;
+            border-radius: 16px;
+            padding: 16px 24px;
+            font-size: 1.125rem;
+            font-weight: 500;
+            color: var(--primary);
+            box-shadow: 0 2px 10px rgba(0,0,0,0.02) inset;
+            transition: all 0.2s;
+        }
+        
+        .custom-input:focus {
+            border-color: var(--accent);
+            box-shadow: 0 0 0 4px var(--accent-light);
+            background: var(--surface);
+        }
+
+        .btn-apple {
+            background: var(--primary);
+            color: white;
+            border-radius: 100px;
+            padding: 16px 32px;
+            font-weight: 600;
+            font-size: 1.125rem;
+            transition: all 0.2s;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 12px;
+            border: none;
+            width: 100%;
+        }
+        .btn-apple:hover {
+            background: #000;
+            color: white;
+            transform: scale(1.02);
+        }
+        
+        .btn-apple.primary {
+            background: var(--accent);
+        }
+        .btn-apple.primary:hover {
+            background: #4338ca;
+        }
+
+        .info-card {
+            background: var(--accent-light);
+            border-radius: 20px;
+            padding: 24px;
+            display: flex;
+            align-items: center;
+            gap: 20px;
+            margin-bottom: 32px;
+        }
+
+        .question-card {
+            background: var(--background);
+            border-radius: 20px;
+            padding: 32px;
+            margin-bottom: 24px;
+            border: 1px solid rgba(0,0,0,0.03);
+        }
+
+        .btn-check:checked+.btn-outline-dashed {
+            background: var(--accent-light) !important;
+            border-color: var(--accent) !important;
+            color: var(--accent) !important;
+            box-shadow: 0 4px 12px rgba(79, 70, 229, 0.15);
+        }
+        
+        .option-btn {
+            background: var(--surface);
+            border: 1px solid rgba(0,0,0,0.08);
+            border-radius: 16px;
+            padding: 16px;
+            font-weight: 600;
+            color: var(--secondary);
+            transition: all 0.2s;
+        }
+        
+        .option-btn:hover {
+            border-color: var(--accent);
+            color: var(--accent);
+        }
+
     </style>
 </head>
 
-<body id="kt_body" class="app-blank bgi-size-cover bgi-position-center bgi-no-repeat">
+<body id="kt_body" class="p-5 p-lg-10">
 
-    <div class="d-flex flex-column flex-root">
-        <div class="d-flex flex-column flex-column-fluid flex-center p-10">
+    <div class="main-card">
+        <div class="header-section">
+            <img src="{{ asset('assets/media/logos/mpp_logo_premium.png') }}" class="brand-logo" alt="Logo">
+            <h1 class="fw-black fs-2x mb-2 text-gray-900" style="letter-spacing: -1px;">Survey Kepuasan Masyarakat</h1>
+            <span class="text-gray-500 fs-5 fw-medium">Sistem Informasi Layanan Publik Terpadu</span>
+        </div>
 
-            {{-- CONTAINER UTAMA --}}
-            <div class="card card-flush w-100 mw-800px shadow-lg border-0 rounded-4">
-
-                {{-- HEADER BIRU --}}
-                <div
-                    class="card-header bg-primary py-7 d-flex justify-content-center align-items-center flex-column rounded-top-4">
-                    <h1 class="text-white fw-bolder fs-2x mb-1">SURVEY KEPUASAN</h1>
-                    <span class="text-white opacity-75 fs-6 fw-bold">MPP Kabupaten Deli Serdang</span>
+        <div class="p-8 p-lg-12">
+            {{-- STEP 1: INPUT NOMOR ANTRIAN --}}
+            <div id="step-1" class="step-content active text-center py-5">
+                <div class="mb-10">
+                    <div class="d-inline-flex align-items-center justify-content-center bg-light-primary text-primary rounded-circle mb-6" style="width: 80px; height: 80px;">
+                        <i class="ph-fill ph-ticket fs-4x"></i>
+                    </div>
+                    <h2 class="fw-black text-gray-900 fs-1 mb-3">Selamat Datang</h2>
+                    <p class="text-gray-500 fw-medium fs-5">Silakan masukkan nomor antrian Anda untuk memulai pengisian survey.</p>
                 </div>
 
-                <div class="card-body p-lg-10 p-5">
-
-                    {{-- STEP 1: INPUT NOMOR ANTRIAN --}}
-                    <div id="step-1" class="step-content active text-center py-5">
-                        <div class="mb-10">
-                            <h2 class="fw-bolder text-dark mb-3">Selamat Datang</h2>
-                            <div class="text-muted fw-bold fs-5">Silakan masukkan nomor antrian Anda untuk memulai.
-                            </div>
+                <div class="mw-500px mx-auto">
+                    <div class="d-flex flex-column gap-4 mb-5">
+                        <input type="text" id="no_antrian" class="form-control custom-input text-center fs-3 fw-bold text-uppercase" placeholder="Contoh: A-001" maxlength="25" autocomplete="off" />
+                        <button type="button" onclick="cekAntrian()" class="btn-apple primary" id="btn-cek">
+                            <i class="ph-bold ph-magnifying-glass"></i> Cari Nomor Antrian
+                        </button>
+                    </div>
+                    
+                    <div id="error-msg" class="alert alert-dismissible bg-light-danger border border-danger border-dashed d-flex align-items-center p-5 mb-10 d-none rounded-4">
+                        <i class="ph-fill ph-warning-circle fs-2x text-danger me-4"></i>
+                        <div class="d-flex flex-column text-start">
+                            <h5 class="mb-1 fw-bold text-danger">Gagal Ditemukan</h5>
+                            <span id="text-error" class="text-danger opacity-75 fw-medium">Nomor antrian tidak terdaftar.</span>
                         </div>
+                    </div>
+                </div>
+            </div>
 
-                        <div class="mw-600px mx-auto">
-                            <div class="input-group input-group-lg input-group-solid mb-5">
-                                <input type="text" id="no_antrian"
-                                    class="form-control form-control-solid text-center fs-3 fw-bolder text-uppercase"
-                                    placeholder="A-001 (Silahkan Input Tanda '-')" maxlength="25" autocomplete="off" />
+            <form id="formSkm" method="POST" action="{{ route('skm.store') }}">
+                @csrf
+                <input type="hidden" name="antrian_id" id="antrian_id">
 
-                                <button type="button" onclick="cekAntrian()" class="btn btn-primary" id="btn-cek">
-                                    <i class="ki-outline ki-magnifier fs-2"></i> Cari
-                                </button>
-                            </div>
-                            <div id="error-msg"
-                                class="alert alert-dismissible bg-light-danger border border-danger border-dashed d-flex flex-column flex-sm-row p-5 mb-10 d-none">
-                                <i class="ki-outline ki-message-text-2 fs-2hx text-danger me-4 mb-5 mb-sm-0"></i>
-                                <div class="d-flex flex-column pe-0 pe-sm-10">
-                                    <h5 class="mb-1">Gagal</h5>
-                                    <span id="text-error">Nomor tidak ditemukan.</span>
-                                </div>
-                            </div>
+                {{-- INFO BAR --}}
+                <div id="info-bar" class="info-card d-none">
+                    <i class="ph-fill ph-user-circle fs-3x text-primary"></i>
+                    <div>
+                        <h4 class="text-gray-900 fw-bold fs-4 mb-1" id="cust-nama">-</h4>
+                        <div class="text-gray-500 fw-medium fs-7 mb-1">
+                            NIK: <span id="cust-nik" class="fw-bold text-gray-700">-</span> &bull; 
+                            Jenis Kelamin: <span id="cust-jk" class="fw-bold text-gray-700">-</span>
+                        </div>
+                        <div class="text-primary fw-bold fs-7 d-flex align-items-center gap-1">
+                            <i class="ph-fill ph-buildings"></i> <span id="cust-instansi">-</span>
+                        </div>
+                    </div>
+                </div>
+
+                {{-- STEP 2: DATA DIRI --}}
+                <div id="step-2" class="step-content">
+                    <div class="mb-10 border-bottom pb-6">
+                        <h2 class="fw-black text-gray-900 fs-2">Data Responden</h2>
+                        <p class="text-gray-500 fw-medium">Lengkapi informasi dasar Anda berikut ini.</p>
+                    </div>
+
+                    <div class="row g-6 mb-10">
+                        <div class="col-md-6">
+                            <label class="form-label fw-bold text-gray-700 ms-1">No. Antrian</label>
+                            <input type="text" id="disp_no_antrian" class="form-control custom-input bg-light text-gray-500" readonly />
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label required fw-bold text-gray-700 ms-1">Umur (Tahun)</label>
+                            <input type="number" name="umur" id="umur" class="form-control custom-input save-local" placeholder="Contoh: 25" required />
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label required fw-bold text-gray-700 ms-1">Pendidikan Terakhir</label>
+                            <select name="pendidikan" id="pendidikan" class="form-select custom-input save-local" required>
+                                <option value="" disabled selected>Pilih Pendidikan</option>
+                                <option value="SD">SD</option>
+                                <option value="SMP">SMP</option>
+                                <option value="SMA">SMA</option>
+                                <option value="D1-D3">D1 - D3</option>
+                                <option value="S1">S1</option>
+                                <option value="S2">S2</option>
+                                <option value="S3">S3</option>
+                            </select>
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label required fw-bold text-gray-700 ms-1">Pekerjaan Utama</label>
+                            <select name="pekerjaan" id="pekerjaan" class="form-select custom-input save-local" required>
+                                <option value="" disabled selected>Pilih Pekerjaan</option>
+                                <option value="PNS">PNS / TNI / Polri</option>
+                                <option value="Pegawai Swasta">Pegawai Swasta</option>
+                                <option value="Wiraswasta">Wiraswasta / Pengusaha</option>
+                                <option value="Pelajar">Pelajar / Mahasiswa</option>
+                                <option value="Lainnya">Lainnya</option>
+                            </select>
                         </div>
                     </div>
 
-                    {{-- FORM UTAMA (STEP 2 & 3) --}}
-                    <form id="mainForm" action="{{ route('skm.store') }}" method="POST">
-                        @csrf
-                        <input type="hidden" name="antrian_id" id="antrian_id">
-
-                        {{-- INFO BAR (HIDDEN DEFAULT) --}}
-                        <div id="info-bar"
-                            class="notice d-flex bg-light-primary rounded border-primary border border-dashed p-6 mb-8 d-none">
-                            <i class="ki-outline ki-user-square fs-2tx text-primary me-4"></i>
-                            <div class="d-flex flex-stack flex-grow-1 flex-wrap flex-md-nowrap">
-                                <div class="mb-3 mb-md-0 fw-semibold">
-                                    <h4 class="text-gray-900 fw-bold" id="cust-nama">-</h4>
-                                    <div class="fs-6 text-gray-700 pe-7">
-                                        NIK: <span id="cust-nik" class="fw-bold font-monospace">-</span> |
-                                        Jenis Kelamin: <span id="cust-jk" class="fw-bold text-dark">-</span>
-                                    </div>
-                                    <div class="fs-6 text-primary mt-1"><i class="fa fa-building me-1 text-primary"></i>
-                                        <span id="cust-instansi">-</span>
-                                    </div>
-                                </div>
-                                <div class="d-flex align-items-center">
-                                    <span id="cust-layanan"
-                                        class="badge badge-lg badge-primary fw-bolder fs-6 px-4 py-2">-</span>
-                                </div>
-                            </div>
-                        </div>
-
-                        {{-- STEP 2: DATA DIRI --}}
-                        <div id="step-2" class="step-content">
-                            <div class="pb-5 pb-lg-10">
-                                <h2 class="fw-bolder text-dark">Data Diri Responden</h2>
-                                <div class="text-muted fw-bold fs-6">Mohon lengkapi data diri Anda.</div>
-                            </div>
-
-                            <div class="row g-5 mb-8">
-                                <div class="col-md-6">
-                                    <label class="form-label fw-bold">No. Antrian</label>
-                                    <input type="text" id="disp_no_antrian"
-                                        class="form-control form-control-solid bg-secondary" readonly />
-                                </div>
-                                <div class="col-md-6">
-                                    <label class="form-label required fw-bold">Umur (Tahun)</label>
-                                    <input type="number" name="umur" id="umur"
-                                        class="form-control form-control-solid save-local" placeholder="Contoh: 25"
-                                        required />
-                                </div>
-                                {{-- <div class="col-md-6">
-                                    <label class="form-label required fw-bold">Jenis Kelamin</label>
-                           
-                                    <select name="jk" id="jk"
-                                        class="form-select form-select-solid save-local" data-control="select2"
-                                        data-placeholder="Pilih Jenis Kelamin" data-hide-search="true" required>
-                                        <option></option>
-                                        <option value="L">Laki-laki</option>
-                                        <option value="P">Perempuan</option>
-                                    </select>
-                                </div> --}}
-                                <div class="col-md-6">
-                                    <label class="form-label required fw-bold">Pendidikan Terakhir</label>
-                                    <select name="pendidikan" id="pendidikan"
-                                        class="form-select form-select-solid save-local" data-control="select2"
-                                        data-placeholder="Pilih Pendidikan" required>
-                                        <option></option>
-                                        @foreach ($pendidikan as $item)
-                                            <option value="{{ $item['name'] ?? $item['nama'] }}">
-                                                {{ $item['name'] ?? $item['nama'] }}</option>
-                                        @endforeach
-                                    </select>
-                                </div>
-                                <div class="col-md-6">
-                                    <label class="form-label required fw-bold">Pekerjaan</label>
-                                    <select name="pekerjaan" id="pekerjaan"
-                                        class="form-select form-select-solid save-local" data-control="select2"
-                                        data-placeholder="Pilih Pekerjaan" required>
-                                        <option></option>
-                                        @foreach ($pekerjaan as $item)
-                                            <option value="{{ $item['name'] ?? $item['nama'] }}">
-                                                {{ $item['name'] ?? $item['nama'] }}</option>
-                                        @endforeach
-                                    </select>
-                                </div>
-                                <div class="col-md-6">
-                                    <label class="form-label required fw-bold">Penyandang Disabilitas?</label>
-                                    <select name="disabilitas" id="disabilitas"
-                                        class="form-select form-select-solid save-local" data-control="select2"
-                                        data-placeholder="Pilih Status" data-hide-search="true" required>
-                                        <option></option>
-                                        @foreach ($disabilitas as $item)
-                                            <option value="{{ $item['name'] ?? $item['nama'] }}">
-                                                {{ $item['name'] ?? $item['nama'] }}</option>
-                                        @endforeach
-                                    </select>
-                                </div>
-                                <div class="col-12">
-                                    <label class="form-label required fw-bold">Jenis Layanan</label>
-                                    <select name="id_pelayanan" id="id_pelayanan"
-                                        class="form-select form-select-solid save-local" data-control="select2"
-                                        data-placeholder="Pilih Jenis Layanan" required>
-                                        <option></option>
-                                        {{-- OPTION AKAN DIISI OTOMATIS OLEH JAVASCRIPT --}}
-                                    </select>
-                                    <div class="form-text text-muted" id="loading-layanan"></div>
-                                </div>
-                            </div>
-
-                            <div class="d-flex justify-content-between pt-5">
-                                <button type="button" onclick="resetSurvey()" class="btn btn-light-danger">
-                                    <i class="ki-outline ki-cross fs-2"></i> Batal
-                                </button>
-                                <button type="button" onclick="goToStep(3)" class="btn btn-primary">
-                                    Selanjutnya <i class="ki-outline ki-arrow-right fs-2 ms-2"></i>
-                                </button>
-                            </div>
-                        </div>
-
-                        {{-- STEP 3: PENILAIAN --}}
-                        <div id="step-3" class="step-content">
-                            <div class="pb-5">
-                                <h2 class="fw-bolder text-dark">Penilaian Kualitas</h2>
-                                <div class="text-muted fw-bold fs-6">Berikan penilaian Anda terhadap pelayanan kami.
-                                </div>
-                            </div>
-
-                            {{-- Looping Pertanyaan dengan Style Metronic --}}
-                            @foreach ($pertanyaan as $key => $p)
-                                <div class="card card-dashed border-gray-300 bg-lighten mb-5">
-                                    <div class="card-body p-4">
-                                        <div class="d-flex align-items-center mb-3">
-                                            <span
-                                                class="badge badge-light-primary fw-bolder me-3">{{ strtoupper($key) }}</span>
-                                            <span class="text-gray-800 fw-bold fs-6">{{ $p['tanya'] }}</span>
-                                        </div>
-
-                                        <div class="row g-3">
-                                            @foreach ($p['opsi'] as $index => $opsi)
-                                                @php $nilai = $index + 1; @endphp
-                                                <div class="col-md-6">
-                                                    <input type="radio" class="btn-check save-local"
-                                                        name="{{ $key }}" value="{{ $nilai }}"
-                                                        id="{{ $key }}_{{ $nilai }}" required />
-                                                    <label
-                                                        class="btn btn-outline btn-outline-dashed btn-active-light-primary p-3 d-flex align-items-center justify-content-center w-100"
-                                                        for="{{ $key }}_{{ $nilai }}">
-                                                        <span class="fw-bold fs-7">{{ $opsi }}</span>
-                                                    </label>
-                                                </div>
-                                            @endforeach
-                                        </div>
-                                    </div>
-                                </div>
-                            @endforeach
-
-                            {{-- PUNGLI SECTION --}}
-                            <div
-                                class="notice d-flex bg-light-danger rounded border-danger border border-dashed p-6 mb-8 flex-column">
-                                <div class="d-flex flex-stack mb-4">
-                                    <div class="fw-bold fs-5 text-gray-800">
-                                        Apakah Anda pernah diminta biaya tambahan di luar ketentuan resmi (Pungli)?
-                                    </div>
-                                </div>
-                                <div class="row g-3 mb-4">
-                                    <div class="col-6">
-                                        <input type="radio" class="btn-check save-local" name="is_pungli"
-                                            value="1" id="pungli_ya" onchange="togglePungli(this)" required />
-                                        <label
-                                            class="btn btn-outline btn-outline-dashed btn-active-light-danger w-100 p-4"
-                                            for="pungli_ya">
-                                            <span class="fw-bolder fs-4">YA</span>
-                                        </label>
-                                    </div>
-                                    <div class="col-6">
-                                        <input type="radio" class="btn-check save-local" name="is_pungli"
-                                            value="0" id="pungli_tidak" onchange="togglePungli(this)"
-                                            required />
-                                        <label
-                                            class="btn btn-outline btn-outline-dashed btn-active-light-success w-100 p-4"
-                                            for="pungli_tidak">
-                                            <span class="fw-bolder fs-4">TIDAK</span>
-                                        </label>
-                                    </div>
-                                </div>
-
-                                {{-- Hidden Form Pungli --}}
-                                <div id="form-pungli" class="d-none bg-white rounded p-4 border border-gray-300">
-                                    <div class="alert alert-warning d-flex align-items-center p-3 mb-3">
-                                        <i class="ki-outline ki-information-2 fs-2 text-warning me-3"></i>
-                                        <span class="text-gray-700 fw-bold fs-7">Identitas Anda akan kami
-                                            rahasiakan.</span>
-                                    </div>
-                                    <div class="mb-3">
-                                        <label class="form-label required fw-bold fs-7">Kontak (HP/Email)</label>
-                                        <input type="text" name="pungli_kontak" id="inp_pungli_kontak"
-                                            class="form-control form-control-solid save-local" />
-                                    </div>
-                                    <div>
-                                        <label class="form-label required fw-bold fs-7">Kronologi Singkat</label>
-                                        <textarea name="pungli_keterangan" id="inp_pungli_ket" class="form-control form-control-solid save-local"
-                                            rows="3"></textarea>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <div class="mb-10">
-                                <label class="form-label fw-bold">Kritik & Saran</label>
-                                <textarea name="kritik_saran" id="kritik_saran" class="form-control form-control-solid save-local" rows="3"
-                                    placeholder="Masukan saran Anda..."></textarea>
-                            </div>
-
-                            <div class="d-flex justify-content-between border-top border-gray-300 pt-6">
-                                <button type="button" onclick="resetSurvey()"
-                                    class="btn btn-light-danger me-2 w-25">Batal</button>
-                                <button type="button" onclick="goToStep(2)"
-                                    class="btn btn-light-primary me-2 w-25">Kembali</button>
-                                <button type="submit" onclick="clearLocal()" class="btn btn-primary w-50">
-                                    <span class="indicator-label">Kirim Penilaian <i
-                                            class="ki-outline ki-send fs-2 ms-1"></i></span>
-                                </button>
-                            </div>
-                        </div>
-
-                    </form>
+                    <div class="d-flex justify-content-between align-items-center mt-10 pt-6 border-top">
+                        <button type="button" class="btn btn-light fw-bold px-6 py-3 rounded-pill" onclick="window.location.reload();">Batalkan</button>
+                        <button type="button" class="btn-apple" onclick="nextStep(3)">Lanjutkan Penilaian <i class="ph-bold ph-arrow-right"></i></button>
+                    </div>
                 </div>
-            </div>
+
+                {{-- STEP 3: PENILAIAN --}}
+                <div id="step-3" class="step-content">
+                    <div class="mb-10 border-bottom pb-6">
+                        <h2 class="fw-black text-gray-900 fs-2">Penilaian Pelayanan</h2>
+                        <p class="text-gray-500 fw-medium">Berikan penilaian jujur Anda untuk kualitas pelayanan yang lebih baik.</p>
+                    </div>
+
+                    <div class="mb-8">
+                        @foreach ($pertanyaan as $key => $p)
+                            <div class="question-card">
+                                <div class="d-flex gap-4 mb-6 align-items-start">
+                                    <span class="badge bg-primary text-white fs-6 px-3 py-2 rounded-3 mt-1">{{ strtoupper($key) }}</span>
+                                    <span class="text-gray-900 fw-bold fs-4 lh-sm">{{ $p['tanya'] }}</span>
+                                </div>
+                                <div class="row g-3">
+                                    @foreach ($p['opsi'] as $nilai => $opsi)
+                                        <div class="col-md-6 col-lg-3">
+                                            <input type="radio" class="btn-check save-local-radio" name="{{ $key }}" value="{{ $nilai }}" id="{{ $key }}_{{ $nilai }}" required />
+                                            <label class="btn btn-outline btn-outline-dashed option-btn w-100 h-100 d-flex align-items-center justify-content-center text-center" for="{{ $key }}_{{ $nilai }}">
+                                                {{ $opsi }}
+                                            </label>
+                                        </div>
+                                    @endforeach
+                                </div>
+                            </div>
+                        @endforeach
+
+                        <div class="question-card border-danger bg-light-danger border-opacity-50">
+                            <div class="d-flex gap-4 mb-6 align-items-start">
+                                <i class="ph-fill ph-warning fs-1 text-danger mt-1"></i>
+                                <span class="text-danger fw-bold fs-4 lh-sm">Apakah Anda pernah diminta biaya tambahan di luar ketentuan resmi (Pungli)?</span>
+                            </div>
+                            <div class="row g-3">
+                                <div class="col-6">
+                                    <input type="radio" class="btn-check save-local-radio" name="ada_pungli" value="Tidak" id="pungli_tdk" required />
+                                    <label class="btn btn-outline btn-outline-dashed border-danger border-opacity-25 text-danger option-btn w-100 h-100" for="pungli_tdk">Tidak Pernah</label>
+                                </div>
+                                <div class="col-6">
+                                    <input type="radio" class="btn-check save-local-radio" name="ada_pungli" value="Ya" id="pungli_ya" required />
+                                    <label class="btn btn-outline btn-outline-dashed border-danger border-opacity-25 text-danger option-btn w-100 h-100" for="pungli_ya">Pernah</label>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="mt-8">
+                            <label class="form-label fw-bold text-gray-700 ms-1">Kritik / Saran Membangun (Opsional)</label>
+                            <textarea name="saran" id="saran" class="form-control custom-input save-local" rows="4" placeholder="Tuliskan saran Anda di sini..."></textarea>
+                        </div>
+                    </div>
+
+                    <div class="d-flex justify-content-between align-items-center mt-10 pt-6 border-top">
+                        <button type="button" class="btn btn-light fw-bold px-6 py-3 rounded-pill" onclick="nextStep(2)"><i class="ph-bold ph-arrow-left me-2"></i> Kembali</button>
+                        <button type="submit" class="btn-apple primary" id="btn-submit">
+                            <span id="btnText"><i class="ph-fill ph-paper-plane-tilt me-2"></i> Kirim Survey</span>
+                            <span id="btnLoading" class="d-none">
+                                <span class="spinner-border spinner-border-sm align-middle me-2"></span> Mengirim...
+                            </span>
+                        </button>
+                    </div>
+                </div>
+            </form>
         </div>
     </div>
 
-    {{-- 2. SCRIPTS METRONIC (Wajib) --}}
     <script src="{{ asset('assets/plugins/global/plugins.bundle.js') }}"></script>
     <script src="{{ asset('assets/js/scripts.bundle.js') }}"></script>
 
     <script>
-        $(document).ready(function() {
-            // Restore session jika ada
-            restoreSession();
+        const btnCek = document.getElementById('btn-cek');
+        const inputAntrian = document.getElementById('no_antrian');
+        const errorMsg = document.getElementById('error-msg');
+        const textError = document.getElementById('text-error');
+
+        inputAntrian.addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                e.preventDefault();
+                cekAntrian();
+            }
         });
 
-        // 1. INPUT MASKING (MODIFIED)
-        // Mengizinkan Huruf + Angka di depan, dan user mengetik strip (-) manual
-        $('#no_antrian').on('input', function() {
-            // Ambil value dan jadikan uppercase
-            let val = $(this).val().toUpperCase();
-
-            // Hanya izinkan: Huruf (A-Z), Angka (0-9), dan Tanda Strip (-)
-            // Hapus karakter lain (spasi, simbol lain, dll)
-            val = val.replace(/[^A-Z0-9-]/g, '');
-
-            // (Opsional) Mencegah strip ganda (misal: A--01 jadi A-01)
-            val = val.replace(/-+/g, '-');
-
-            // (Opsional) Mencegah strip di karakter pertama
-            if (val.startsWith('-')) {
-                val = val.substring(1);
-            }
-
-            // Update value input
-            $(this).val(val);
-        });
-
-        // 2. NAVIGASI STEP
-        function goToStep(step) {
-            if (step === 3) {
-                // Validasi Step 2 (Bootstrap style)
-                let valid = true;
-                $('#step-2 input[required], #step-2 select[required]').each(function() {
-                    if ($(this).val() === "" || $(this).val() === null) {
-                        valid = false;
-                        $(this).addClass('is-invalid');
-                        // Khusus Select2, tambahkan border merah ke containernya jika perlu
-                        $(this).next('.select2').find('.select2-selection').addClass('border-danger');
-                    } else {
-                        $(this).removeClass('is-invalid');
-                        $(this).next('.select2').find('.select2-selection').removeClass('border-danger');
-                    }
-                });
-
-                if (!valid) {
-                    Swal.fire({
-                        text: "Mohon lengkapi Data Diri terlebih dahulu.",
-                        icon: "warning",
-                        buttonsStyling: false,
-                        confirmButtonText: "Ok, Mengerti!",
-                        customClass: {
-                            confirmButton: "btn btn-primary"
-                        }
-                    });
-                    return;
-                }
-            }
-
-            $('.step-content').removeClass('active').addClass('d-none');
-            $('#step-' + step).removeClass('d-none').addClass('active');
-            window.scrollTo({
-                top: 0,
-                behavior: 'smooth'
-            });
-        }
-
-        // 3. CEK ANTRIAN
-        // 3. CEK ANTRIAN
         function cekAntrian() {
-            let no = $('#no_antrian').val();
-            let btn = $('#btn-cek');
+            let no = inputAntrian.value.trim();
+            if (!no) {
+                Swal.fire("Peringatan", "Silakan isi nomor antrian terlebih dahulu", "warning");
+                return;
+            }
 
-            $('#error-msg').addClass('d-none');
+            btnCek.disabled = true;
+            btnCek.innerHTML = '<span class="spinner-border spinner-border-sm"></span>';
+            errorMsg.classList.add('d-none');
 
-            if (!no) return;
+            fetch(`{{ url('/skm/check-antrian') }}?no_antrian=${no}`)
+                .then(res => res.json())
+                .then(data => {
+                    if (data.status === 'success') {
+                        document.getElementById('antrian_id').value = data.data.id;
+                        document.getElementById('disp_no_antrian').value = data.data.no_antrian;
+                        
+                        document.getElementById('cust-nama').innerText = data.data.nama;
+                        document.getElementById('cust-nik').innerText = data.data.nik;
+                        document.getElementById('cust-jk').innerText = data.data.jk == 'L' ? 'Laki-Laki' : 'Perempuan';
+                        document.getElementById('cust-instansi').innerText = data.data.skpd + " - " + data.data.loket;
 
-            // Loading State Metronic
-            btn.attr('data-kt-indicator', 'on');
-            btn.prop('disabled', true);
-
-            $.ajax({
-                url: "{{ route('skm.check') }}",
-                type: "POST",
-                data: {
-                    _token: "{{ csrf_token() }}",
-                    no_antrian: no
-                },
-                success: function(res) {
-                    btn.removeAttr('data-kt-indicator');
-                    btn.prop('disabled', false);
-
-                    if (res.status === 'success') {
-                        localStorage.setItem('skm_session', JSON.stringify({
-                            no_antrian: no,
-                            data: res.data,
-                            services: res.services // Simpan layanan di localstorage juga
-                        }));
-
-                        applyData(res.data, no);
-
-                        // 🔥 POPULASI DROPDOWN LAYANAN DARI API
-                        populateServices(res.services);
-
-                        goToStep(2);
+                        document.getElementById('info-bar').classList.remove('d-none');
+                        nextStep(2);
                     } else {
-                        $('#text-error').text(res.message);
-                        $('#error-msg').removeClass('d-none');
+                        errorMsg.classList.remove('d-none');
+                        textError.innerText = data.message;
+                        document.getElementById('info-bar').classList.add('d-none');
                     }
-                },
-                error: function() {
-                    btn.removeAttr('data-kt-indicator');
-                    btn.prop('disabled', false);
-                    $('#text-error').text("Terjadi kesalahan koneksi.");
-                    $('#error-msg').removeClass('d-none');
-                }
-            });
-        }
-
-        // FUNGSI BARU: Render Option Layanan
-        // FUNGSI BARU: Render Option Layanan (Versi Auto-Detect)
-        function populateServices(services) {
-            let select = $('#id_pelayanan');
-            select.empty();
-            select.append('<option></option>');
-
-            console.log("🔥 DEBUG DATA API:", services); // Cek ini di Console Browser
-
-            if (Array.isArray(services) && services.length > 0) {
-                services.forEach(function(item) {
-
-                    // 1. Coba tebak nama field yang umum digunakan
-                    let text = item.nama_layanan ||
-                        item.jenis_layanan ||
-                        item.layanan ||
-                        item.opd ||
-                        item.nama;
-
-                    // 2. JIKA MASIH KOSONG, Kita cari manual field yang isinya huruf (String)
-                    if (!text) {
-                        // Ambil semua key (misal: ['id', 'nm_pelayanan'])
-                        let keys = Object.keys(item);
-                        // Cari key yang BUKAN 'id' dan isinya adalah TEXT
-                        let foundKey = keys.find(k => k !== 'id' && typeof item[k] === 'string');
-                        if (foundKey) {
-                            text = item[foundKey];
-                        }
-                    }
-
-                    // 3. Fallback terakhir jika benar-benar tidak ketemu
-                    text = text || "Layanan Tidak Bernama (Cek Console)";
-
-                    select.append(new Option(text, item.id));
+                })
+                .catch(err => {
+                    Swal.fire("Error", "Gagal menghubungi server", "error");
+                })
+                .finally(() => {
+                    btnCek.disabled = false;
+                    btnCek.innerHTML = '<i class="ph-bold ph-magnifying-glass"></i> Cari Nomor Antrian';
                 });
-
-                $('#loading-layanan').html(
-                    '<span class="text-success"><i class="ki-outline ki-check-circle fs-7"></i> Data layanan berhasil ditarik (' +
-                    services.length + ' item).</span>'
-                );
-            } else {
-                $('#loading-layanan').html(
-                    '<span class="text-danger fw-bold"><i class="ki-outline ki-cross-circle fs-7"></i> Data layanan kosong atau ID Sukma salah.</span>'
-                );
-            }
-
-            select.trigger('change');
         }
 
-        // Helper Apply Data
-        function applyData(data, no) {
-            $('#antrian_id').val(data.id);
-            $('#disp_no_antrian').val(no.toUpperCase());
-            $('#cust-nama').text(data.nama);
-            $('#cust-nik').text(data.nik);
-            $('#cust-jk').text(data.jk === 'L' ? 'Laki-Laki' : (data.jk === 'P' ? 'Perempuan' : '-'));
-            $('#cust-instansi').text(data.instansi);
-            $('#cust-layanan').text(data.layanan);
-            $('#info-bar').removeClass('d-none');
+        function nextStep(step) {
+            document.querySelectorAll('.step-content').forEach(el => el.classList.remove('active'));
+            document.getElementById('step-' + step).classList.add('active');
+            window.scrollTo({ top: 0, behavior: 'smooth' });
         }
 
-        // 4. DATA PERSISTENCE
-        $(document).on('change input', '.save-local', function() {
-            let name = $(this).attr('name');
-            let val = $(this).val();
+        // Auto Save LocalStorage
+        const storageKey = 'skm_draft_data';
+        function saveDraft() {
+            let draft = {};
+            document.querySelectorAll('.save-local').forEach(el => { draft[el.id] = el.value; });
+            document.querySelectorAll('.save-local-radio:checked').forEach(el => { draft[el.name] = el.value; });
+            localStorage.setItem(storageKey, JSON.stringify(draft));
+        }
 
-            // Khusus Radio
-            if ($(this).attr('type') === 'radio') {
-                if ($(this).is(':checked')) {
-                    localStorage.setItem('skm_form_' + name, val);
+        function loadDraft() {
+            let draft = JSON.parse(localStorage.getItem(storageKey) || '{}');
+            for (let key in draft) {
+                let el = document.getElementById(key);
+                if (el && !el.classList.contains('save-local-radio')) { el.value = draft[key]; }
+                else {
+                    let radio = document.querySelector(`input[name="${key}"][value="${draft[key]}"]`);
+                    if (radio) radio.checked = true;
                 }
-            } else {
-                localStorage.setItem('skm_form_' + name, val);
             }
+        }
+
+        document.querySelectorAll('.save-local, .save-local-radio').forEach(el => {
+            el.addEventListener('change', saveDraft);
+            el.addEventListener('keyup', saveDraft);
         });
 
-        // UPDATE FUNGSI RESTORE SESSION
-        function restoreSession() {
-            let session = localStorage.getItem('skm_session');
-            if (session) {
-                let sessData = JSON.parse(session);
-                $('#no_antrian').val(sessData.no_antrian);
-                applyData(sessData.data, sessData.no_antrian);
+        document.addEventListener('DOMContentLoaded', loadDraft);
 
-                // Restore Layanan Dulu sebelum restore value yang dipilih
-                if (sessData.services) {
-                    populateServices(sessData.services);
-                }
+        document.getElementById('formSkm').addEventListener('submit', function(e) {
+            const btnSubmit = document.getElementById('btn-submit');
+            btnSubmit.disabled = true;
+            document.getElementById('btnText').classList.add('d-none');
+            document.getElementById('btnLoading').classList.remove('d-none');
+            localStorage.removeItem(storageKey); 
+        });
 
-                goToStep(2);
-
-                $('.save-local').each(function() {
-                    let name = $(this).attr('name');
-                    let storedVal = localStorage.getItem('skm_form_' + name);
-                    if (storedVal) {
-                        if ($(this).attr('type') === 'radio') {
-                            if ($(this).val() == storedVal) {
-                                $(this).prop('checked', true);
-                                if (name === 'is_pungli') togglePungli(this);
-                            }
-                        } else {
-                            $(this).val(storedVal);
-                            if ($(this).is('select')) {
-                                $(this).trigger('change.select2');
-                            }
-                        }
-                    }
-                });
-            }
-        }
-
-        // 6. RESET SURVEY
-        function resetSurvey() {
+        @if(session('success'))
             Swal.fire({
-                text: "Batalkan pengisian survey?",
-                icon: 'warning',
-                showCancelButton: true,
-                buttonsStyling: false,
-                confirmButtonText: 'Ya, Batalkan',
-                cancelButtonText: 'Tidak',
-                customClass: {
-                    confirmButton: "btn btn-danger",
-                    cancelButton: "btn btn-active-light"
-                }
-            }).then((result) => {
-                if (result.isConfirmed) {
-                    localStorage.removeItem('skm_session');
-                    Object.keys(localStorage).forEach((key) => {
-                        if (key.startsWith('skm_form_')) localStorage.removeItem(key);
-                    });
-
-                    document.getElementById('mainForm').reset();
-                    // Reset Select2
-                    $('.form-select').val(null).trigger('change');
-
-                    $('#no_antrian').val('');
-                    $('.step-content').removeClass('active').addClass('d-none');
-                    $('#step-1').removeClass('d-none').addClass('active');
-                    $('#info-bar').addClass('d-none');
-                    window.scrollTo({
-                        top: 0,
-                        behavior: 'smooth'
-                    });
-                }
-            });
-        }
-
-        function clearLocal() {
-            // Biarkan submit berjalan, nanti dibersihkan via session success
-        }
-
-        // 6. MENAMPILKAN ALERT SUKSES & DEBUG KE CONSOLE
-        @if (session('success'))
-            localStorage.clear();
-
-            // 🔥 CETAK DATA KE CONSOLE F12
-            console.log("%c🚀 DEBUG API SUKMADELI",
-                "color: white; background: #009ef7; font-weight: bold; padding: 4px 8px; border-radius: 4px;");
-
-            @if (session('api_debug'))
-                console.log("Status Code:", {{ session('api_debug.status_code') }});
-                console.log("Payload Terkirim:", @json(session('api_debug.payload')));
-                console.log("Respon API Sukmadeli:", @json(session('api_debug.response')));
-
-                // Notifikasi visual di console
-                if ({{ session('api_debug.status_code') }} == 200) {
-                    console.log("%c✅ DATA BERHASIL TERKIRIM KE SERVER SUKMADELI", "color: green; font-weight: bold;");
-                } else {
-                    console.log("%c❌ GAGAL TERKIRIM KE SERVER SUKMADELI", "color: red; font-weight: bold;");
-                }
-            @endif
-
-            Swal.fire({
+                title: "Terima Kasih!",
                 text: "{{ session('success') }}",
                 icon: "success",
-                buttonsStyling: false,
-                confirmButtonText: "Selesai",
-                customClass: {
-                    confirmButton: "btn btn-primary"
-                }
-            });
+                confirmButtonText: "Tutup",
+                customClass: { confirmButton: "btn btn-primary rounded-pill px-8" }
+            }).then(() => { window.location.href = "{{ route('skm.index') }}"; });
         @endif
-
-        @if (session('error'))
-            Swal.fire({
-                text: "{{ session('error') }}",
-                icon: "error",
-                buttonsStyling: false,
-                confirmButtonText: "Ok",
-                customClass: {
-                    confirmButton: "btn btn-danger"
-                }
-            });
-        @endif
-
-        // Logic Toggle Pungli
-        function togglePungli(radio) {
-            const formContainer = document.getElementById('form-pungli');
-            const inputKontak = document.getElementById('inp_pungli_kontak');
-            const inputKet = document.getElementById('inp_pungli_ket');
-
-            if (radio.value == '1') {
-                $(formContainer).removeClass('d-none');
-                inputKontak.required = true;
-                inputKet.required = true;
-            } else {
-                $(formContainer).addClass('d-none');
-                inputKontak.required = false;
-                inputKet.required = false;
-                inputKontak.value = "";
-                inputKet.value = "";
-                localStorage.removeItem('skm_form_pungli_kontak');
-                localStorage.removeItem('skm_form_pungli_keterangan');
-            }
-        }
     </script>
 </body>
-
 </html>
