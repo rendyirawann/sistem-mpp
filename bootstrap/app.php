@@ -24,11 +24,17 @@ return Application::configure(basePath: dirname(__DIR__))
     // })
 
     ->withMiddleware(function (Middleware $middleware) {
+        $middleware->encryptCookies(except: [
+            'kiosk_authorized',
+        ]);
+
         $middleware->alias([
             'role' => \Spatie\Permission\Middleware\RoleMiddleware::class,
             'permission' => \Spatie\Permission\Middleware\PermissionMiddleware::class,
             'role_or_permission' => \Spatie\Permission\Middleware\RoleOrPermissionMiddleware::class,
             'forbid-banned-user' => \Cog\Laravel\Ban\Http\Middleware\ForbidBannedUser::class,
+            'kiosk-security' => \App\Http\Middleware\KioskSecurity::class,
+
         ]);
         // 🔥 TAMBAHKAN BARIS INI (Agar logoutOtherDevices berfungsi)
         $middleware->web(append: [

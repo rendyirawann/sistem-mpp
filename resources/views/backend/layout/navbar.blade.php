@@ -16,21 +16,18 @@
             <!--end:Info-->
             <!--begin::User-->
             <div class="symbol symbol-40px me-5">
+    @if (Auth::user()->avatar)
+        <img class="navbar-avatar-img" src="{{ asset('storage/user/avatar/' . Auth::user()->avatar) }}"
+            alt="{{ Auth::user()->name }}" />
+    @else
+        <div class="symbol-label fs-3 bg-light-primary text-primary navbar-avatar-wrapper navbar-avatar-name">
+            {{ strtoupper(substr(Auth::user()->name, 0, 1)) }}
+        </div>
+    @endif
 
-                @if (Auth::user()->avatar)
-                    <img class="navbar-avatar-img" src="{{ asset('storage/app/public/user/avatar/' . Auth::user()->avatar) }}"
-                        alt="{{ Auth::user()->name }}" />
-                @else
-                    <div
-                        class="symbol-label fs-3 bg-light-primary text-primary navbar-avatar-wrapper navbar-avatar-name">
-                        {{ strtoupper(substr(Auth::user()->name, 0, 1)) }}
-                    </div>
-                @endif
-
-                <div
-                    class="position-absolute translate-middle bottom-0 mb-1 start-100 ms-n1 bg-success rounded-circle h-8px w-8px">
-                </div>
-            </div>
+    <div class="position-absolute translate-middle bottom-0 mb-1 start-100 ms-n1 bg-success rounded-circle h-8px w-8px">
+    </div>
+</div>
 
             <!--end::User-->
         </div>

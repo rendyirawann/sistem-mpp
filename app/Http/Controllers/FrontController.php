@@ -113,6 +113,64 @@ class FrontController extends Controller
         return $skpd;
     }
 
+    /**
+     * HALAMAN LANDING (PUBLIC)
+     */
+    public function landing()
+    {
+        // Ambil data antrian untuk ditampilkan di landing page (opsional)
+        $skpd = $this->getSkpdWithStatus();
+        return view('welcome', compact('skpd'));
+    }
+
+    /**
+     * HALAMAN DAFTAR INSTANSI LENGKAP
+     */
+    public function daftarInstansi()
+    {
+        $skpd = $this->getSkpdWithStatus();
+        return view('daftar_instansi', compact('skpd'));
+    }
+
+    /**
+     * HALAMAN LOGIN KIOSK
+     */
+    public function showKioskAuth()
+    {
+        $secret = config('kiosk.secret', 'mppdeli2024');
+        $expectedValue = md5($secret);
+
+        $sessionValue = session('kiosk_unlocked');
+        $cookieValue = request()->cookie('kiosk_authorized') ?? \Illuminate\Support\Facades\Cookie::get('kiosk_authorized');
+
+        // Jika sudah authorized dengan nilai yang benar, langsung lempar ke kios
+        if ($sessionValue === $expectedValue || $cookieValue === $expectedValue) {
+            return redirect()->route('home');
+        }
+
+        return view('kiosk_auth');
+    }
+
+    /**
+     * VERIFIKASI KODE RAHASIA
+     */
+    public function verifyKioskAuth(Request $request)
+    {
+        $secret = config('kiosk.secret', 'mppdeli2024');
+        $expectedValue = md5($secret);
+
+        if ($request->kode === $secret) {
+            session(['kiosk_unlocked' => $expectedValue]);
+            session()->save();
+
+            $cookie = cookie('kiosk_authorized', $expectedValue, 2628000); // 5 Tahun
+
+            return redirect()->route('home')->withCookie($cookie);
+        }
+
+        return redirect()->back()->with('error', 'Kode Rahasia Salah!');
+    }
+
     // B. UBAH FUNGSI INDEX MENJADI SANGAT RINGKAS
     public function index()
     {

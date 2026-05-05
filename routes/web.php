@@ -229,11 +229,22 @@ require __DIR__ . '/auth.php';
 //use App\Http\Controllers\AntrianController; // Pastikan baris ini ada di paling atas file, kalau sudah ada hapus yang ini.
 
 // 1. Halaman Depan Kios (Memanggil AntrianController fungsi index)
-Route::get('/', [FrontController::class, 'index'])->name('home');
+// 1. Landing Page (Public)
+Route::get('/', [FrontController::class, 'landing'])->name('landing');
+Route::get('/daftar-instansi', [FrontController::class, 'daftarInstansi'])->name('daftar.instansi');
 
-// 2. Proses Ambil Antrian (Saat tombol Input ditekan)
-Route::post('/ambil-antrian', [FrontController::class, 'ambilAntrian'])->name('ambil.antrian');
 
-Route::get('/kios/grid-skpd', [FrontController::class, 'getGridSkpd'])->name('kios.grid');
+// 2. Halaman Depan Kios (Memanggil FrontController fungsi index) - Pindahkan ke /kiosk-mpp
+Route::get('/kiosk-auth', [FrontController::class, 'showKioskAuth'])->name('kiosk.auth');
+Route::post('/kiosk-auth', [FrontController::class, 'verifyKioskAuth'])->name('kiosk.verify');
+
+Route::middleware('kiosk-security')->group(function () {
+    Route::get('/kiosk-mpp', [FrontController::class, 'index'])->name('home');
+
+    // 2. Proses Ambil Antrian (Saat tombol Input ditekan)
+    Route::post('/ambil-antrian', [FrontController::class, 'ambilAntrian'])->name('ambil.antrian');
+
+    Route::get('/kios/grid-skpd', [FrontController::class, 'getGridSkpd'])->name('kios.grid');
+});
 
 // -------------------------------------------------------------

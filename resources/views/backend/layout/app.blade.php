@@ -73,9 +73,9 @@ License: For each use you must have a valid license purchased only from above li
     <!--begin::loader-->
     <div class="page-loader flex-column">
         <img alt="Logo" class="theme-light-show max-h-50px"
-            src="{{ asset('assets/media/logos/keenthemes.svg') }}" />
+            src="{{ asset('assets/media/logos/logo_deliserdang.png') }}" />
         <img alt="Logo" class="theme-dark-show max-h-50px"
-            src="{{ asset('assets/media/logos/keenthemes-dark.svg') }}" />
+            src="{{ asset('assets/media/logos/logo_deliserdang.png') }}" />
         <div class="d-flex align-items-center mt-5">
             <span class="spinner-border text-primary" role="status"></span>
             <span class="text-muted fs-6 fw-semibold ms-5">Loading...</span>
