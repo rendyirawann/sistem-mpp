@@ -8,19 +8,34 @@ return new class extends Migration
 {
     public function up()
     {
+        if (!Schema::hasTable('skpd')) {
+            return;
+        }
+
         Schema::table('skpd', function (Blueprint $table) {
-            // Tambahkan flag apakah sabtu buka atau libur
-            $table->boolean('is_sabtu_buka')->default(false)->after('tutup_jumat');
-            // Tambahkan jam sabtu
-            $table->time('buka_sabtu')->default('08:00:00')->after('is_sabtu_buka');
-            $table->time('tutup_sabtu')->default('15:00:00')->after('buka_sabtu');
+            if (!Schema::hasColumn('skpd', 'is_sabtu_buka')) {
+                $table->boolean('is_sabtu_buka')->default(false)->after('tutup_jumat');
+            }
+            if (!Schema::hasColumn('skpd', 'buka_sabtu')) {
+                $table->time('buka_sabtu')->default('08:00:00')->after('is_sabtu_buka');
+            }
+            if (!Schema::hasColumn('skpd', 'tutup_sabtu')) {
+                $table->time('tutup_sabtu')->default('15:00:00')->after('buka_sabtu');
+            }
         });
     }
 
     public function down()
     {
+        if (!Schema::hasTable('skpd')) {
+            return;
+        }
         Schema::table('skpd', function (Blueprint $table) {
-            $table->dropColumn(['is_sabtu_buka', 'buka_sabtu', 'tutup_sabtu']);
+            foreach (['is_sabtu_buka', 'buka_sabtu', 'tutup_sabtu'] as $col) {
+                if (Schema::hasColumn('skpd', $col)) {
+                    $table->dropColumn($col);
+                }
+            }
         });
     }
 };

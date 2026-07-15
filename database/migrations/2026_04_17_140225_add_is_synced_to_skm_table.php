@@ -6,23 +6,22 @@ use Illuminate\Support\Facades\Schema;
 
 return new class extends Migration
 {
-    /**
-     * Run the migrations.
-     */
     public function up(): void
     {
+        if (!Schema::hasTable('skm') || Schema::hasColumn('skm', 'is_synced')) {
+            return;
+        }
         Schema::table('skm', function (Blueprint $table) {
             $table->boolean('is_synced')->default(1)->after('nilai');
         });
     }
 
-    /**
-     * Reverse the migrations.
-     */
     public function down(): void
     {
-        Schema::table('skm', function (Blueprint $table) {
-            $table->dropColumn('is_synced');
-        });
+        if (Schema::hasTable('skm') && Schema::hasColumn('skm', 'is_synced')) {
+            Schema::table('skm', function (Blueprint $table) {
+                $table->dropColumn('is_synced');
+            });
+        }
     }
 };

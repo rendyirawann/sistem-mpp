@@ -16,10 +16,13 @@ class DatabaseSeeder extends Seeder
     public function run(): void
     {
         $this->call([
-            UserSeeder::class,
-            LoadWilayahSqlSeeder::class,
-            LandingContentSeeder::class,
-            FormPersyaratanSeeder::class,
+            UserSeeder::class,          // user & role (login)
+            LoadWilayahSqlSeeder::class, // wilayah: provinsi/kabupaten/kecamatan/desa
+            MppMasterDataSeeder::class,  // instansi, layanan, form persyaratan, setting, kuota, hari libur, display TV
         ]);
+
+        // Catatan: LandingContentSeeder & FormPersyaratanSeeder digantikan oleh
+        // MppMasterDataSeeder (snapshot SQL) agar deterministik & tidak duplikat.
+        // Keduanya tetap tersedia bila ingin dijalankan manual.
     }
 }

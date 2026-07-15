@@ -8,6 +8,9 @@ return new class extends Migration
 {
     public function up()
     {
+        if (!Schema::hasTable('customers') || Schema::hasColumn('customers', 'jk')) {
+            return;
+        }
         Schema::table('customers', function (Blueprint $table) {
             $table->enum('jk', ['L', 'P'])->nullable()->after('nama');
         });
@@ -15,8 +18,10 @@ return new class extends Migration
 
     public function down()
     {
-        Schema::table('customers', function (Blueprint $table) {
-            $table->dropColumn('jk');
-        });
+        if (Schema::hasTable('customers') && Schema::hasColumn('customers', 'jk')) {
+            Schema::table('customers', function (Blueprint $table) {
+                $table->dropColumn('jk');
+            });
+        }
     }
 };
