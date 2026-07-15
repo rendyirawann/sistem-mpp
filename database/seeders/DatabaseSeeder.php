@@ -16,7 +16,8 @@ class DatabaseSeeder extends Seeder
     public function run(): void
     {
         $this->call([
-            UserSeeder::class,          // user & role (login)
+            RolePermissionSeeder::class, // role + permission (harus sebelum UserSeeder)
+            UserSeeder::class,           // akun Super Admin (assign role Superadmin)
             LoadWilayahSqlSeeder::class, // wilayah: provinsi/kabupaten/kecamatan/desa
             MppMasterDataSeeder::class,  // instansi, layanan, form persyaratan, setting, kuota, hari libur, display TV
         ]);

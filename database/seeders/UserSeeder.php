@@ -25,7 +25,7 @@ class UserSeeder extends Seeder
             // Password hanya di-set saat create agar re-seed tidak mereset akun
             // yang sudah ada. Diambil dari env agar kredensial tidak di repo.
             // Set SEED_ADMIN_PASSWORD di .env server; default hanya untuk lokal.
-            $user->password = Hash::make(env('SEED_ADMIN_PASSWORD', 'password'));
+            $user->password = Hash::make(env('SEED_ADMIN_PASSWORD', 'password123'));
         }
 
         $user->name = 'Super Admin';
