@@ -14,9 +14,9 @@ License: For each use you must have a valid license purchased only from above li
 <!--begin::Head-->
 
 <head>
-<base href="" />
     <title>@yield('title')</title>
     <meta charset="utf-8" />
+    <meta name="csrf-token" content="{{ csrf_token() }}" />
     <meta name="description" content="Aplikasi Antrian MPP - Kabupaten Deli Serdang | Deli Serdang Sehat" />
     <meta name="keywords" content="mpp deli serdang, mall pelayanan publik, antrian online, deli serdang sehat, pemkab deli serdang" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />

@@ -109,6 +109,7 @@ class AntrianController extends Controller
                 'antrians.status',
                 'antrians.loket_id',
                 'antrians.skpd_id',
+                'antrians.sumber',
                 'antrians.waktu_ambil',
                 'antrians.no_urut',
                 'lokets.nama_loket',
@@ -125,6 +126,12 @@ class AntrianController extends Controller
         // Filter jika bukan Superadmin
         $this->filterBySkpd($query);
 
+        // Filter sumber (tab: Semua / Loket / Online)
+        $sumber = request('sumber');
+        if (in_array($sumber, ['online', 'kiosk'], true)) {
+            $query->where('antrians.sumber', $sumber);
+        }
+
         // Sorting Tampilan: Selesai di bawah, sisanya urut waktu
         $query->orderByRaw('CASE WHEN antrians.status = 2 THEN 1 ELSE 0 END ASC')
             ->orderBy('antrians.waktu_ambil', 'asc')
@@ -133,18 +140,20 @@ class AntrianController extends Controller
         // 🔥 LOGIKA BARU: Cari "Next ID" berdasarkan Waktu & No Urut (Bukan ID Terkecil)
         // Kita ambil semua antrian 'Menunggu' hari ini, lalu kelompokkan per SKPD
         // Ambil item pertama dari tiap grup.
-        $nextIdsPerSkpd = Antrian::select('id', 'skpd_id')
+        // 🔥 FASE 2: deret ONLINE & OFFLINE independen.
+        // Kelompokkan per (skpd_id + sumber) -> tiap SKPD punya 2 "terdepan":
+        // satu untuk antrian online, satu untuk antrian kiosk. Keduanya bisa dipanggil
+        // tanpa saling menunggu.
+        $nextIdsPerSkpd = Antrian::select('id', 'skpd_id', 'sumber')
             ->hariIni()
             ->where('status', 0) // Hanya status Menunggu
             ->orderBy('waktu_ambil', 'asc') // Yang paling pagi duluan
             ->orderBy('no_urut', 'asc') // Yang nomornya kecil duluan
             ->get()
-            ->groupBy('skpd_id')
-            ->map(function ($rows) {
-                return $rows->first()->id; // Ambil ID dari antrian paling depan
-            })
+            ->groupBy(fn ($r) => $r->skpd_id . '|' . ($r->sumber ?? 'kiosk'))
+            ->map(fn ($rows) => $rows->first()->id) // Ambil ID antrian terdepan tiap grup
+            ->values()
             ->toArray();
-        // Hasilnya: [ 'skpd_1' => 105, 'skpd_2' => 210, ... ]
 
         return DataTables::of($query)
             ->addColumn('status_label', function ($row) {
@@ -161,7 +170,13 @@ class AntrianController extends Controller
                 // in_array akan mencocokkan value ID-nya
                 return in_array($row->id, array_values($nextIdsPerSkpd));
             })
-            ->rawColumns(['status_label'])
+            ->addColumn('sumber', fn($row) => $row->sumber ?? 'kiosk')
+            ->addColumn('sumber_label', function ($row) {
+                return ($row->sumber === 'online')
+                    ? '<span class="badge badge-light-info">Online</span>'
+                    : '<span class="badge badge-light-dark">Loket</span>';
+            })
+            ->rawColumns(['status_label', 'sumber_label'])
             ->make(true);
     }
 
@@ -312,6 +327,7 @@ class AntrianController extends Controller
             ->hariIni()
             ->where('status', 0)
             ->where('skpd_id', $antrian->skpd_id) // KUNCI UTAMA: Filter by SKPD antrian tsb
+            ->where('sumber', $antrian->sumber)    // 🔥 FASE 2: deret online & offline independen
             ->orderBy('waktu_ambil', 'asc')
             ->orderBy('no_urut', 'asc')
             ->first();
@@ -347,9 +363,15 @@ class AntrianController extends Controller
             'no_antrian' => $antrian->no_antrian,
             'loket'      => $antrian->loket->nama_loket,
             'skpd'       => $antrian->skpd->nama_skpd,
+            'sumber'     => $antrian->sumber ?? 'kiosk',
             'waktu'      => now()->format('H:i')
         ];
-        PanggilanAntrian::dispatch($payload);
+
+        try {
+            PanggilanAntrian::dispatch($payload);
+        } catch (\Throwable $e) {
+            \Log::error("Gagal mengirim event PanggilanAntrian ke Reverb: " . $e->getMessage());
+        }
 
         // 2. SET GLOBAL LOCK (First Come First Serve)
         // Siapa cepat dia dapat, yang lain harus nunggu 30 detik
@@ -360,7 +382,11 @@ class AntrianController extends Controller
         Cache::put('lock_panggilan_global_end', $waktuSelesai, $durasi);
 
         // 3. Trigger Event (Untuk realtime user yang sedang online)
-        CooldownTriggered::dispatch($durasi);
+        try {
+            CooldownTriggered::dispatch($durasi);
+        } catch (\Throwable $e) {
+            \Log::error("Gagal mengirim event CooldownTriggered ke Reverb: " . $e->getMessage());
+        }
 
         // 4. Update Cache Tampilan
         $this->updateCache($antrian);
@@ -458,6 +484,7 @@ class AntrianController extends Controller
         $history = Antrian::select(
             'antrians.no_antrian',
             'antrians.waktu_panggil',
+            'antrians.sumber',
             'lokets.nama_loket',
             'skpd.nama_skpd' // <--- Tambah Select SKPD
         )
@@ -479,6 +506,7 @@ class AntrianController extends Controller
                     'no_antrian'    => $item->no_antrian,
                     'nama_loket'    => $item->nama_loket,
                     'nama_skpd'     => $item->nama_skpd, // <--- Masukkan ke Respon JSON
+                    'sumber'        => $item->sumber ?? 'kiosk',
                     'waktu_panggil' => \Carbon\Carbon::parse($item->waktu_panggil)
                         ->timezone('Asia/Jakarta')
                         ->format('H:i')
@@ -514,6 +542,7 @@ class AntrianController extends Controller
                 $q->select(DB::raw('MIN(id)'))
                     ->from('antrians as a')
                     ->whereRaw('a.skpd_id = antrians.skpd_id')
+                    ->whereRaw('a.sumber = antrians.sumber') // 🔥 FASE 2: terdepan per (skpd + sumber)
                     ->where('a.status', 0)
                     ->whereDate('a.tanggal', now());
             })
@@ -528,6 +557,7 @@ class AntrianController extends Controller
                 'no_antrian' => $item->no_antrian,
                 'skpd'       => $item->skpd->nama_skpd ?? '-',
                 'loket'      => $item->loket->nama_loket ?? '-',
+                'sumber'     => $item->sumber ?? 'kiosk',
                 'waktu'      => $item->waktu_ambil ? \Carbon\Carbon::parse($item->waktu_ambil)->format('H:i') : '-'
             ];
         });
@@ -550,6 +580,7 @@ class AntrianController extends Controller
                 'no_antrian' => $current->no_antrian,
                 'loket'      => $current->loket->nama_loket ?? '-',
                 'skpd'       => $current->skpd->nama_skpd ?? '-',
+                'sumber'     => $current->sumber ?? 'kiosk',
                 'waktu'      => $current->waktu_panggil ? \Carbon\Carbon::parse($current->waktu_panggil)->format('H:i') : '-'
             ] : ['status' => 'empty'],
 

@@ -70,15 +70,15 @@
                 <!--begin::Button-->
 
                 @can('skpd.edit')
+                    <button type="button" id="btn_batch_status" class="btn btn-sm btn-info me-2">
+                        <i class="ki-outline ki-shield-cross fs-2"></i> Status Layanan Masal
+                    </button>
                     <button type="button" id="btn_batch_jam" class="btn btn-sm btn-warning me-2">
                         <i class="ki-outline ki-time fs-2"></i> Set Jam Masal
                     </button>
                 @endcan
 
                 @can('skpd.create')
-                    {{-- <button type="button" id="btn_sync_sukma" class="btn btn-sm btn-info me-2">
-                        <i class="ki-outline ki-arrows-circle fs-2"></i> Sync Sukma
-                    </button> --}}
                     <button type="button" id="btn_tambah_data" class="btn btn-sm btn-primary">
                         <i class="ki-outline ki-plus fs-2"></i>Add</button>
                 @endcan
@@ -400,9 +400,19 @@
                                 </div>
                             </div>
                             <div class="fv-row mb-7">
-                                <label class="required fw-semibold fs-6 mb-2">Kuota Antrian Harian</label>
+                                <label class="required fw-semibold fs-6 mb-2">Kuota Antrian Harian (total/informasi)</label>
                                 <input type="number" name="kuota_harian" class="form-control" value="0" required>
-                                <div class="form-text">Isi 0 jika tidak ada batasan kuota.</div>
+                                <div class="form-text">Pembatasan riil memakai kuota Online & Kiosk di bawah.</div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-6 fv-row mb-7">
+                                    <label class="fw-semibold fs-6 mb-2">Kuota Online / Hari</label>
+                                    <input type="number" name="kuota_online" class="form-control" value="40" min="0">
+                                </div>
+                                <div class="col-md-6 fv-row mb-7">
+                                    <label class="fw-semibold fs-6 mb-2">Kuota Kiosk / Hari</label>
+                                    <input type="number" name="kuota_kiosk" class="form-control" value="60" min="0">
+                                </div>
                             </div>
                             <div class="form-check form-switch form-check-custom form-check-solid mb-7">
                                 <input class="form-check-input" type="checkbox" name="is_force_close" value="1"
@@ -821,31 +831,71 @@
 
             $('#btn_batch_jam').click(function() {
                 Swal.fire({
-                    title: 'Ubah Jam Operasional Masal',
+                    title: 'Set Jam Operasional Masal',
                     html: `
-                        <div class="text-muted mb-5">Pilih mode jam operasional untuk SELURUH instansi:</div>
-                        <div class="d-grid gap-3">
-                            <button type="button" class="btn btn-primary btn-sm py-3" onclick="Swal.close(); sendBatchJam('normal')">
-                                <i class="fa fa-sun text-white me-2"></i> Mode Normal
-                            </button>
-                            <button type="button" class="btn btn-warning btn-sm py-3" onclick="Swal.close(); sendBatchJam('ramadan')">
-                                <i class="fa fa-moon text-white me-2"></i> Mode Ramadhan
-                            </button>
-                            <button type="button" class="btn btn-danger btn-sm py-3" onclick="Swal.close(); sendBatchJam('mpp')">
-                                <i class="fa fa-star text-white me-2"></i> Mode MPP
-                            </button>
+                        <div class="text-muted fs-7 mb-4">Tentukan jam pelayanan untuk <b>SELURUH instansi</b> sekaligus.</div>
+                        <div class="text-start">
+                            <label class="fw-bold fs-7 d-block mb-1">Senin – Kamis</label>
+                            <div class="d-flex align-items-center gap-2 mb-3">
+                                <input type="time" id="bj_buka_sk" class="form-control form-control-sm" value="08:00">
+                                <span class="text-muted fs-8">s/d</span>
+                                <input type="time" id="bj_tutup_sk" class="form-control form-control-sm" value="15:00">
+                            </div>
+                            <label class="fw-bold fs-7 d-block mb-1">Jumat</label>
+                            <div class="d-flex align-items-center gap-2 mb-3">
+                                <input type="time" id="bj_buka_jumat" class="form-control form-control-sm" value="08:00">
+                                <span class="text-muted fs-8">s/d</span>
+                                <input type="time" id="bj_tutup_jumat" class="form-control form-control-sm" value="15:30">
+                            </div>
+                            <label class="fw-bold fs-7 d-block mb-1">Sabtu</label>
+                            <div class="d-flex align-items-center gap-2">
+                                <input type="time" id="bj_buka_sabtu" class="form-control form-control-sm" value="08:00">
+                                <span class="text-muted fs-8">s/d</span>
+                                <input type="time" id="bj_tutup_sabtu" class="form-control form-control-sm" value="12:00">
+                            </div>
                         </div>
                     `,
-                    showConfirmButton: false,
                     showCancelButton: true,
+                    confirmButtonText: '<i class="fa fa-check me-1"></i> Terapkan ke Semua',
                     cancelButtonText: 'Batal',
+                    buttonsStyling: false,
+                    focusConfirm: false,
                     customClass: {
-                        cancelButton: 'btn btn-secondary btn-sm mt-3'
+                        confirmButton: 'btn btn-warning btn-sm',
+                        cancelButton: 'btn btn-secondary btn-sm ms-2'
+                    },
+                    preConfirm: () => {
+                        const g = id => (document.getElementById(id).value || '').trim();
+                        const v = {
+                            buka_senin_kamis: g('bj_buka_sk'),
+                            tutup_senin_kamis: g('bj_tutup_sk'),
+                            buka_jumat: g('bj_buka_jumat'),
+                            tutup_jumat: g('bj_tutup_jumat'),
+                            buka_sabtu: g('bj_buka_sabtu'),
+                            tutup_sabtu: g('bj_tutup_sabtu'),
+                        };
+                        for (const k in v) {
+                            if (!v[k]) {
+                                Swal.showValidationMessage('Semua jam buka & tutup wajib diisi.');
+                                return false;
+                            }
+                        }
+                        if (v.tutup_senin_kamis <= v.buka_senin_kamis ||
+                            v.tutup_jumat <= v.buka_jumat ||
+                            v.tutup_sabtu <= v.buka_sabtu) {
+                            Swal.showValidationMessage('Jam tutup harus lebih besar dari jam buka.');
+                            return false;
+                        }
+                        return v;
+                    }
+                }).then(function(result) {
+                    if (result.isConfirmed && result.value) {
+                        sendBatchJam(result.value);
                     }
                 });
             });
 
-            function sendBatchJam(mode) {
+            function sendBatchJam(jam) {
                 Swal.fire({
                     title: 'Memproses...',
                     text: 'Sedang mengatur jam untuk seluruh tenant.',
@@ -858,16 +908,19 @@
                 $.ajax({
                     url: "{{ route('skpd.batch-jam') }}",
                     method: "POST",
-                    data: {
-                        _token: $('meta[name="csrf-token"]').attr('content'),
-                        mode: mode
-                    },
+                    data: $.extend({
+                        _token: $('meta[name="csrf-token"]').attr('content')
+                    }, jam),
                     success: function(res) {
                         Swal.fire("Berhasil", res.success, "success");
                         $('.chimox').DataTable().ajax.reload(null, false);
                     },
                     error: function(xhr) {
-                        Swal.fire("Gagal", xhr.responseJSON?.error || "Terjadi kesalahan sistem", "error");
+                        let msg = xhr.responseJSON?.error || "Terjadi kesalahan sistem";
+                        if (xhr.responseJSON?.errors) {
+                            msg = Object.values(xhr.responseJSON.errors)[0][0];
+                        }
+                        Swal.fire("Gagal", msg, "error");
                     }
                 });
             }
@@ -950,6 +1003,56 @@
                     }
                 });
             });
+
+            $('#btn_batch_status').click(function() {
+                Swal.fire({
+                    title: 'Status Layanan Masal',
+                    html: `
+                        <div class="text-muted mb-5">Pilih status layanan untuk SELURUH instansi:</div>
+                        <div class="d-grid gap-3">
+                            <button type="button" class="btn btn-success btn-sm py-3" onclick="Swal.close(); sendBatchStatus(0)">
+                                <i class="ki-outline ki-check-circle text-white me-2"></i> Buka Seluruh Layanan
+                            </button>
+                            <button type="button" class="btn btn-danger btn-sm py-3" onclick="Swal.close(); sendBatchStatus(1)">
+                                <i class="ki-outline ki-cross-circle text-white me-2"></i> Tutup Paksa Seluruh Layanan
+                            </button>
+                        </div>
+                    `,
+                    showConfirmButton: false,
+                    showCancelButton: true,
+                    cancelButtonText: 'Batal',
+                    customClass: {
+                        cancelButton: 'btn btn-secondary btn-sm mt-3'
+                    }
+                });
+            });
+
+            function sendBatchStatus(status) {
+                Swal.fire({
+                    title: 'Memproses...',
+                    text: 'Sedang mengubah status seluruh tenant.',
+                    allowOutsideClick: false,
+                    didOpen: () => {
+                        Swal.showLoading();
+                    }
+                });
+
+                $.ajax({
+                    url: "{{ route('skpd.batch-status-all') }}",
+                    method: "POST",
+                    data: {
+                        _token: $('meta[name="csrf-token"]').attr('content'),
+                        status: status
+                    },
+                    success: function(res) {
+                        Swal.fire("Berhasil", res.success, "success");
+                        $('.chimox').DataTable().ajax.reload(null, false);
+                    },
+                    error: function(xhr) {
+                        Swal.fire("Gagal", xhr.responseJSON?.error || "Terjadi kesalahan sistem", "error");
+                    }
+                });
+            }
 
             let editId = null;
 
@@ -1116,7 +1219,7 @@
                 }
 
                 $.ajax({
-                    url: `/skpd/${id}/ban`,
+                    url: `{{ url('skpd') }}/${id}/ban`,
                     method: 'POST',
                     data: {
                         _token: $('meta[name="csrf-token"]').attr('content'),
@@ -1152,7 +1255,7 @@
                     if (result.isConfirmed) {
 
                         $.ajax({
-                            url: `/skpd/${id}/unban`,
+                            url: `{{ url('skpd') }}/${id}/unban`,
                             method: "POST",
                             data: {
                                 _token: $('meta[name="csrf-token"]').attr('content')

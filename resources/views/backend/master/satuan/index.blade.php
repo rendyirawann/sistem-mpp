@@ -871,7 +871,7 @@ $("body").on("click", "#getShowRowData", function(e) {
     );
 
     $.ajax({
-        url: "/master/satuan/" + id,
+        url: "{{ url('master/satuan') }}/" + id,
         dataType: "json",
         success: function(result) {
             $("#ShowRowModalBody").html(result.html);

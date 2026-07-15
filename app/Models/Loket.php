@@ -37,4 +37,21 @@ class Loket extends Model
     {
         return $this->belongsTo(Skpd::class, 'skpd_id', 'id');
     }
+
+    /** Form persyaratan yang ditautkan ke layanan ini (0..N). */
+    public function formPersyaratan()
+    {
+        return $this->belongsToMany(
+            FormPersyaratan::class,
+            'loket_form_persyaratan',
+            'loket_id',
+            'form_persyaratan_id'
+        )->withPivot('urutan')->withTimestamps()->orderBy('urutan');
+    }
+
+    /** True jika layanan sudah punya data antrian -> tidak boleh dihapus / ganti nama. */
+    public function hasAntrianData(): bool
+    {
+        return Antrian::where('loket_id', $this->id)->exists();
+    }
 }

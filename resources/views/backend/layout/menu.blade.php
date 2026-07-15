@@ -174,6 +174,115 @@
         <!--end:Menu item-->
         @endcanany
 
+        @if (auth()->user()->hasRole('Superadmin') || auth()->user()->skpd_id)
+        <!--begin:Menu item Antrian Online-->
+        <div data-kt-menu-trigger="{default: 'click', lg: 'hover'}" data-kt-menu-placement="bottom-start"
+            class="menu-item menu-lg-down-accordion menu-sub-lg-down-indention me-0 me-lg-2">
+            <!--begin:Menu link-->
+            <span
+                class="menu-link py-3 {{ request()->routeIs('antrian-online-list.*', 'kalender.*', 'scan.*', 'form-persyaratan.*', 'landing-setting.*') ? 'active ' : '' }}">
+                <span class="menu-title">Antrian Online</span>
+                <span class="menu-arrow d-lg-none"></span>
+            </span>
+            <!--end:Menu link-->
+            <!--begin:Menu sub-->
+            <div class="menu-sub menu-sub-lg-down-accordion menu-sub-lg-dropdown px-lg-2 py-lg-4 w-lg-225px">
+                <!--begin:Menu item-->
+                <div class="menu-item {{ request()->routeIs('antrian-online-list.index') ? 'here show ' : '' }}">
+                    <a class="menu-link py-3" href="{{ route('antrian-online-list.index') }}">
+                        <span class="menu-icon">
+                            <i class="ki-outline ki-people fs-2"></i>
+                        </span>
+                        <span class="menu-title">Daftar Antrian Online</span>
+                    </a>
+                </div>
+                <!--end:Menu item-->
+                <!--begin:Menu item-->
+                <div class="menu-item {{ request()->routeIs('kalender.*') ? 'here show ' : '' }}">
+                    <a class="menu-link py-3" href="{{ route('kalender.index') }}">
+                        <span class="menu-icon">
+                            <i class="ki-outline ki-calendar fs-2"></i>
+                        </span>
+                        <span class="menu-title">Kalender Antrian</span>
+                    </a>
+                </div>
+                <!--end:Menu item-->
+                <!--begin:Menu item-->
+                <div class="menu-item {{ request()->routeIs('scan.*') ? 'here show ' : '' }}">
+                    <a class="menu-link py-3" href="{{ route('scan.index') }}">
+                        <span class="menu-icon">
+                            <i class="ki-outline ki-scan-barcode fs-2"></i>
+                        </span>
+                        <span class="menu-title">Scan Antrean</span>
+                    </a>
+                </div>
+                <!--end:Menu item-->
+                @if (auth()->user()->hasRole('Superadmin'))
+                <!--begin:Menu item-->
+                <div class="menu-item {{ request()->routeIs('form-persyaratan.*') ? 'here show ' : '' }}">
+                    <a class="menu-link py-3" href="{{ route('form-persyaratan.index') }}">
+                        <span class="menu-icon">
+                            <i class="ki-outline ki-document fs-2"></i>
+                        </span>
+                        <span class="menu-title">Form Persyaratan</span>
+                    </a>
+                </div>
+                <!--end:Menu item-->
+                <!--begin:Menu item-->
+                <div class="menu-item {{ request()->routeIs('landing-setting.*') ? 'here show ' : '' }}">
+                    <a class="menu-link py-3" href="{{ route('landing-setting.index') }}">
+                        <span class="menu-icon">
+                            <i class="ki-outline ki-gear fs-2"></i>
+                        </span>
+                        <span class="menu-title">Landing & Footer</span>
+                    </a>
+                </div>
+                <!--end:Menu item-->
+                @endif
+            </div>
+            <!--end:Menu sub-->
+        </div>
+        <!--end:Menu item Antrian Online-->
+        @endif
+
+        @if (auth()->user()->hasRole('Superadmin'))
+        <!--begin:Menu item Display TV-->
+        <div data-kt-menu-trigger="{default: 'click', lg: 'hover'}" data-kt-menu-placement="bottom-start"
+            class="menu-item menu-lg-down-accordion menu-sub-lg-down-indention me-0 me-lg-2">
+            <!--begin:Menu link-->
+            <span class="menu-link py-3 {{ request()->routeIs('display-setting.*', 'announcement.*') ? 'active ' : '' }}">
+                <span class="menu-title">Display TV</span>
+                <span class="menu-arrow d-lg-none"></span>
+            </span>
+            <!--end:Menu link-->
+            <!--begin:Menu sub-->
+            <div class="menu-sub menu-sub-lg-down-accordion menu-sub-lg-dropdown px-lg-2 py-lg-4 w-lg-225px">
+                <!--begin:Menu item-->
+                <div class="menu-item {{ request()->routeIs('display-setting.*') ? 'here show ' : '' }}">
+                    <a class="menu-link py-3" href="{{ route('display-setting.index') }}">
+                        <span class="menu-icon">
+                            <i class="ki-outline ki-screen fs-2"></i>
+                        </span>
+                        <span class="menu-title">Display Monitor TV</span>
+                    </a>
+                </div>
+                <!--end:Menu item-->
+                <!--begin:Menu item-->
+                <div class="menu-item {{ request()->routeIs('announcement.*') ? 'here show ' : '' }}">
+                    <a class="menu-link py-3" href="{{ route('announcement.index') }}">
+                        <span class="menu-icon">
+                            <i class="ki-outline ki-microphone-2 fs-2"></i>
+                        </span>
+                        <span class="menu-title">Pengumuman Suara TV</span>
+                    </a>
+                </div>
+                <!--end:Menu item-->
+            </div>
+            <!--end:Menu sub-->
+        </div>
+        <!--end:Menu item Display TV-->
+        @endif
+
         <!--begin:Menu item-->
         <div data-kt-menu-trigger="{default: 'click', lg: 'hover'}" data-kt-menu-placement="bottom-start"
             class="menu-item menu-lg-down-accordion menu-sub-lg-down-indention me-0 me-lg-2">

@@ -110,7 +110,24 @@
                     </div>
                     <!--end::Group actions-->
                     <!--begin::Toolbar-->
-                    <div class="d-flex justify-content-end" data-kt-loket-table-toolbar="base">
+                    <div class="d-flex justify-content-end align-items-center gap-2 flex-wrap"
+                        data-kt-loket-table-toolbar="base">
+
+                        <!--begin::Filter Instansi-->
+                        <select id="filter_skpd" class="form-select form-select-sm w-200px">
+                            <option value="all" selected>Semua Instansi</option>
+                            @foreach ($skpd as $sk)
+                                <option value="{{ $sk->id }}">{{ $sk->nama_skpd }}</option>
+                            @endforeach
+                        </select>
+                        <!--end::Filter Instansi-->
+
+                        <!--begin::Export PDF-->
+                        <button type="button" class="btn btn-sm btn-danger" id="btn-export-pdf">
+                            <i class="ki-outline ki-file-down me-2"></i> Export PDF
+                        </button>
+                        <!--end::Export PDF-->
+
                         <!--begin::Reload Data-->
                         <button type="button" class="btn btn-sm btn-primary " id="refresh-table-btn">
                             <span class="indicator-label">
@@ -481,7 +498,11 @@
                     ordering: false,
                     ajax: {
                         url: "{{ route('get-loket') }}",
-                        type: "GET"
+                        type: "GET",
+                        data: function(d) {
+                            // Kirim filter instansi ke server
+                            d.skpd_id = $('#filter_skpd').val();
+                        }
                     },
                     columns: [
                         canMassDelete ? {
@@ -526,6 +547,21 @@
                 // 🔄 Refresh button
                 $('#refresh-table-btn').on('click', function() {
                     table.ajax.reload(null, false);
+                });
+
+                // 🏢 Filter Instansi: reload tabel saat pilihan berubah
+                $('#filter_skpd').on('change', function() {
+                    table.ajax.reload();
+                });
+
+                // 📄 Export PDF (mengikuti filter instansi & pencarian aktif)
+                $('#btn-export-pdf').on('click', function() {
+                    const skpdId = $('#filter_skpd').val() || 'all';
+                    const search = $('#search').val() || '';
+                    const url = "{{ route('loket.export-pdf') }}" +
+                        "?skpd_id=" + encodeURIComponent(skpdId) +
+                        "&search=" + encodeURIComponent(search);
+                    window.open(url, '_blank');
                 });
 
                 // 🔍 Search input (native DataTables, JANGAN debounce)
@@ -853,7 +889,7 @@
                 }
 
                 $.ajax({
-                    url: `/loket/${id}/ban`,
+                    url: `{{ url('loket') }}/${id}/ban`,
                     method: 'POST',
                     data: {
                         _token: $('meta[name="csrf-token"]').attr('content'),
@@ -889,7 +925,7 @@
                     if (result.isConfirmed) {
 
                         $.ajax({
-                            url: `/loket/${id}/unban`,
+                            url: `{{ url('loket') }}/${id}/unban`,
                             method: "POST",
                             data: {
                                 _token: $('meta[name="csrf-token"]').attr('content')

@@ -142,7 +142,33 @@
             <i class="fa fa-users text-gray-500 fs-4"></i>
         </div>
     </div>
-    <div class="form-text">Ketik angka '0' jika antrian tidak ingin dibatasi.</div>
+    <div class="form-text">Total/informasi. Pembatasan riil memakai kuota Online & Kiosk di bawah.</div>
+</div>
+
+<div class="row">
+    <div class="col-md-6 fv-row mb-7">
+        <label class="fw-semibold fs-6 mb-2">Kuota Antrian Online / Hari</label>
+        <input type="number" name="kuota_online" class="form-control form-control-solid"
+            value="{{ $user->kuota_online ?? 40 }}" min="0">
+        <div class="form-text">Jatah antrian online (tidak menghabiskan jatah kiosk).</div>
+    </div>
+    <div class="col-md-6 fv-row mb-7">
+        <label class="fw-semibold fs-6 mb-2">Kuota Antrian Kiosk / Hari</label>
+        <input type="number" name="kuota_kiosk" class="form-control form-control-solid"
+            value="{{ $user->kuota_kiosk ?? 60 }}" min="0">
+        <div class="form-text">Jatah antrian walk-in di kiosk MPP.</div>
+    </div>
+</div>
+
+<div class="border border-primary border-dashed rounded bg-light-primary mb-5 p-4">
+    <div class="form-check form-switch form-check-custom form-check-solid form-check-primary d-flex align-items-center">
+        <input class="form-check-input h-30px w-50px me-3" type="checkbox" name="is_antrianonline" value="1"
+            id="antrianOnlineEdit" {{ $user->is_antrianonline ? 'checked' : '' }} />
+        <label class="form-check-label text-primary fw-bolder fs-6" for="antrianOnlineEdit">
+            AKTIFKAN ANTRIAN ONLINE untuk instansi ini
+        </label>
+    </div>
+    <div class="form-text ms-1">Jika aktif, instansi ini tampil di portal antrian online dengan tombol <b>"Pilih Tenan"</b> (warga bisa daftar online). Jika nonaktif, tampil sebagai <b>"Available Soon"</b>.</div>
 </div>
 
 <div class="border border-danger border-dashed rounded bg-light-danger mb-5 p-4">

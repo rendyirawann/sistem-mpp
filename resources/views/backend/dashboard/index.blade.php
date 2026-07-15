@@ -322,13 +322,13 @@
                                         <tr>
                                             <td class="text-center">{{ $index + 1 }}</td>
                                             <td>
-                                                @if ($row->loket->skpd->logo_skpd)
+                                                @if ($row->loket?->skpd?->logo_skpd)
                                                     <img src="{{ asset('storage/user/logo_skpd/' . $row->loket->skpd->logo_skpd) }}"
                                                         class="w-25px h-25px me-2 object-fit-cover rounded-circle">
                                                 @endif
-                                                {{ $row->loket->skpd->nama_skpd ?? '-' }}
+                                                {{ $row->loket?->skpd?->nama_skpd ?? 'Tanpa Instansi' }}
                                             </td>
-                                            <td>{{ $row->loket->nama_loket }}</td>
+                                            <td>{{ $row->loket?->nama_loket ?? 'Tanpa Layanan' }}</td>
                                             <td class="text-end">
                                                 <div class="d-flex justify-content-end align-items-center gap-2">
                                                     <span class="fw-bold fs-6">{{ $row->total }}</span>

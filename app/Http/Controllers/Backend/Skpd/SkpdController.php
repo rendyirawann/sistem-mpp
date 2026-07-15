@@ -31,7 +31,7 @@ class SkpdController extends Controller
         $this->middleware('permission:skpd.list', ['only' => ['index', 'getSkpd']]);
         $this->middleware('permission:skpd.show', ['only' => ['show']]);
         $this->middleware('permission:skpd.create', ['only' => ['store']]);
-        $this->middleware('permission:skpd.edit', ['only' => ['edit', 'update', 'batchJamOperasional']]);
+        $this->middleware('permission:skpd.edit', ['only' => ['edit', 'update', 'batchJamOperasional', 'batchStatusAll']]);
         $this->middleware('permission:skpd.delete', ['only' => ['destroy']]);
         $this->middleware('permission:skpd.massdelete', ['only' => ['massDelete']]);
     }
@@ -60,9 +60,15 @@ class SkpdController extends Controller
 
         return DataTables::of($query)
             ->addColumn('isaktif', function ($r) {
-                return $r->isaktif
+                $status = $r->isaktif
                     ? '<span class="badge badge-light-success">Aktif</span>'
                     : '<span class="badge badge-light-danger">Nonaktif</span>';
+
+                if ($r->is_force_close) {
+                    $status .= '<br><span class="badge badge-light-danger mt-1">Force Closed</span>';
+                }
+
+                return $status;
             })
             ->addColumn('action', function ($row) {
 
@@ -111,8 +117,18 @@ class SkpdController extends Controller
                         </li>';
                 }
 
-                // 🗑 Hapus
-                if (auth()->user()->can('skpd.delete')) {
+                // 📅 Kalender Kuota Antrian
+                $html .= '
+                    <li>
+                        <a href="' . url('kalender-antrian/' . $row->id) . '"
+                           class="dropdown-item d-flex align-items-center">
+                            <i class="ki-outline ki-calendar fs-5 me-2 text-primary"></i>
+                            Kalender Kuota
+                        </a>
+                    </li>';
+
+                // 🗑 Hapus — disembunyikan jika instansi sudah punya data antrian
+                if (auth()->user()->can('skpd.delete') && !$row->hasAntrianData()) {
                     $html .= '
                         <li>
                             <a href="javascript:void(0)"
@@ -169,6 +185,8 @@ class SkpdController extends Controller
             'buka_sabtu' => 'required',
             'tutup_sabtu' => 'required',
             'kuota_harian' => 'required|numeric',
+            'kuota_online' => 'nullable|numeric|min:0',
+            'kuota_kiosk' => 'nullable|numeric|min:0',
         ], [
 
             //  'kode_skpd.required' => 'Kode SKPD wajib diisi',
@@ -231,8 +249,11 @@ class SkpdController extends Controller
             $data->buka_jumat = $request->buka_jumat;
             $data->tutup_jumat = $request->tutup_jumat;
             $data->kuota_harian = $request->kuota_harian;
+            $data->kuota_online = $request->kuota_online ?? 40;
+            $data->kuota_kiosk = $request->kuota_kiosk ?? 60;
             $data->is_force_close = $request->has('is_force_close') ? 1 : 0;
             $data->is_sabtu_buka = $request->has('is_sabtu_buka') ? 1 : 0;
+            $data->is_antrianonline = $request->has('is_antrianonline') ? 1 : 0;
             $data->buka_sabtu = $request->buka_sabtu;
             $data->tutup_sabtu = $request->tutup_sabtu;
             $data->save();
@@ -392,52 +413,55 @@ class SkpdController extends Controller
 
     public function batchJamOperasional(Request $request)
     {
-        $mode = $request->mode;
+        // Admin menentukan jam sendiri untuk SELURUH instansi (batch)
+        $validator = \Validator::make($request->all(), [
+            'buka_senin_kamis'  => 'required|date_format:H:i',
+            'tutup_senin_kamis' => 'required|date_format:H:i|after:buka_senin_kamis',
+            'buka_jumat'        => 'required|date_format:H:i',
+            'tutup_jumat'       => 'required|date_format:H:i|after:buka_jumat',
+            'buka_sabtu'        => 'required|date_format:H:i',
+            'tutup_sabtu'       => 'required|date_format:H:i|after:buka_sabtu',
+        ], [
+            'buka_senin_kamis.required'  => 'Jam buka Senin–Kamis wajib diisi',
+            'tutup_senin_kamis.required' => 'Jam tutup Senin–Kamis wajib diisi',
+            'tutup_senin_kamis.after'    => 'Jam tutup Senin–Kamis harus lebih besar dari jam buka',
+            'buka_jumat.required'        => 'Jam buka Jumat wajib diisi',
+            'tutup_jumat.required'       => 'Jam tutup Jumat wajib diisi',
+            'tutup_jumat.after'          => 'Jam tutup Jumat harus lebih besar dari jam buka',
+            'buka_sabtu.required'        => 'Jam buka Sabtu wajib diisi',
+            'tutup_sabtu.required'       => 'Jam tutup Sabtu wajib diisi',
+            'tutup_sabtu.after'          => 'Jam tutup Sabtu harus lebih besar dari jam buka',
+            '*.date_format'              => 'Format jam harus HH:MM',
+        ]);
 
-        // Tentukan Jam Sesuai Mode
-        if ($mode === 'ramadan') {
-            $buka_sk = '08:00:00';
-            $tutup_sk = '15:00:00';
-            $buka_jumat = '08:00:00';
-            $tutup_jumat = '15:30:00';
-            $buka_sabtu = '08:00:00';
-            $tutup_sabtu = '15:00:00';
-        } elseif ($mode === 'mpp') {
-            $buka_sk = '08:00:00';
-            $tutup_sk = '15:00:00';
-            $buka_jumat = '08:00:00';
-            $tutup_jumat = '16:00:00';
-            $buka_sabtu = '08:00:00';
-            $tutup_sabtu = '13:00:00';
-        } else {
-            // Mode Normal (Standar Jam Kerja ASN)
-            // Silakan sesuaikan jika jam tutup normalnya berbeda
-            $buka_sk = '08:00:00';
-            $tutup_sk = '16:00:00';
-            $buka_jumat = '08:00:00';
-            $tutup_jumat = '16:30:00';
-            $buka_sabtu = '08:00:00';
-            $tutup_sabtu = '15:00:00';
+        if ($validator->fails()) {
+            return response()->json(['errors' => $validator->errors()], 422);
         }
+
+        // Normalisasi HH:MM -> HH:MM:SS agar konsisten dengan data lama
+        $fmt = fn ($t) => strlen(trim((string) $t)) === 5 ? trim($t) . ':00' : trim((string) $t);
+
+        $jam = [
+            'buka_senin_kamis'  => $fmt($request->buka_senin_kamis),
+            'tutup_senin_kamis' => $fmt($request->tutup_senin_kamis),
+            'buka_jumat'        => $fmt($request->buka_jumat),
+            'tutup_jumat'       => $fmt($request->tutup_jumat),
+            'buka_sabtu'        => $fmt($request->buka_sabtu),
+            'tutup_sabtu'       => $fmt($request->tutup_sabtu),
+        ];
 
         try {
             \DB::beginTransaction();
 
             // Ubah seluruh jam operasional di tabel SKPD
-            Skpd::query()->update([
-                'buka_senin_kamis' => $buka_sk,
-                'tutup_senin_kamis' => $tutup_sk,
-                'buka_jumat' => $buka_jumat,
-                'tutup_jumat' => $tutup_jumat,
-                'buka_sabtu' => $buka_sabtu,
-                'tutup_sabtu' => $tutup_sabtu,
-            ]);
+            Skpd::query()->update($jam);
 
             // Log Activity
             activity()
                 ->useLog('Ubah Masal Jam Layanan')
                 ->causedBy(Auth::user())
-                ->log("Mengubah jam pelayanan seluruh tenant ke Mode " . ucfirst($mode));
+                ->withProperties(['jam' => $jam])
+                ->log('Mengatur jam pelayanan seluruh tenant secara massal');
 
             \DB::commit();
 
@@ -448,7 +472,7 @@ class SkpdController extends Controller
             }
 
             return response()->json([
-                'success' => 'Jam operasional seluruh tenant berhasil diubah ke Mode ' . ucfirst($mode) . '!'
+                'success' => 'Jam operasional seluruh tenant berhasil diperbarui!'
             ]);
         } catch (\Exception $e) {
             \DB::rollBack();
@@ -584,6 +608,8 @@ class SkpdController extends Controller
             'buka_sabtu' => 'required',
             'tutup_sabtu' => 'required',
             'kuota_harian' => 'required|numeric',
+            'kuota_online' => 'nullable|numeric|min:0',
+            'kuota_kiosk' => 'nullable|numeric|min:0',
         ], [
             'nama_skpd.required' => 'Nama SKPD wajib diisi',
             'nama_skpd.max'      => 'Nama SKPD maksimal 255 karakter',
@@ -611,6 +637,33 @@ class SkpdController extends Controller
 
             $data = Skpd::findOrFail($id);
             $oldData = $data->toArray();
+
+            // 🔒 Nama instansi terkunci jika sudah punya data antrian (semua role)
+            if ($data->hasAntrianData() && $request->nama_skpd !== $data->nama_skpd) {
+                DB::rollBack();
+                return response()->json([
+                    'error' => 'Nama instansi tidak dapat diubah karena sudah memiliki data antrian. Anda hanya dapat menonaktifkannya.',
+                    'judul' => 'Tidak Diizinkan',
+                ], 422);
+            }
+
+            // 🔒 Kuota baru meng-override SEMUA tanggal ke depan, KECUALI tanggal yang
+            // sudah ada antrean -> dibekukan dgn kuota lama (tulis override di kalender).
+            $oldOnline = (int) ($oldData['kuota_online'] ?? 40);
+            $oldKiosk  = (int) ($oldData['kuota_kiosk'] ?? 60);
+            $newOnline = (int) ($request->kuota_online ?? 40);
+            $newKiosk  = (int) ($request->kuota_kiosk ?? 60);
+            if ($newOnline !== $oldOnline || $newKiosk !== $oldKiosk) {
+                $tglBerantrean = \App\Models\Antrian::where('skpd_id', $id)
+                    ->whereDate('tanggal', '>=', Carbon::today()->toDateString())
+                    ->select('tanggal')->distinct()->pluck('tanggal');
+                foreach ($tglBerantrean as $t) {
+                    \App\Models\KuotaTanggal::firstOrCreate(
+                        ['skpd_id' => $id, 'tanggal' => Carbon::parse($t)->toDateString()],
+                        ['kuota_online' => $oldOnline, 'kuota_kiosk' => $oldKiosk]
+                    );
+                }
+            }
 
             if ($request->hasFile('logo_skpd')) {
 
@@ -650,8 +703,11 @@ class SkpdController extends Controller
             $data->buka_jumat = $request->buka_jumat;
             $data->tutup_jumat = $request->tutup_jumat;
             $data->kuota_harian = $request->kuota_harian;
+            $data->kuota_online = $request->kuota_online ?? 40;
+            $data->kuota_kiosk = $request->kuota_kiosk ?? 60;
             $data->is_force_close = $request->has('is_force_close') ? 1 : 0;
             $data->is_sabtu_buka = $request->has('is_sabtu_buka') ? 1 : 0;
+            $data->is_antrianonline = $request->has('is_antrianonline') ? 1 : 0;
             $data->buka_sabtu = $request->buka_sabtu;
             $data->tutup_sabtu = $request->tutup_sabtu;
             $data->save();
@@ -736,6 +792,15 @@ class SkpdController extends Controller
             $data = Skpd::findOrFail($id);
             $getData = $data->toArray();
 
+            // 🔒 Tidak boleh dihapus jika sudah punya data antrian (semua role)
+            if ($data->hasAntrianData()) {
+                DB::rollBack();
+                return response()->json([
+                    'error' => 'Instansi tidak dapat dihapus karena sudah memiliki data antrian. Anda hanya dapat menonaktifkannya.',
+                    'judul' => 'Tidak Diizinkan',
+                ], 422);
+            }
+
             $data->delete();
 
             DB::commit();
@@ -791,11 +856,24 @@ class SkpdController extends Controller
                 ]);
             }
 
-            // Ambil data SKPD untuk logging sebelum dihapus
-            $skpd = Skpd::whereIn('id', $ids)->get();
+            // 🔒 Lindungi instansi yang sudah punya data antrian
+            $allSkpd   = Skpd::whereIn('id', $ids)->get();
+            $deletable = $allSkpd->reject(fn ($s) => $s->hasAntrianData());
+            $protected = $allSkpd->count() - $deletable->count();
 
-            // Hapus data SKPD
-            Skpd::whereIn('id', $ids)->delete();
+            if ($deletable->isEmpty()) {
+                DB::rollBack();
+                return response()->json([
+                    'status'  => 'error',
+                    'message' => 'Instansi terpilih sudah memiliki data antrian, tidak dapat dihapus. Hanya bisa dinonaktifkan.'
+                ]);
+            }
+
+            // Data SKPD untuk logging (hanya yang akan dihapus)
+            $skpd = $deletable;
+
+            // Hapus data SKPD (hanya yang tidak punya data antrian)
+            Skpd::whereIn('id', $deletable->pluck('id')->all())->delete();
 
             DB::commit();
 
@@ -830,7 +908,8 @@ class SkpdController extends Controller
 
             return response()->json([
                 'status'  => 'success',
-                'message' => count($ids) . ' SKPD berhasil dihapus'
+                'message' => $deletable->count() . ' SKPD berhasil dihapus'
+                    . ($protected > 0 ? ', ' . $protected . ' dilindungi karena sudah punya data antrian' : '')
             ]);
         } catch (\Exception $e) {
             DB::rollBack();
@@ -962,6 +1041,41 @@ class SkpdController extends Controller
             \DB::rollBack();
             return response()->json([
                 'error' => 'Terjadi kesalahan sistem',
+                'message' => $e->getMessage()
+            ], 500);
+        }
+    }
+
+    public function batchStatusAll(Request $request)
+    {
+        $status = $request->status; // 1 = Tutup, 0 = Buka
+
+        try {
+            DB::beginTransaction();
+
+            Skpd::query()->update(['is_force_close' => $status]);
+
+            // Log Activity
+            $label = $status == 1 ? 'MENUTUP' : 'MEMBUKA';
+            activity()
+                ->useLog('Ubah Masal Status Layanan')
+                ->causedBy(Auth::user())
+                ->log("{$label} SELURUH layanan tenant sekaligus.");
+
+            DB::commit();
+
+            try {
+                event(new StatusTenantUpdated());
+            } catch (\Exception $e) {
+            }
+
+            return response()->json([
+                'success' => "Seluruh layanan tenant berhasil " . ($status == 1 ? 'ditutup' : 'dibuka') . "!"
+            ]);
+        } catch (\Exception $e) {
+            DB::rollBack();
+            return response()->json([
+                'error' => 'Gagal mengubah status layanan',
                 'message' => $e->getMessage()
             ], 500);
         }

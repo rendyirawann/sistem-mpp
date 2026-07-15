@@ -18,6 +18,8 @@ class DatabaseSeeder extends Seeder
         $this->call([
             UserSeeder::class,
             LoadWilayahSqlSeeder::class,
+            LandingContentSeeder::class,
+            FormPersyaratanSeeder::class,
         ]);
     }
 }

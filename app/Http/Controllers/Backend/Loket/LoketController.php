@@ -14,12 +14,13 @@ use Jenssegers\Agent\Agent;
 use Illuminate\View\View;
 use Yajra\DataTables\Facades\DataTables;
 use Illuminate\Validation\Rule;
+use Barryvdh\DomPDF\Facade\Pdf;
 class LoketController extends Controller
 {
     function __construct()
     {
         $this->middleware(['auth']);
-        $this->middleware('permission:loket.list', ['only' => ['index', 'getData']]);
+        $this->middleware('permission:loket.list', ['only' => ['index', 'getData', 'exportPdf']]);
         $this->middleware('permission:loket.create', ['only' => ['store']]);
         $this->middleware('permission:loket.edit', ['only' => ['edit', 'update']]);
         $this->middleware('permission:loket.delete', ['only' => ['destroy']]);
@@ -28,17 +29,29 @@ class LoketController extends Controller
 
     public function index(): View
     {
-        $skpd = Skpd::orderBy('id', 'desc')
-        ->get();
-        return view('backend.loket.index',compact('skpd'));
+        // Tenant (non-Superadmin) hanya boleh melihat/memfilter instansinya sendiri,
+        // agar dropdown filter selaras dengan data yang bisa diakses.
+        $skpd = Skpd::query()
+            ->when(!auth()->user()->hasRole('Superadmin'), function ($q) {
+                $q->where('id', auth()->user()->skpd_id);
+            })
+            ->orderBy('nama_skpd')
+            ->get();
+
+        return view('backend.loket.index', compact('skpd'));
     }
 
     public function getData(Request $request)
     {
-        $query = Loket::query();
+        $query = Loket::query()->with('skpd');
 
         if (!auth()->user()->hasRole('Superadmin')) {
             $query->where('skpd_id', auth()->user()->skpd_id);
+        }
+
+        // Filter berdasarkan Instansi (dropdown)
+        if ($request->filled('skpd_id') && $request->skpd_id !== 'all') {
+            $query->where('skpd_id', $request->skpd_id);
         }
 
         $query->orderByDesc('created_at');
@@ -46,10 +59,21 @@ class LoketController extends Controller
 
         if (!empty($request->search['value'])) {
             $search = $request->search['value'];
-            $query->where(function ($q) use ($search) {
+
+            // Resolve dulu id SKPD yang namanya cocok (query tabel skpd saja).
+            // Hindari whereHas (join antar kolom skpd_id = id) yang error karena
+            // beda collation antar kolom di DB (1267 Illegal mix of collations).
+            $skpdIds = Skpd::where('nama_skpd', 'like', "%{$search}%")->pluck('id')->all();
+
+            $query->where(function ($q) use ($search, $skpdIds) {
                 $q->where('nama_loket', 'like', "%{$search}%")
                   ->orWhere('kode_tenant', 'like', "%{$search}%")
                   ->orWhere('prefix_tenant', 'like', "%{$search}%");
+
+                // Cari juga berdasarkan Nama Instansi (SKPD)
+                if (!empty($skpdIds)) {
+                    $q->orWhereIn('skpd_id', $skpdIds);
+                }
             });
         }
 
@@ -86,7 +110,7 @@ class LoketController extends Controller
                     </li>';
                 }
 
-                if (auth()->user()->can('loket.delete')) {
+                if (auth()->user()->can('loket.delete') && !$row->hasAntrianData()) {
                     $html .= '
                     <li>
                         <a href="javascript:void(0)" class="dropdown-item"
@@ -105,6 +129,61 @@ class LoketController extends Controller
             })
             ->rawColumns(['isaktif','action'])
             ->make(true);
+    }
+
+    /**
+     * Export daftar layanan (loket) ke PDF.
+     * Mengikuti filter yang sedang aktif: pencarian (search) & instansi (skpd_id).
+     */
+    public function exportPdf(Request $request)
+    {
+        $query = Loket::query()->with('skpd');
+
+        // Role guard: tenant hanya boleh export miliknya
+        $namaInstansi = 'Semua Instansi';
+        if (!auth()->user()->hasRole('Superadmin')) {
+            $query->where('skpd_id', auth()->user()->skpd_id);
+            // Label header menyesuaikan instansi tenant (bukan "Semua Instansi")
+            $namaInstansi = optional(Skpd::find(auth()->user()->skpd_id))->nama_skpd ?? 'Instansi';
+        }
+
+        // Filter Instansi (dropdown)
+        if ($request->filled('skpd_id') && $request->skpd_id !== 'all') {
+            $query->where('skpd_id', $request->skpd_id);
+            $namaInstansi = optional(Skpd::find($request->skpd_id))->nama_skpd ?? 'Instansi';
+        }
+
+        // Filter Pencarian (selaras dengan getData)
+        if ($request->filled('search')) {
+            $search = $request->search;
+
+            // Resolve id SKPD dulu untuk menghindari join antar kolom beda collation.
+            $skpdIds = Skpd::where('nama_skpd', 'like', "%{$search}%")->pluck('id')->all();
+
+            $query->where(function ($q) use ($search, $skpdIds) {
+                $q->where('nama_loket', 'like', "%{$search}%")
+                  ->orWhere('kode_tenant', 'like', "%{$search}%")
+                  ->orWhere('prefix_tenant', 'like', "%{$search}%");
+
+                if (!empty($skpdIds)) {
+                    $q->orWhereIn('skpd_id', $skpdIds);
+                }
+            });
+        }
+
+        // Ambil & urutkan berdasarkan nama instansi agar rapi
+        $lokets = $query->get()
+            ->sortBy(fn($l) => $l->skpd->nama_skpd ?? 'ZZZ')
+            ->values();
+
+        $pdf = Pdf::loadView('backend.loket.export_pdf', [
+            'lokets'       => $lokets,
+            'namaInstansi' => $namaInstansi,
+            'tanggalCetak' => Carbon::now()->locale('id')->translatedFormat('d F Y H:i'),
+        ]);
+        $pdf->setPaper('a4', 'portrait');
+
+        return $pdf->stream('daftar-layanan.pdf');
     }
 
     public function store(Request $request)
@@ -188,6 +267,14 @@ class LoketController extends Controller
             'skpd_id' => 'required'
         ]);
 
+        // 🔒 Nama layanan terkunci jika sudah punya data antrian (semua role)
+        $current = (clone $query)->first();
+        if ($current && $current->hasAntrianData() && $request->nama_loket !== $current->nama_loket) {
+            return response()->json([
+                'error' => 'Nama layanan tidak dapat diubah karena sudah memiliki data antrian. Anda hanya dapat menonaktifkannya.',
+            ], 422);
+        }
+
         // 🚀 UPDATE DATA
         $query->update($request->only([
             'nama_loket',
@@ -211,6 +298,14 @@ class LoketController extends Controller
         }
 
         $loket = $query->findOrFail($id);
+
+        // 🔒 Tidak boleh dihapus jika sudah punya data antrian (semua role)
+        if ($loket->hasAntrianData()) {
+            return response()->json([
+                'error' => 'Layanan tidak dapat dihapus karena sudah memiliki data antrian. Anda hanya dapat menonaktifkannya.',
+            ], 422);
+        }
+
         $loket->delete();
 
         return response()->json([
@@ -243,23 +338,31 @@ class LoketController extends Controller
         // ===============================
         // AMBIL DATA LOKET UNTUK AUDIT
         // ===============================
-        $lokets = Loket::withTrashed()
-            ->whereIn('id', $ids)
-            ->get();
+        $allLoket = Loket::whereIn('id', $ids)->get();
 
-        if ($lokets->isEmpty()) {
+        if ($allLoket->isEmpty()) {
             return response()->json([
                 'status'  => 'warning',
                 'message' => 'Data Loket tidak ditemukan'
             ]);
         }
 
-        // ===============================
-        // FORCE DELETE (HAPUS PERMANEN)
-        // ===============================
-        Loket::withTrashed()
-            ->whereIn('id', $ids)
-            ->forceDelete();
+        // 🔒 Lindungi layanan yang sudah punya data antrian
+        $deletable = $allLoket->reject(fn ($l) => $l->hasAntrianData());
+        $protected = $allLoket->count() - $deletable->count();
+
+        if ($deletable->isEmpty()) {
+            DB::rollBack();
+            return response()->json([
+                'status'  => 'error',
+                'message' => 'Layanan terpilih sudah memiliki data antrian, tidak dapat dihapus. Hanya bisa dinonaktifkan.'
+            ]);
+        }
+
+        $lokets = $deletable; // untuk logging
+
+        // Hapus hanya yang tidak punya data antrian
+        Loket::whereIn('id', $deletable->pluck('id')->all())->delete();
 
         DB::commit();
 
@@ -294,7 +397,8 @@ class LoketController extends Controller
 
         return response()->json([
             'status'  => 'success',
-            'message' => count($ids).' Loket berhasil dihapus permanen'
+            'message' => $deletable->count().' Loket berhasil dihapus'
+                . ($protected > 0 ? ', '.$protected.' dilindungi karena sudah punya data antrian' : '')
         ]);
 
     } catch (\Exception $e) {

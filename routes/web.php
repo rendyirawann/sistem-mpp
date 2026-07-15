@@ -37,21 +37,28 @@ use App\Http\Controllers\Backend\Skpd\SkpdController;
 use App\Http\Controllers\Backend\Master\LayananSkmController;
 use App\Http\Controllers\SkmController;
 
-//Route::get('/', function () {
-//    return redirect()->route('login');
-//});
+// ANTRIAN ONLINE (PUBLIC)
+use App\Http\Controllers\AntrianOnlineController;
+use App\Http\Controllers\RegistrasiOnlineController;
+use App\Http\Controllers\WilayahController;
 
+// DISPLAY TV
+use App\Http\Controllers\Backend\Display\DisplaySettingController;
+use App\Http\Controllers\Backend\Display\AnnouncementController;
 
-Route::get('/', function () {
-    return view('welcome'); // atau return "OK";
-});
+// ANTRIAN ONLINE (BACKEND)
+use App\Http\Controllers\Backend\AntrianOnline\ListAntrianController;
+use App\Http\Controllers\Backend\Kalender\KalenderController;
+use App\Http\Controllers\Backend\Scan\ScanController;
+use App\Http\Controllers\Backend\Setting\LandingSettingController;
+use App\Http\Controllers\Backend\FormPersyaratan\FormPersyaratanController;
 
 Route::get('/get-last-panggilan', [FrontController::class, 'checkLastPanggilan'])->name('antrian.check');
 
 // --- ROUTES SKM (SURVEY) ---
 Route::get('/skm', [SkmController::class, 'index'])->name('skm.index');
-Route::post('/skm/check', [SkmController::class, 'checkAntrian'])->name('skm.check');
-Route::post('/skm/store', [SkmController::class, 'store'])->name('skm.store');
+Route::post('/skm/check', [SkmController::class, 'checkAntrian'])->middleware('throttle:20,1')->name('skm.check');
+Route::post('/skm/store', [SkmController::class, 'store'])->middleware('throttle:20,1')->name('skm.store');
 // Tambahkan ini di group yang public (sebelum atau sesudah route skm)
 Route::get('/proxy/sukmadeli/{endpoint}', [SkmController::class, 'getReferensiSukma'])
     ->name('skm.proxy');
@@ -99,6 +106,7 @@ Route::middleware('auth')->group(function () {
         ->name('skpd.sync-sukma');
 
     Route::post('/skpd/batch-jam-operasional', [SkpdController::class, 'batchJamOperasional'])->name('skpd.batch-jam');
+    Route::post('/skpd/batch-status-all', [SkpdController::class, 'batchStatusAll'])->name('skpd.batch-status-all');
 
     Route::resource('antrian', AntrianController::class);
 
@@ -132,7 +140,8 @@ Route::middleware('auth')->group(function () {
         ->name('antrian.panggil');
 
     Route::get('/loket/get', [LoketController::class, 'getData'])->name('get-loket');
-    Route::post('/loket/mass-delete', [SkpdController::class, 'massDelete'])->name('loket.mass-delete');
+    Route::get('/loket/export-pdf', [LoketController::class, 'exportPdf'])->name('loket.export-pdf');
+    Route::post('/loket/mass-delete', [LoketController::class, 'massDelete'])->name('loket.mass-delete');
     Route::post('/loket/aktifkan', [LoketController::class, 'aktifkan'])
         ->name('loket.aktifkan');
 
@@ -221,6 +230,55 @@ Route::middleware('auth')->group(function () {
             'guard' => config('auth.defaults.guard')
         ];
     })->middleware('auth');
+
+    // ===================== DISPLAY SETTING BACKEND (SUPERADMIN ONLY) =====================
+    Route::get('/display-setting', [DisplaySettingController::class, 'index'])->name('display-setting.index');
+    Route::post('/display-setting/update', [DisplaySettingController::class, 'updateSetting'])->name('display-setting.update');
+    Route::post('/display-setting/banner', [DisplaySettingController::class, 'storeBanner'])->name('display-setting.banner.store');
+    Route::post('/display-setting/banner/{id}/toggle', [DisplaySettingController::class, 'toggleBanner'])->name('display-setting.banner.toggle');
+    Route::delete('/display-setting/banner/{id}', [DisplaySettingController::class, 'deleteBanner'])->name('display-setting.banner.delete');
+
+    // ===================== DISPLAY ANNOUNCEMENT SYSTEM (SUPERADMIN ONLY) =====================
+    Route::get('/display-announcement', [AnnouncementController::class, 'index'])->name('announcement.index');
+    Route::get('/get-announcement', [AnnouncementController::class, 'getAnnouncement'])->name('announcement.data');
+    Route::post('/display-announcement/play', [AnnouncementController::class, 'play'])->name('announcement.play');
+    Route::post('/display-announcement/play-all', [AnnouncementController::class, 'playAll'])->name('announcement.play_all');
+    Route::post('/display-announcement/stop', [AnnouncementController::class, 'stop'])->name('announcement.stop');
+    Route::post('/display-announcement', [AnnouncementController::class, 'store'])->name('announcement.store');
+    Route::get('/display-announcement/{id}', [AnnouncementController::class, 'show'])->name('announcement.show');
+    Route::put('/display-announcement/{id}', [AnnouncementController::class, 'update'])->name('announcement.update');
+    Route::delete('/display-announcement/{id}', [AnnouncementController::class, 'destroy'])->name('announcement.delete');
+
+    // ===================== KALENDER KUOTA ANTRIAN (Superadmin & tenant pemilik) =====================
+    Route::get('/kalender-antrian', [KalenderController::class, 'index'])->name('kalender.index');
+    Route::get('/kalender-antrian/{skpd}', [KalenderController::class, 'show'])->name('kalender.show');
+    Route::post('/kalender-antrian/{skpd}/set', [KalenderController::class, 'setKuota'])->name('kalender.set');
+
+    // ===================== SCAN QR TIKET ANTREAN (Superadmin & tenant) =====================
+    Route::get('/scan-antrean', [ScanController::class, 'index'])->name('scan.index');
+    Route::post('/scan-antrean/lookup', [ScanController::class, 'lookup'])->name('scan.lookup');
+
+    // ===================== LIST ANTRIAN ONLINE (per tenant) =====================
+    Route::get('/list-antrian-online', [ListAntrianController::class, 'index'])->name('antrian-online-list.index');
+    Route::get('/list-antrian-online/data', [ListAntrianController::class, 'data'])->name('antrian-online-list.data');
+    Route::get('/list-antrian-online/{id}', [ListAntrianController::class, 'detail'])->name('antrian-online-list.detail');
+
+    // ===================== FORM PERSYARATAN — MANAJEMEN (SUPERADMIN ONLY) =====================
+    Route::get('/form-persyaratan', [FormPersyaratanController::class, 'index'])->name('form-persyaratan.index');
+    Route::get('/form-persyaratan/data', [FormPersyaratanController::class, 'data'])->name('form-persyaratan.data');
+    Route::get('/form-persyaratan/create', [FormPersyaratanController::class, 'create'])->name('form-persyaratan.create');
+    Route::post('/form-persyaratan', [FormPersyaratanController::class, 'store'])->name('form-persyaratan.store');
+    Route::get('/form-persyaratan/{id}/edit', [FormPersyaratanController::class, 'edit'])->name('form-persyaratan.edit');
+    Route::put('/form-persyaratan/{id}', [FormPersyaratanController::class, 'update'])->name('form-persyaratan.update');
+    Route::delete('/form-persyaratan/{id}', [FormPersyaratanController::class, 'destroy'])->name('form-persyaratan.destroy');
+
+    // ===================== LANDING ANTRIAN ONLINE — PENGATURAN (SUPERADMIN ONLY) =====================
+    Route::get('/landing-setting', [LandingSettingController::class, 'index'])->name('landing-setting.index');
+    Route::post('/landing-setting/update', [LandingSettingController::class, 'updateSettings'])->name('landing-setting.update');
+    Route::post('/landing-setting/social', [LandingSettingController::class, 'storeSocial'])->name('landing-setting.social.store');
+    Route::post('/landing-setting/social/{id}/toggle', [LandingSettingController::class, 'toggleSocial'])->name('landing-setting.social.toggle');
+    Route::delete('/landing-setting/social/{id}', [LandingSettingController::class, 'deleteSocial'])->name('landing-setting.social.delete');
+    Route::post('/landing-setting/tenant/{id}/toggle', [LandingSettingController::class, 'toggleTenant'])->name('landing-setting.tenant.toggle');
 });
 
 require __DIR__ . '/auth.php';
@@ -236,7 +294,7 @@ Route::get('/daftar-instansi', [FrontController::class, 'daftarInstansi'])->name
 
 // 2. Halaman Depan Kios (Memanggil FrontController fungsi index) - Pindahkan ke /kiosk-mpp
 Route::get('/kiosk-auth', [FrontController::class, 'showKioskAuth'])->name('kiosk.auth');
-Route::post('/kiosk-auth', [FrontController::class, 'verifyKioskAuth'])->name('kiosk.verify');
+Route::post('/kiosk-auth', [FrontController::class, 'verifyKioskAuth'])->middleware('throttle:10,1')->name('kiosk.verify');
 
 Route::middleware('kiosk-security')->group(function () {
     Route::get('/kiosk-mpp', [FrontController::class, 'index'])->name('home');
@@ -245,6 +303,29 @@ Route::middleware('kiosk-security')->group(function () {
     Route::post('/ambil-antrian', [FrontController::class, 'ambilAntrian'])->name('ambil.antrian');
 
     Route::get('/kios/grid-skpd', [FrontController::class, 'getGridSkpd'])->name('kios.grid');
+});
+
+// 3. Halaman Display Monitor TV (Public)
+Route::get('/display', [FrontController::class, 'displayMonitor'])->name('display.monitor');
+Route::get('/api/display-data', [FrontController::class, 'getDisplayData'])->name('api.display.data');
+Route::post('/api/display/announcement-finished', [FrontController::class, 'announcementFinished'])->name('api.display.announcement_finished');
+
+// 4. ANTRIAN ONLINE (Public, rate-limited)
+Route::middleware('throttle:60,1')->group(function () {
+    Route::get('/antrian-online', [AntrianOnlineController::class, 'index'])->name('antrian-online');
+    Route::get('/list-tenant', [AntrianOnlineController::class, 'listTenant'])->name('antrian-online.list');
+    Route::get('/antrian-online/tenant/{skpd}', [AntrianOnlineController::class, 'layanan'])->name('antrian-online.layanan');
+
+    // Wizard registrasi antrian online (per layanan/loket)
+    Route::get('/antrian-online/registrasi/{loket}', [RegistrasiOnlineController::class, 'show'])->name('antrian-online.registrasi');
+    Route::post('/antrian-online/registrasi/{loket}/draft', [RegistrasiOnlineController::class, 'saveStep'])->name('antrian-online.registrasi.draft');
+    Route::post('/antrian-online/registrasi/{loket}/submit', [RegistrasiOnlineController::class, 'submit'])->name('antrian-online.registrasi.submit');
+
+    // Dropdown wilayah bertingkat (untuk form persyaratan)
+    Route::get('/wilayah/provinsi', [WilayahController::class, 'provinsi'])->name('wilayah.provinsi');
+    Route::get('/wilayah/kabupaten/{provinsi}', [WilayahController::class, 'kabupaten'])->name('wilayah.kabupaten');
+    Route::get('/wilayah/kecamatan/{kabupaten}', [WilayahController::class, 'kecamatan'])->name('wilayah.kecamatan');
+    Route::get('/wilayah/desa/{kecamatan}', [WilayahController::class, 'desa'])->name('wilayah.desa');
 });
 
 // -------------------------------------------------------------

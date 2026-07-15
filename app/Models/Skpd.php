@@ -28,7 +28,19 @@ class Skpd extends Model
         'tutup_sabtu',
         // ----------------------
         'kuota_harian',
+        'kuota_online',
+        'kuota_kiosk',
         'is_force_close',
+        'is_antrianonline',
+    ];
+
+    protected $casts = [
+        'isaktif'          => 'boolean',
+        'is_sabtu_buka'    => 'boolean',
+        'is_force_close'   => 'boolean',
+        'is_antrianonline' => 'boolean',
+        'kuota_online'     => 'integer',
+        'kuota_kiosk'      => 'integer',
     ];
 
     public $incrementing = false;
@@ -53,5 +65,11 @@ class Skpd extends Model
     public function lokets()
     {
         return $this->hasMany(Loket::class);
+    }
+
+    /** True jika instansi sudah punya data antrian -> tidak boleh dihapus / ganti nama. */
+    public function hasAntrianData(): bool
+    {
+        return Antrian::where('skpd_id', $this->id)->exists();
     }
 }

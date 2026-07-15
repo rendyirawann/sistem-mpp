@@ -1219,7 +1219,7 @@
                 }
 
                 $.ajax({
-                    url: `/users/${id}/ban`,
+                    url: `{{ url('users') }}/${id}/ban`,
                     method: 'POST',
                     data: {
                         _token: $('meta[name="csrf-token"]').attr('content'),
@@ -1255,7 +1255,7 @@
                     if (result.isConfirmed) {
 
                         $.ajax({
-                            url: `/users/${id}/unban`,
+                            url: `{{ url('users') }}/${id}/unban`,
                             method: "POST",
                             data: {
                                 _token: $('meta[name="csrf-token"]').attr('content')

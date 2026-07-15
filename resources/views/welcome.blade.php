@@ -217,7 +217,7 @@
                 </ul>
                 <div class="d-flex align-items-center gap-3">
                     <a href="{{ route('skm.index') }}" class="nav-link"><i class="ph ph-chart-line-up fs-4 me-1 align-middle"></i> Survey</a>
-                    <a href="/login" class="btn btn-apple-outline px-4 py-2" style="font-size: 0.9rem;">Masuk</a>
+                    <a href="{{ route('login') }}" class="btn btn-apple-outline px-4 py-2" style="font-size: 0.9rem;">Masuk</a>
                 </div>
             </div>
         </div>

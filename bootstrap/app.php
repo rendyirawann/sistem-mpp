@@ -3,6 +3,8 @@
 use Illuminate\Foundation\Application;
 use Illuminate\Foundation\Configuration\Exceptions;
 use Illuminate\Foundation\Configuration\Middleware;
+use Illuminate\Http\Request;
+use Illuminate\Session\TokenMismatchException;
 
 return Application::configure(basePath: dirname(__DIR__))
     ->withRouting(
@@ -40,11 +42,29 @@ return Application::configure(basePath: dirname(__DIR__))
         $middleware->web(append: [
             \Illuminate\Session\Middleware\AuthenticateSession::class,
         ]);
+
+        // Security header untuk SEMUA response (web & publik).
+        $middleware->append(\App\Http\Middleware\SecurityHeaders::class);
     })
 
 
 
 
     ->withExceptions(function (Exceptions $exceptions): void {
-        //
+        // CSRF token kadaluarsa / tidak valid (419):
+        // - AJAX/JSON -> balas JSON 419 agar front-end bisa menampilkan pesan & reload.
+        // - Request biasa -> kembali ke halaman sebelumnya dengan input & pesan (bukan halaman 419 mentah).
+        $exceptions->render(function (TokenMismatchException $e, Request $request) {
+            if ($request->expectsJson() || $request->ajax()) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Sesi Anda telah berakhir. Muat ulang halaman lalu coba lagi.',
+                    'reload'  => true,
+                ], 419);
+            }
+
+            return redirect()->back()
+                ->withInput($request->except(['_token', 'password', 'password_confirmation']))
+                ->with('error', 'Sesi Anda telah berakhir karena tidak ada aktivitas. Silakan coba lagi.');
+        });
     })->create();

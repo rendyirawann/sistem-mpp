@@ -101,9 +101,14 @@ class FrontController extends Controller
                     $item->pesan_tutup = 'PELAYANAN LIBUR';
                 }
 
-                if ($item->is_layanan_buka && $item->kuota_harian > 0) {
-                    $jumlahAntrianHariIni = Antrian::where('skpd_id', $item->id)->whereDate('tanggal', $tanggalSekarang)->count();
-                    if ($jumlahAntrianHariIni >= $item->kuota_harian) {
+                // Kuota KIOSK (terpisah dari online). Penuh -> tidak bisa ambil di kiosk.
+                $kuotaKiosk = ($item->kuota_kiosk ?? 0) > 0 ? $item->kuota_kiosk : ($item->kuota_harian ?? 0);
+                if ($item->is_layanan_buka && $kuotaKiosk > 0) {
+                    $jumlahKioskHariIni = Antrian::where('skpd_id', $item->id)
+                        ->where('sumber', 'kiosk')
+                        ->whereDate('tanggal', $tanggalSekarang)
+                        ->count();
+                    if ($jumlahKioskHariIni >= $kuotaKiosk) {
                         $item->is_layanan_buka = false;
                         $item->pesan_tutup = 'KUOTA PENUH';
                     }
@@ -326,15 +331,19 @@ class FrontController extends Controller
 
         DB::beginTransaction(); // Tambahkan Transaction biar aman
         try {
-            // 2. SIMPAN / UPDATE CUSTOMER
-            // $customer = Customer::firstOrCreate(
-            //     ['nik' => $request->nik],
-            //     [
-            //         'nama'  => $request->nama,
-            //         'jk'    => $request->jk,
-            //         'no_hp' => $request->no_hp,
-            //     ]
-            // );
+            // 🔥 CEK KUOTA HARIAN (gabungan kiosk + online). Jika penuh, tidak bisa ambil.
+            $tanggal = Carbon::today();
+            $skpd    = Skpd::find($request->skpd_id);
+            $svc     = app(\App\Services\AntrianService::class);
+            if (!$skpd || $svc->sisaKuotaSumber($skpd, $tanggal->toDateString(), 'kiosk') <= 0) {
+                DB::rollBack();
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Kuota antrean kiosk hari ini untuk instansi ini sudah penuh.',
+                ], 422);
+            }
+
+            // SIMPAN CUSTOMER
             $customer = Customer::create([
                 'nik'   => $request->nik,
                 'nama'  => $request->nama,
@@ -342,33 +351,21 @@ class FrontController extends Controller
                 'no_hp' => $request->no_hp,
             ]);
 
-            // 3. AMBIL DATA LOKET DULU (Untuk Cek Prefix)
-            $loket = Loket::findOrFail($request->loket_id); //
-            $prefixSama = $loket->prefix_tenant;
-            $tanggal = Carbon::today();
+            // GENERATE NOMOR — deret KIOSK terpisah dari deret online (sumber='kiosk')
+            $loket     = Loket::findOrFail($request->loket_id);
+            $nomor     = $svc->generateNomor($loket, $tanggal, 'kiosk');
+            $kodeTiket = $nomor['no_antrian'];
 
-            // 4. 🔥 LOGIKA NOMOR URUT BARU (OPSI B) 🔥
-            // Cari max nomor urut dari SEMUA loket yang punya prefix sama hari ini
-            $lastUrut = Antrian::whereDate('tanggal', $tanggal)
-                ->whereHas('loket', function ($q) use ($prefixSama) {
-                    $q->where('prefix_tenant', $prefixSama);
-                })
-                ->max('no_urut'); // Gunakan max() biar urutan tidak reset jika ada data dihapus
-
-            $nomorUrut = $lastUrut ? $lastUrut + 1 : 1;
-
-            // 5. GENERATE KODE TIKET (Contoh: BS-005)
-            $kodeTiket = $loket->prefix_tenant . '-' . str_pad($nomorUrut, 3, '0', STR_PAD_LEFT);
-
-            // 6. SIMPAN ANTRIAN
+            // SIMPAN ANTRIAN
             Antrian::create([
                 'skpd_id'     => $request->skpd_id,
                 'loket_id'    => $request->loket_id,
                 'customer_id' => $customer->id,
-                'no_urut'     => $nomorUrut, // Angka murni (misal: 5)
-                'no_antrian'  => $kodeTiket, // String tiket (misal: BS-005)
+                'no_urut'     => $nomor['no_urut'],
+                'no_antrian'  => $kodeTiket,
                 'tanggal'     => $tanggal,
                 'status'      => 0,
+                'sumber'      => 'kiosk',
                 'waktu_ambil' => now(),
             ]);
 
@@ -460,7 +457,7 @@ class FrontController extends Controller
             ->first();
 
         // 2. AMBIL "GILIRAN BERIKUTNYA" (Status 0, Paling Lama Menunggu)
-        $next = Antrian::select('antrians.no_antrian', 'lokets.nama_loket', 'skpd.nama_skpd')
+        $next = Antrian::select('antrians.no_antrian', 'antrians.sumber', 'lokets.nama_loket', 'skpd.nama_skpd')
             ->leftJoin('lokets', function ($join) {
                 $join->on(DB::raw('lokets.id COLLATE utf8mb4_unicode_ci'), '=', DB::raw('antrians.loket_id COLLATE utf8mb4_unicode_ci'));
             })
@@ -537,5 +534,131 @@ class FrontController extends Controller
         // Cut
         $printer->cut();
         $printer->close();
+    }
+
+    /**
+     * HALAMAN DISPLAY MONITOR TV
+     */
+    public function displayMonitor()
+    {
+        // 1. Ambil settingan display (YouTube Video ID & Ticker Text)
+        $setting = \App\Models\DisplaySetting::first();
+        $youtubeId = $setting->video_youtube_id ?? 'qK65r2c462I';
+        $tickerText = $setting->ticker_text ?? 'Selamat Datang di Mal Pelayanan Publik Kabupaten Deli Serdang. Mari melayani dengan ramah, cepat, transparan, dan prima. Silakan tunggu giliran nomor antrian Anda dipanggil. NIK Anda terdaftar dengan aman di database MPP.';
+
+        // 2. Ambil gambar iklan dari database
+        $iklanImages = [];
+        $banners = \App\Models\DisplayBanner::where('is_active', true)
+            ->orderBy('order_index', 'asc')
+            ->get();
+
+        foreach ($banners as $banner) {
+            if (str_starts_with($banner->image_path, 'http://') || str_starts_with($banner->image_path, 'https://')) {
+                $iklanImages[] = $banner->image_path;
+            } else {
+                $iklanImages[] = asset($banner->image_path);
+            }
+        }
+
+        // 3. Fallback ke folder public/images/iklan/ jika DB kosong
+        if (empty($iklanImages)) {
+            $iklanPath = public_path('images/iklan');
+            if (file_exists($iklanPath)) {
+                $files = glob($iklanPath . '/*.{jpg,jpeg,png,gif,webp}', GLOB_BRACE);
+                foreach ($files as $file) {
+                    $iklanImages[] = asset('images/iklan/' . basename($file));
+                }
+            }
+        }
+
+        // 4. Jika masih kosong, gunakan default mock images
+        if (empty($iklanImages)) {
+            $iklanImages = [
+                asset('assets/media/illustrations/sigma-1/17.png'),
+                asset('assets/media/illustrations/sigma-1/2.png'),
+                asset('assets/media/illustrations/sigma-1/15.png'),
+            ];
+        }
+
+        return view('display_monitor', compact('iklanImages', 'youtubeId', 'tickerText'));
+    }
+
+    /**
+     * API DATA UNTUK DISPLAY MONITOR
+     */
+    public function getDisplayData()
+    {
+        $setting = \App\Models\DisplaySetting::first();
+        $youtubeId = $setting->video_youtube_id ?? 'qK65r2c462I';
+        $tickerText = $setting->ticker_text ?? 'Selamat Datang di Mal Pelayanan Publik Kabupaten Deli Serdang. Mari melayani dengan ramah, cepat, transparan, dan prima. Silakan tunggu giliran nomor antrian Anda dipanggil. NIK Anda terdaftar dengan aman di database MPP. Sukseskan Mal Pelayanan Publik Deli Serdang!';
+
+        $calledQueues = Antrian::select('antrians.*', 'lokets.nama_loket', 'skpd.nama_skpd')
+            ->leftJoin('lokets', function ($join) {
+                $join->on(DB::raw('lokets.id COLLATE utf8mb4_unicode_ci'), '=', DB::raw('antrians.loket_id COLLATE utf8mb4_unicode_ci'));
+            })
+            ->leftJoin('skpd', function ($join) {
+                $join->on(DB::raw('skpd.id COLLATE utf8mb4_unicode_ci'), '=', DB::raw('antrians.skpd_id COLLATE utf8mb4_unicode_ci'));
+            })
+            ->whereDate('antrians.tanggal', Carbon::today())
+            ->whereNotNull('antrians.waktu_panggil')
+            ->orderBy('antrians.waktu_panggil', 'desc')
+            ->take(5)
+            ->get();
+
+        $current = $calledQueues->first();
+        $previous = $calledQueues->slice(1)->values();
+
+        $nextList = Antrian::select('antrians.*', 'lokets.nama_loket', 'skpd.nama_skpd')
+            ->leftJoin('lokets', function ($join) {
+                $join->on(DB::raw('lokets.id COLLATE utf8mb4_unicode_ci'), '=', DB::raw('antrians.loket_id COLLATE utf8mb4_unicode_ci'));
+            })
+            ->leftJoin('skpd', function ($join) {
+                $join->on(DB::raw('skpd.id COLLATE utf8mb4_unicode_ci'), '=', DB::raw('antrians.skpd_id COLLATE utf8mb4_unicode_ci'));
+            })
+            ->whereDate('antrians.tanggal', Carbon::today())
+            ->where('antrians.status', 0) // Menunggu
+            ->orderBy('antrians.waktu_ambil', 'asc')
+            ->orderBy('antrians.no_urut', 'asc')
+            ->take(4)
+            ->get();
+
+        return response()->json([
+            'youtubeId' => $youtubeId,
+            'tickerText' => $tickerText,
+            'current' => $current ? [
+                'no_antrian' => $current->no_antrian,
+                'nama_loket' => $current->nama_loket ?? '-',
+                'nama_skpd'  => $current->nama_skpd ?? '-',
+                'sumber'     => $current->sumber ?? 'kiosk',
+                'waktu'      => Carbon::parse($current->waktu_panggil)->format('H:i')
+            ] : null,
+            'previous' => $previous->map(function ($item) {
+                return [
+                    'no_antrian' => $item->no_antrian,
+                    'nama_loket' => $item->nama_loket ?? '-',
+                    'nama_skpd'  => $item->nama_skpd ?? '-',
+                    'sumber'     => $item->sumber ?? 'kiosk',
+                    'waktu'      => Carbon::parse($item->waktu_panggil)->format('H:i')
+                ];
+            }),
+            'next' => $nextList->map(function ($item) {
+                return [
+                    'no_antrian' => $item->no_antrian,
+                    'nama_loket' => $item->nama_loket ?? '-',
+                    'nama_skpd'  => $item->nama_skpd ?? '-',
+                    'sumber'     => $item->sumber ?? 'kiosk',
+                    'waktu'      => Carbon::parse($item->waktu_ambil)->format('H:i')
+                ];
+            })
+        ]);
+    }
+
+    /**
+     * Notify that the announcement has finished playing on the TV Display
+     */
+    public function announcementFinished()
+    {
+        \App\Events\PengumumanSelesai::dispatch();
+        return response()->json(['success' => true]);
     }
 }

@@ -161,6 +161,12 @@
                 </div>
             </div>
             <div class="card-body py-4">
+                {{-- Tab sumber antrean: Semua / Loket (Offline) / Online (deret independen) --}}
+                <ul class="nav nav-pills mb-5" id="sumberTabs">
+                    <li class="nav-item"><a class="nav-link active fw-bold" data-sumber="" href="javascript:;">Semua</a></li>
+                    <li class="nav-item"><a class="nav-link fw-bold" data-sumber="kiosk" href="javascript:;"><i class="ki-outline ki-shop fs-5 me-1"></i> Loket / Kiosk</a></li>
+                    <li class="nav-item"><a class="nav-link fw-bold" data-sumber="online" href="javascript:;"><i class="ki-outline ki-cloud fs-5 me-1"></i> Online</a></li>
+                </ul>
                 <table id="tabel-antrian" class="table align-middle table-row-dashed fs-6 gy-4">
                     <thead>
                         <tr class="text-muted fw-bold fs-7 text-uppercase bg-light">
@@ -422,15 +428,29 @@
 
             // --- 3. DATATABLES ---
             // --- UPDATE KOLOM LAYANAN DI TABEL ---
+            let currentSumber = '';
+            $('#sumberTabs').on('click', '.nav-link', function () {
+                $('#sumberTabs .nav-link').removeClass('active');
+                $(this).addClass('active');
+                currentSumber = $(this).data('sumber') || '';
+                if (table) table.ajax.reload();
+            });
+
             table = $('#tabel-antrian').DataTable({
                 processing: true,
                 serverSide: true,
                 searching: false,
                 ordering: false,
-                ajax: "{{ route('antrian.get') }}",
+                ajax: {
+                    url: "{{ route('antrian.get') }}",
+                    data: function (d) { d.sumber = currentSumber; }
+                },
                 columns: [{
                         data: 'no_antrian',
-                        className: 'text-center fw-bold fs-4 text-dark'
+                        className: 'text-center fw-bold fs-4 text-dark',
+                        render: function(data, type, row) {
+                            return `<div>${data}</div><div class="mt-1">${row.sumber_label ?? ''}</div>`;
+                        }
                     },
                     {
                         data: 'status_label',

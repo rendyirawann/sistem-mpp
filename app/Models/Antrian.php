@@ -38,6 +38,8 @@ class Antrian extends Model
         'no_urut', // 🔥 PERBAIKAN: Di database kolomnya 'no_urut', bukan 'nomor_urut'
         'no_antrian',
         'status',
+        'sumber',      // 'kiosk' | 'online'
+        'foto_wajah',
         'tanggal',
         'waktu_ambil',
         'waktu_panggil',
@@ -70,6 +72,12 @@ class Antrian extends Model
     public function loket()
     {
         return $this->belongsTo(Loket::class);
+    }
+
+    /** Isian form persyaratan yang dilampirkan warga untuk antrean ini. */
+    public function formValues()
+    {
+        return $this->hasMany(FormPersyaratanValue::class, 'antrian_id', 'id');
     }
 
     // Scope tambahan (opsional, ada di controller sebelumnya)
