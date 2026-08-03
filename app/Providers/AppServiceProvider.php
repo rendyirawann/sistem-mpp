@@ -20,9 +20,12 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
-        // Paksa HTTPS jika di Production / Server Online
-    if($this->app->environment('production') || env('APP_ENV') === 'production') {
-        URL::forceScheme('https');
-    }
+        // Paksa root URL (termasuk prefix subfolder /sistem-mpp dari APP_URL) + HTTPS
+        // di production. Wajib utk Octane di belakang proxy TLS agar route()/asset()
+        // menyertakan prefix subfolder.
+        if ($this->app->environment('production') || env('APP_ENV') === 'production') {
+            URL::forceRootUrl(config('app.url'));
+            URL::forceScheme('https');
+        }
     }
 }
